@@ -9,8 +9,7 @@ class HeaderComponent extends HTMLElement {
         const shadow = this.attachShadow({ mode: 'open' });
 
         // Create header
-        const header = document.createElement('span');
-        header.setAttribute('class', 'info');
+        const header = document.createElement('h1');
 
         // Take attribute content and put it inside the info span
         const text = this.getAttribute('data-text');
