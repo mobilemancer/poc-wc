@@ -1,0 +1,20 @@
+{
+  "name": "poc-wc",
+  "version": "1.0.0",
+  "description": "Some web components",
+  "main": "main.js",
+  "module": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mobilemancer/poc-wc.git"
+  },
+  "author": "Andreas Wänqvist @mobilemancer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mobilemancer/poc-wc/issues"
+  },
+  "homepage": "https://github.com/mobilemancer/poc-wc#readme"
+}
