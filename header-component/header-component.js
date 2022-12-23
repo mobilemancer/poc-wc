@@ -1,6 +1,13 @@
 class HeaderComponent extends HTMLElement {
+
+    _text;
     get text() {
-        return this.getAttribute('text') || '';
+        this._text = this.getAttribute('text') || '';
+        return this._text;
+    }
+
+    set text(value) {
+        this._text = value;
     }
 
     constructor() {
