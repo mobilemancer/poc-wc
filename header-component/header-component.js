@@ -1,4 +1,8 @@
 class HeaderComponent extends HTMLElement {
+    get text() {
+        return this.getAttribute('text') || '';
+    }
+
     constructor() {
         console.log("Constructor for header-component started");
 
