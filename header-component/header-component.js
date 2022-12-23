@@ -12,13 +12,12 @@ class HeaderComponent extends HTMLElement {
         const header = document.createElement('h1');
 
         // Take attribute content and put it inside the info span
-        const text = this.getAttribute('data-text');
-        header.textContent = text;
+        // const text = this.getAttribute('data-text');
+        header.textContent = this.text;
 
         // Create some CSS to apply to the shadow dom
         console.log("setting up style");
         const style = document.createElement('style');
-        console.log(style.isConnected);
 
         style.textContent = `
          h1 {
