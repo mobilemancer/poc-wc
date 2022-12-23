@@ -5,7 +5,7 @@ class HeaderComponent2 extends HTMLElement {
         // this._text = this.getAttribute('text') || '';
         // return this._text;
 
-        return this.getAttribute('text') || '';
+        return this.getAttribute('text') || 'Hoopa unbound';
     }
 
     set text(value) {
@@ -13,7 +13,7 @@ class HeaderComponent2 extends HTMLElement {
     }
 
     constructor() {
-        console.log("Constructor for header-component started");
+        console.log("Constructor for header-component2 started");
 
         // Always call super first in constructor
         super();
@@ -29,12 +29,11 @@ class HeaderComponent2 extends HTMLElement {
         header.textContent = this.text;
 
         // Create some CSS to apply to the shadow dom
-        console.log("setting up style");
         const style = document.createElement('style');
 
         style.textContent = `
          h1 {
-            color: green;
+            color: red;
          }
         `;
         shadow.appendChild(style);
