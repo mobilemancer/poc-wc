@@ -5,11 +5,11 @@ class HeaderComponent2 extends HTMLElement {
         // this._text = this.getAttribute('text') || '';
         // return this._text;
 
-        return this.getAttribute('text') || 'Hoopa unbound';
+        return this._text || 'Hoopa unbound';
     }
 
     set text(value) {
-        // this._text = value;
+        this._text = value;
     }
 
     constructor() {
