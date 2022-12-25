@@ -17,6 +17,7 @@ class HeaderComponent2 extends HTMLElement {
     }
     set color(val) {
         this._color = val;
+        this.header.style.color = this._color;
     }
 
     constructor() {
