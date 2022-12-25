@@ -1,11 +1,14 @@
 class HeaderComponent2 extends HTMLElement {
 
+    header;
+
     _text;
     get text() {
         return this._text || 'Hoopa unbound';
     }
     set text(value) {
         this._text = value;
+        this.header.innerText = this._text;
     }
 
     _color = 'blue';
@@ -26,11 +29,11 @@ class HeaderComponent2 extends HTMLElement {
         const shadow = this.attachShadow({ mode: 'open' });
 
         // Create header
-        const header = document.createElement('h1');
+        this.header = document.createElement('h1');
 
         // Take attribute content and put it inside the info span
         // const text = this.getAttribute('data-text');
-        header.textContent = this.text;
+        this.header.textContent = this.text;
 
         // Create some CSS to apply to the shadow dom
         const style = document.createElement('style');
@@ -43,7 +46,7 @@ class HeaderComponent2 extends HTMLElement {
         shadow.appendChild(style);
 
         // Attach the created elements to the shadow dom
-        shadow.appendChild(header);
+        shadow.appendChild(this.header);
     }
 }
 
