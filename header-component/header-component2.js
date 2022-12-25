@@ -13,7 +13,7 @@ class HeaderComponent2 extends HTMLElement {
         return this._color || 'red';
     }
     set color(val) {
-        this._color = value;
+        this._color = val;
     }
 
     constructor() {
