@@ -12,6 +12,14 @@ class HeaderComponent2 extends HTMLElement {
         this._text = value;
     }
 
+    _value = 'blue';
+    get value() {
+        return this._value || 'red';
+    }
+    set value(val) {
+        this._value = value;
+    }
+
     constructor() {
         console.log("Constructor for header-component2 started");
 
@@ -33,7 +41,7 @@ class HeaderComponent2 extends HTMLElement {
 
         style.textContent = `
          h1 {
-            color: red;
+            color: ${this.value};
          }
         `;
         shadow.appendChild(style);
