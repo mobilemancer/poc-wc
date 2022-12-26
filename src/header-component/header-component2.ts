@@ -1,5 +1,5 @@
 class HeaderComponent2 extends HTMLElement {
-  header;
+  private header;
 
   private _text = "Hoopa unbound";
   get text() {
@@ -10,7 +10,7 @@ class HeaderComponent2 extends HTMLElement {
     this.header.innerText = this._text;
   }
 
-  _color = "blue";
+  private _color = "blue";
   get color() {
     return this._color || "red";
   }
