@@ -5,7 +5,8 @@
   "main": "main.js",
   "module": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/mobilemancer/poc-wc/issues"
   },
-  "homepage": "https://github.com/mobilemancer/poc-wc#readme"
+  "homepage": "https://github.com/mobilemancer/poc-wc#readme",
+  "devDependencies": {
+    "typescript": "^4.9.4"
+  }
 }
