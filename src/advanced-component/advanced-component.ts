@@ -1,3 +1,5 @@
+import { ReactiveBase } from "./../base/reactive-base";
+
 class AdvancedComponent extends ReactiveBase {
   constructor() {
     super();

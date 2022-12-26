@@ -1,4 +1,4 @@
-declare class ReactiveBase extends HTMLElement {
+export declare class ReactiveBase extends HTMLElement {
     state: any;
     constructor();
     setState(newState: Object): void;

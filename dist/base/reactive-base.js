@@ -1,5 +1,4 @@
-"use strict";
-class ReactiveBase extends HTMLElement {
+export class ReactiveBase extends HTMLElement {
     state;
     constructor() {
         super();

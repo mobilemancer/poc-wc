@@ -1,4 +1,4 @@
-class ReactiveBase extends HTMLElement {
+export class ReactiveBase extends HTMLElement {
   public state: any;
   constructor() {
     super();
