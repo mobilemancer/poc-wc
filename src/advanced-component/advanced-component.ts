@@ -9,7 +9,7 @@ class AdvancedComponent extends ReactiveBase {
     //       <p data-bind="title"></p>
     //     `;
 
-    fetch("advanced-component.html")
+    fetch("./advanced-component.html")
       .then((stream) => stream.text())
       .then((text) => console.log(text));
   }
