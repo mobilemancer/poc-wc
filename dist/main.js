@@ -1,5 +1,3 @@
-'use strict';
-
 class HeaderComponent extends HTMLElement {
     _text = "";
     get text() {
@@ -117,6 +115,4 @@ class AdvancedComponent extends ReactiveBase {
 // Define the new element
 customElements.define("advanced-component", AdvancedComponent);
 
-exports.AdvancedComponent = AdvancedComponent;
-exports.HeaderComponent = HeaderComponent;
-exports.HeaderComponent2 = HeaderComponent2;
+export { AdvancedComponent, HeaderComponent, HeaderComponent2 };
