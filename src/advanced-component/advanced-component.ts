@@ -1,21 +1,21 @@
 import { ReactiveBase } from "./../base/reactive-base";
-import template from './advanced-component.html';
+import template from "./advanced-component.html";
+import style from "./style.css";
 
 class AdvancedComponent extends ReactiveBase {
   constructor() {
     super();
-    const shadowRoot = this.attachShadow({ mode: "open" });
-
-    // shadowRoot.innerHTML = `
-    //       <p data-bind="title"></p>
-    //     `;
 
     console.log("html?");
     console.table(template);
 
-    // fetch("../dist/advanced-component.html")
-    //   .then((stream) => stream.text())
-    //   .then((text) => console.log(text));
+    const shadowRoot = this.attachShadow({ mode: "open" });
+    shadowRoot.innerHTML = template;
+
+    const styleElement = document.createElement("style");
+    // style.textContent = advancedcomponent;
+    console.log(style);
+    shadowRoot.appendChild(styleElement);
   }
 }
 

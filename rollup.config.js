@@ -1,5 +1,6 @@
 import typescript from 'rollup-plugin-typescript2';
 import html from 'rollup-plugin-html';
+import { libStylePlugin, onwarn } from "rollup-plugin-lib-style"
 
 
 export default {
@@ -8,7 +9,9 @@ export default {
         file: './dist/main.js',
         format: 'es'
     },
+    onwarn,
     plugins: [
+        libStylePlugin({ extensions: ['.css'] }),
         typescript(),
         html({
             include: "src/**/*.html",

@@ -1,8 +1,11 @@
+import style from "./style.css";
+
 export class ReactiveBase extends HTMLElement {
   public state: any;
   constructor() {
     super();
     this.state = {};
+    console.log(style);
   }
 
   setState(newState: Object) {

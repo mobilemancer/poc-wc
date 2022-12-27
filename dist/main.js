@@ -1,3 +1,6 @@
+import '@@_MAGIC_PATH_@@/src/base/style.css';
+import '@@_MAGIC_PATH_@@/src/advanced-component/style.css';
+
 class HeaderComponent extends HTMLElement {
     _text = "";
     get text() {
@@ -77,11 +80,14 @@ class HeaderComponent2 extends HTMLElement {
 // Define the new element
 customElements.define("header-component2", HeaderComponent2);
 
+var style$1 = {};
+
 class ReactiveBase extends HTMLElement {
     state;
     constructor() {
         super();
         this.state = {};
+        console.log(style$1);
     }
     setState(newState) {
         Object.entries(newState).forEach(([key, value]) => {
@@ -98,18 +104,19 @@ class ReactiveBase extends HTMLElement {
 
 var template = "<template>\r\n\r\n    <h1>Hello!!!</h1>\r\n\r\n</template>";
 
+var style = {};
+
 class AdvancedComponent extends ReactiveBase {
     constructor() {
         super();
-        this.attachShadow({ mode: "open" });
-        // shadowRoot.innerHTML = `
-        //       <p data-bind="title"></p>
-        //     `;
         console.log("html?");
         console.table(template);
-        // fetch("../dist/advanced-component.html")
-        //   .then((stream) => stream.text())
-        //   .then((text) => console.log(text));
+        const shadowRoot = this.attachShadow({ mode: "open" });
+        shadowRoot.innerHTML = template;
+        const styleElement = document.createElement("style");
+        // style.textContent = advancedcomponent;
+        console.log(style);
+        shadowRoot.appendChild(styleElement);
     }
 }
 // Define the new element
