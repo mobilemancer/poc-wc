@@ -13,7 +13,8 @@ export default {
     plugins: [
         // libStylePlugin({ extensions: ['.css'] }),
         postcss({
-            extract: false
+            extract: false,
+            inject: false
         }),
         typescript(),
         html({
