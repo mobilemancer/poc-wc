@@ -6,7 +6,7 @@ class AdvancedComponent extends ReactiveBase {
         // shadowRoot.innerHTML = `
         //       <p data-bind="title"></p>
         //     `;
-        fetch("../dist/advanced - component.html")
+        fetch("../dist/advanced-component.html")
             .then((stream) => stream.text())
             .then((text) => console.log(text));
     }
