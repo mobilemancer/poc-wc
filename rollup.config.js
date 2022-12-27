@@ -1,7 +1,7 @@
 import typescript from 'rollup-plugin-typescript2';
 import html from 'rollup-plugin-html';
 import { libStylePlugin, onwarn } from "rollup-plugin-lib-style"
-
+import postcss from 'rollup-plugin-postcss';
 
 export default {
     input: './src/main.ts',
@@ -9,9 +9,12 @@ export default {
         file: './dist/main.js',
         format: 'es'
     },
-    onwarn,
+    // onwarn,
     plugins: [
-        libStylePlugin({ extensions: ['.css'] }),
+        // libStylePlugin({ extensions: ['.css'] }),
+        postcss({
+            extract: false
+        }),
         typescript(),
         html({
             include: "src/**/*.html",
