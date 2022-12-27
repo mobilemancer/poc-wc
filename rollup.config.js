@@ -9,9 +9,7 @@ export default {
         file: './dist/main.js',
         format: 'es'
     },
-    // onwarn,
     plugins: [
-        // libStylePlugin({ extensions: ['.css'] }),
         postcss({
             extract: false,
             inject: false
