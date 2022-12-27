@@ -1,4 +1,5 @@
 import { ReactiveBase } from "./../base/reactive-base";
+import html from 'advanced-component';
 
 class AdvancedComponent extends ReactiveBase {
   constructor() {
@@ -9,9 +10,12 @@ class AdvancedComponent extends ReactiveBase {
     //       <p data-bind="title"></p>
     //     `;
 
-    fetch("../dist/advanced-component.html")
-      .then((stream) => stream.text())
-      .then((text) => console.log(text));
+    console.log("html?");
+    console.table(html);
+
+    // fetch("../dist/advanced-component.html")
+    //   .then((stream) => stream.text())
+    //   .then((text) => console.log(text));
   }
 }
 
