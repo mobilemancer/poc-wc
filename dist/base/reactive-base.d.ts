@@ -62,4 +62,11 @@ export declare class ReactiveBase extends HTMLElement {
      * @param {string} style
      */
     setStyle(style: string): void;
+    /**
+     * Returns the name of the element
+     *
+     * @param className name of the cextending class
+     * @returns an hyphenated element name
+     */
+    static getElementName(className: string): string;
 }

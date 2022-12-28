@@ -102,4 +102,16 @@ export class ReactiveBase extends HTMLElement {
     this.shadow.appendChild(styleElement);
     console.log(style);
   }
+
+  /**
+   * Returns the name of the element
+   *
+   * @param className name of the cextending class
+   * @returns an hyphenated element name
+   */
+  public static getElementName(className: string): string {
+    const wordRegex = /[A-Z]?[a-z]+|[0-9]+|[A-Z]+(?![a-z])/g;
+    const resultingWords = className.match(wordRegex);
+    return !!resultingWords ? resultingWords.join("-") : "";
+  }
 }

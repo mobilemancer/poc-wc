@@ -18,4 +18,7 @@ export default class InternalBinding extends ReactiveBase {
 }
 
 // Define the new element
-customElements.define("indernal-binding", InternalBinding);
+customElements.define(
+  ReactiveBase.getElementName(InternalBinding.name),
+  InternalBinding
+);

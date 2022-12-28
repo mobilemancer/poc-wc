@@ -170,6 +170,17 @@ class ReactiveBase extends HTMLElement {
         this.shadow.appendChild(styleElement);
         console.log(style);
     }
+    /**
+     * Returns the name of the element
+     *
+     * @param className name of the cextending class
+     * @returns an hyphenated element name
+     */
+    static getElementName(className) {
+        const wordRegex = /[A-Z]?[a-z]+|[0-9]+|[A-Z]+(?![a-z])/g;
+        const resultingWords = className.match(wordRegex);
+        return !!resultingWords ? resultingWords.join("-") : "";
+    }
 }
 
 var template$1 = "<h1>Hello!!!</h1>";
@@ -203,6 +214,6 @@ class InternalBinding extends ReactiveBase {
     }
 }
 // Define the new element
-customElements.define("indernal-binding", InternalBinding);
+customElements.define(ReactiveBase.getElementName(InternalBinding.name), InternalBinding);
 
 export { AdvancedComponent, HeaderComponent, HeaderComponent2, InternalBinding };
