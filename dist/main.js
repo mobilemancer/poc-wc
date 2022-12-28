@@ -179,7 +179,7 @@ class ReactiveBase extends HTMLElement {
     static getElementName(className) {
         const wordRegex = /[A-Z]?[a-z]+|[0-9]+|[A-Z]+(?![a-z])/g;
         const resultingWords = className.match(wordRegex);
-        return !!resultingWords ? resultingWords.join("-") : "";
+        return !!resultingWords ? resultingWords.join("-").toLowerCase() : "";
     }
 }
 
