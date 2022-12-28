@@ -77,15 +77,53 @@ class HeaderComponent2 extends HTMLElement {
 // Define the new element
 customElements.define("header-component2", HeaderComponent2);
 
-var css_248z$1 = "body {\r\n  padding: 0px;\r\n  margin: 0px;\r\n}\r\n";
-
+/**
+ * Description placeholder
+ * @date 2022-12-28 - 01:08:02
+ *
+ * @export
+ * @class ReactiveBase
+ * @typedef {ReactiveBase}
+ * @extends {HTMLElement}
+ */
 class ReactiveBase extends HTMLElement {
-    state;
-    constructor() {
+    /**
+     * Description placeholder
+     * @date 2022-12-28 - 01:08:02
+     *
+     * @private
+     * @type {(ShadowRoot | undefined)}
+     */
+    shadow;
+    /**
+     * Description placeholder
+     * @date 2022-12-28 - 01:08:02
+     *
+     * @private
+     * @type {*}
+     */
+    state = {};
+    /**
+     * Creates an instance of ReactiveBase.
+     * @date 2022-12-28 - 01:08:02
+     *
+     * @constructor
+     */
+    constructor(template, style) {
         super();
-        this.state = {};
-        console.log(css_248z$1);
+        if (!!template && template.length > 0) {
+            this.setTemplate(template);
+            if (!!style && style.length > 0) {
+                this.setStyle(style);
+            }
+        }
     }
+    /**
+     * Update the component state
+     * @date 2022-12-28 - 01:08:02
+     *
+     * @param {Object} newState
+     */
     setState(newState) {
         Object.entries(newState).forEach(([key, value]) => {
             this.state[key] =
@@ -94,8 +132,43 @@ class ReactiveBase extends HTMLElement {
                     : value;
         });
     }
+    /**
+     * Description placeholder
+     * @date 2022-12-28 - 01:08:02
+     *
+     * @param {*} value
+     * @returns {boolean}
+     */
     isObject(value) {
         return true;
+    }
+    /**
+     * Set the component template
+     * @date 2022-12-28 - 01:08:02
+     *
+     * @public
+     * @param {string} template
+     */
+    setTemplate(template) {
+        this.shadow = this.attachShadow({ mode: "open" });
+        this.shadow.innerHTML = template;
+    }
+    /**
+     * Set the style of the component
+     * @date 2022-12-28 - 01:08:02
+     *
+     * @public
+     * @param {string} style
+     */
+    setStyle(style) {
+        if (this.shadow === undefined) {
+            console.warn(`Failed to set styling on element ${this.tagName}, shadoe root is undefined`);
+            return;
+        }
+        const styleElement = document.createElement("style");
+        styleElement.textContent = style;
+        this.shadow.appendChild(styleElement);
+        console.log(style);
     }
 }
 
@@ -105,15 +178,13 @@ var css_248z = "h1 {\r\n  color: azure;\r\n}\r\n";
 
 class AdvancedComponent extends ReactiveBase {
     constructor() {
-        super();
-        console.log("html?");
-        console.table(template);
-        const shadowRoot = this.attachShadow({ mode: "open" });
-        shadowRoot.innerHTML = template;
-        const styleElement = document.createElement("style");
-        // style.textContent = advancedcomponent;
-        console.log(css_248z);
-        shadowRoot.appendChild(styleElement);
+        super(template, css_248z);
+        // const shadowRoot = this.attachShadow({ mode: "open" });
+        // shadowRoot.innerHTML = template;
+        // const styleElement = document.createElement("style");
+        // // style.textContent = advancedcomponent;
+        // console.log(style);
+        // shadowRoot.appendChild(styleElement);
     }
 }
 // Define the new element

@@ -4,18 +4,15 @@ import style from "./style.css";
 
 class AdvancedComponent extends ReactiveBase {
   constructor() {
-    super();
+    super(template, style);
 
-    console.log("html?");
-    console.table(template);
+    // const shadowRoot = this.attachShadow({ mode: "open" });
+    // shadowRoot.innerHTML = template;
 
-    const shadowRoot = this.attachShadow({ mode: "open" });
-    shadowRoot.innerHTML = template;
-
-    const styleElement = document.createElement("style");
-    // style.textContent = advancedcomponent;
-    console.log(style);
-    shadowRoot.appendChild(styleElement);
+    // const styleElement = document.createElement("style");
+    // // style.textContent = advancedcomponent;
+    // console.log(style);
+    // shadowRoot.appendChild(styleElement);
   }
 }
 
