@@ -174,17 +174,11 @@ class ReactiveBase extends HTMLElement {
 
 var template = "<h1>Hello!!!</h1>";
 
-var css_248z = "h1 {\r\n  color: azure;\r\n}\r\n";
+var css_248z = "h1 {\r\n  color: hotpink;\r\n  font-style: italic;\r\n  font-weight: bolder;\r\n}\r\n";
 
 class AdvancedComponent extends ReactiveBase {
     constructor() {
         super(template, css_248z);
-        // const shadowRoot = this.attachShadow({ mode: "open" });
-        // shadowRoot.innerHTML = template;
-        // const styleElement = document.createElement("style");
-        // // style.textContent = advancedcomponent;
-        // console.log(style);
-        // shadowRoot.appendChild(styleElement);
     }
 }
 // Define the new element
