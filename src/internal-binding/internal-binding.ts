@@ -2,6 +2,7 @@ import { ReactiveBase } from "../base/reactive-base";
 import template from "./internal-binding.html";
 import style from "./internal-binding.css";
 
+@defineElementDeco
 export default class InternalBinding extends ReactiveBase {
   public mode = "untouched 🆕";
   constructor() {
@@ -22,3 +23,9 @@ customElements.define(
   ReactiveBase.getElementName(InternalBinding.name),
   InternalBinding
 );
+
+function defineElementDeco<T extends { new (...args: any[]): {} }>(
+  constructor: T
+) {
+  console.log(ReactiveBase.getElementName(constructor.name));
+}
