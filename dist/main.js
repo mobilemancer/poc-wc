@@ -172,16 +172,37 @@ class ReactiveBase extends HTMLElement {
     }
 }
 
-var template = "<h1>Hello!!!</h1>";
+var template$1 = "<h1>Hello!!!</h1>";
 
-var css_248z = "h1 {\r\n  color: hotpink;\r\n  font-style: italic;\r\n  font-weight: bolder;\r\n}\r\n";
+var css_248z$1 = "h1 {\r\n  color: hotpink;\r\n  font-style: italic;\r\n  font-weight: bolder;\r\n}\r\n";
 
 class AdvancedComponent extends ReactiveBase {
     constructor() {
-        super(template, css_248z);
+        super(template$1, css_248z$1);
     }
 }
 // Define the new element
 customElements.define("advanced-component", AdvancedComponent);
 
-export { AdvancedComponent, HeaderComponent, HeaderComponent2 };
+var template = "<button onclick=\"clicked()\">Change mode</button>\r\n\r\n<p>${mode}</p>";
+
+var css_248z = "";
+
+class InternalBinding extends ReactiveBase {
+    mode = "untouched 🆕";
+    constructor() {
+        super(template, css_248z);
+    }
+    clicked() {
+        if (this.mode.startsWith("dark")) {
+            this.mode = "light ☀️";
+        }
+        else {
+            this.mode = "dark 🌒";
+        }
+    }
+}
+// Define the new element
+customElements.define("indernal-binding", InternalBinding);
+
+export { AdvancedComponent, HeaderComponent, HeaderComponent2, InternalBinding };

@@ -1,6 +1,6 @@
 import { ReactiveBase } from "../base/reactive-base";
-import template from "./indernal-binding.html";
-import style from "./indernal-binding.css";
+import template from "./internal-binding.html";
+import style from "./internal-binding.css";
 
 export default class InternalBinding extends ReactiveBase {
   public mode = "untouched 🆕";
