@@ -172,7 +172,7 @@ class ReactiveBase extends HTMLElement {
     }
 }
 
-var template = "<template>\r\n\r\n    <h1>Hello!!!</h1>\r\n\r\n</template>";
+var template = "<h1>Hello!!!</h1>";
 
 var css_248z = "h1 {\r\n  color: azure;\r\n}\r\n";
 
