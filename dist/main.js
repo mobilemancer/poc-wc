@@ -236,8 +236,12 @@ InternalBinding = __decorate([
 ], InternalBinding);
 var InternalBinding$1 = InternalBinding;
 // Define the new element
-customElements.define(ReactiveBase.getElementName(InternalBinding.name), InternalBinding);
+// customElements.define(
+//   ReactiveBase.getElementName(InternalBinding.name),
+//   InternalBinding
+// );
 function defineElementDeco(target) {
+    debugger;
     console.log(ReactiveBase.getElementName(target.name));
     customElements.define(ReactiveBase.getElementName(target.name), target);
 }
