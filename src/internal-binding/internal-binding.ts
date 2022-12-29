@@ -1,6 +1,7 @@
 import { ReactiveBase } from "../base/reactive-base";
 import template from "./internal-binding.html";
 import style from "./internal-binding.css";
+import { defineElementDeco } from "../base/defineElementDeco";
 
 @defineElementDeco
 export default class InternalBinding extends ReactiveBase {
@@ -20,15 +21,4 @@ export default class InternalBinding extends ReactiveBase {
   connectedCallback() {
     console.log("connected callback");
   }
-}
-
-// Define the new element
-// customElements.define(
-//   ReactiveBase.getElementName(InternalBinding.name),
-//   InternalBinding
-// );
-
-function defineElementDeco(target: any): void {
-  console.log(`defining element ${ReactiveBase.getElementName(target.name)}`);
-  customElements.define(ReactiveBase.getElementName(target.name), target);
 }
