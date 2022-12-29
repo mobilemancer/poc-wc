@@ -7,7 +7,6 @@ class HeaderComponent extends HTMLElement {
         // this._text = value;
     }
     constructor() {
-        console.log("Constructor for header-component started");
         // Always call super first in constructor
         super();
         // Create a shadow root
@@ -18,7 +17,6 @@ class HeaderComponent extends HTMLElement {
         // const text = this.getAttribute('data-text');
         header.textContent = this.text;
         // Create some CSS to apply to the shadow dom
-        console.log("setting up style");
         const style = document.createElement("style");
         style.textContent = `
          h1 {
@@ -52,7 +50,6 @@ class HeaderComponent2 extends HTMLElement {
         this.header.style.color = this._color;
     }
     constructor() {
-        console.log("Constructor for header-component2 started");
         // Always call super first in constructor
         super();
         // Create a shadow root
@@ -168,7 +165,6 @@ class ReactiveBase extends HTMLElement {
         const styleElement = document.createElement("style");
         styleElement.textContent = style;
         this.shadow.appendChild(styleElement);
-        console.log(style);
     }
     /**
      * Returns the name of the element
@@ -241,8 +237,9 @@ InternalBinding = __decorate([
 var InternalBinding$1 = InternalBinding;
 // Define the new element
 customElements.define(ReactiveBase.getElementName(InternalBinding.name), InternalBinding);
-function defineElementDeco(constructor) {
-    console.log(ReactiveBase.getElementName(constructor.name));
+function defineElementDeco(target) {
+    console.log(ReactiveBase.getElementName(target.name));
+    customElements.define(ReactiveBase.getElementName(target.name), target);
 }
 
 export { AdvancedComponent, HeaderComponent, HeaderComponent2, InternalBinding$1 as InternalBinding };

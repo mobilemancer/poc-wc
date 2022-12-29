@@ -20,8 +20,6 @@ class HeaderComponent2 extends HTMLElement {
   }
 
   constructor() {
-    console.log("Constructor for header-component2 started");
-
     // Always call super first in constructor
     super();
 

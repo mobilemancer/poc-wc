@@ -24,8 +24,7 @@ customElements.define(
   InternalBinding
 );
 
-function defineElementDeco<T extends { new (...args: any[]): {} }>(
-  constructor: T
-) {
-  console.log(ReactiveBase.getElementName(constructor.name));
+function defineElementDeco(target: any): void {
+  console.log(ReactiveBase.getElementName(target.name));
+  customElements.define(ReactiveBase.getElementName(target.name), target);
 }

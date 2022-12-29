@@ -100,7 +100,6 @@ export class ReactiveBase extends HTMLElement {
     const styleElement = document.createElement("style");
     styleElement.textContent = style;
     this.shadow.appendChild(styleElement);
-    console.log(style);
   }
 
   /**

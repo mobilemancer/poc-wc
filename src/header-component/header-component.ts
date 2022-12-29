@@ -9,8 +9,6 @@ class HeaderComponent extends HTMLElement {
   }
 
   constructor() {
-    console.log("Constructor for header-component started");
-
     // Always call super first in constructor
     super();
 
@@ -25,7 +23,6 @@ class HeaderComponent extends HTMLElement {
     header.textContent = this.text;
 
     // Create some CSS to apply to the shadow dom
-    console.log("setting up style");
     const style = document.createElement("style");
 
     style.textContent = `
