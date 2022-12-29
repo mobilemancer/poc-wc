@@ -26,3 +26,24 @@ export function defineElementDeco() {
     return generated;
   };
 }
+
+export function defineClass() {
+  return function classDecorator<T extends { new (...args: any[]): {} }>(
+    constructor: T
+  ) {
+    console.log("Define: " + constructor.name);
+    const generated = class extends constructor {
+      newProperty = "decorator";
+      hello = "decorator";
+    };
+    window.customElements.define(
+      ReactiveBase.getElementName(constructor.name),
+      <any>generated
+    );
+    return generated;
+  };
+}
+
+export const CustomElement = () => (cls: any) => {
+  window.customElements.define(ReactiveBase.getElementName(cls.name), <any>cls);
+};

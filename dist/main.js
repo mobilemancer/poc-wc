@@ -218,23 +218,9 @@ var template = "<button onclick=\"clicked()\">Change mode</button>\r\n\r\n<p>${m
 
 var css_248z = "";
 
-// export function defineElementDeco(target: any): void {
-//   console.log(`defining element ${ReactiveBase.getElementName(target.name)}`);
-//   customElements.define(ReactiveBase.getElementName(target.name), target);
-// }
-function defineElementDeco() {
-    return function classDecorator(constructor) {
-        console.log("Define: " + constructor.name);
-        //extend the class
-        const generated = class extends constructor {
-            newProperty = "decorator";
-            hello = "decorator";
-        };
-        // define the custom element
-        window.customElements.define(ReactiveBase.getElementName(constructor.name), generated);
-        return generated;
-    };
-}
+const CustomElement = () => (cls) => {
+    window.customElements.define(ReactiveBase.getElementName(cls.name), cls);
+};
 
 let InternalBinding = class InternalBinding extends ReactiveBase {
     mode = "untouched 🆕";
@@ -254,7 +240,7 @@ let InternalBinding = class InternalBinding extends ReactiveBase {
     }
 };
 InternalBinding = __decorate([
-    defineElementDeco()
+    CustomElement()
 ], InternalBinding);
 var InternalBinding$1 = InternalBinding;
 

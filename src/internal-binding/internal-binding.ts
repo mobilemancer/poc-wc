@@ -1,9 +1,9 @@
 import { ReactiveBase } from "../base/reactive-base";
 import template from "./internal-binding.html";
 import style from "./internal-binding.css";
-import { defineElementDeco } from "../base/defineElementDeco";
+import { CustomElement, defineElementDeco } from "../base/defineElementDeco";
 
-@defineElementDeco()
+@CustomElement()
 export default class InternalBinding extends ReactiveBase {
   public mode = "untouched 🆕";
   constructor() {
