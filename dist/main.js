@@ -231,7 +231,7 @@ function defineElementDeco() {
             hello = "decorator";
         };
         // define the custom element
-        window.customElements.define(ReactiveBase.getElementName(generated.name), generated);
+        window.customElements.define(ReactiveBase.getElementName(constructor.name), generated);
         return generated;
     };
 }

@@ -19,7 +19,7 @@ export function defineElementDeco() {
 
     // define the custom element
     window.customElements.define(
-      ReactiveBase.getElementName(generated.name),
+      ReactiveBase.getElementName(constructor.name),
       <any>generated
     );
 
