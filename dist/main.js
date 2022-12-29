@@ -114,6 +114,7 @@ class ReactiveBase extends HTMLElement {
                 this.setStyle(style);
             }
         }
+        console.timeLog("Reactive base constructor finished.");
     }
     /**
      * Update the component state
