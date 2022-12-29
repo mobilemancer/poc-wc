@@ -231,6 +231,9 @@ let InternalBinding = class InternalBinding extends ReactiveBase {
             this.mode = "dark 🌒";
         }
     }
+    connectedCallback() {
+        console.log("connected callback");
+    }
 };
 InternalBinding = __decorate([
     defineElementDeco
