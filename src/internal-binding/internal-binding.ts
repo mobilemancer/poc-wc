@@ -16,6 +16,10 @@ export default class InternalBinding extends ReactiveBase {
       this.mode = "dark 🌒";
     }
   }
+
+  connectedCallback() {
+    console.log("connected callback");
+  }
 }
 
 // Define the new element
