@@ -42,7 +42,7 @@ export class ReactiveBase extends HTMLElement {
         this.setStyle(style);
       }
     }
-    console.timeLog("Reactive base constructor finished.");
+    console.log("Reactive base constructor finished.");
   }
 
   /**
