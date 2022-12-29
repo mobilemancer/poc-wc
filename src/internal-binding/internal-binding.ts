@@ -29,7 +29,6 @@ export default class InternalBinding extends ReactiveBase {
 // );
 
 function defineElementDeco(target: any): void {
-  debugger;
-  console.log(ReactiveBase.getElementName(target.name));
+  console.log(`defining element ${ReactiveBase.getElementName(target.name)}`);
   customElements.define(ReactiveBase.getElementName(target.name), target);
 }

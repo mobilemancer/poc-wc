@@ -245,8 +245,7 @@ var InternalBinding$1 = InternalBinding;
 //   InternalBinding
 // );
 function defineElementDeco(target) {
-    debugger;
-    console.log(ReactiveBase.getElementName(target.name));
+    console.log(`defining element ${ReactiveBase.getElementName(target.name)}`);
     customElements.define(ReactiveBase.getElementName(target.name), target);
 }
 
