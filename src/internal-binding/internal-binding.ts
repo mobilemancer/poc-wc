@@ -19,10 +19,10 @@ export default class InternalBinding extends ReactiveBase {
 }
 
 // Define the new element
-customElements.define(
-  ReactiveBase.getElementName(InternalBinding.name),
-  InternalBinding
-);
+// customElements.define(
+//   ReactiveBase.getElementName(InternalBinding.name),
+//   InternalBinding
+// );
 
 function defineElementDeco(target: any): void {
   console.log(ReactiveBase.getElementName(target.name));
