@@ -222,14 +222,14 @@ var css_248z = "";
 //   console.log(`defining element ${ReactiveBase.getElementName(target.name)}`);
 //   customElements.define(ReactiveBase.getElementName(target.name), target);
 // }
-function defineElementDeco(tagname) {
+function defineElementDeco(target) {
     return function classDecorator(constructor) {
         console.log("Define: " + constructor.name);
         const generated = class extends constructor {
             newProperty = "decorator";
             hello = "decorator";
         };
-        window.customElements.define(tagname, generated);
+        window.customElements.define(ReactiveBase.getElementName(target.name), generated);
         return generated;
     };
 }

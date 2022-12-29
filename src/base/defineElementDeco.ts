@@ -5,7 +5,7 @@ import { ReactiveBase } from "./reactive-base";
 //   customElements.define(ReactiveBase.getElementName(target.name), target);
 // }
 
-export function defineElementDeco(tagname: string) {
+export function defineElementDeco(target: any) {
   return function classDecorator<T extends { new (...args: any[]): {} }>(
     constructor: T
   ) {
@@ -14,7 +14,10 @@ export function defineElementDeco(tagname: string) {
       newProperty = "decorator";
       hello = "decorator";
     };
-    window.customElements.define(tagname, <any>generated);
+    window.customElements.define(
+      ReactiveBase.getElementName(target.name),
+      <any>generated
+    );
     return generated;
   };
 }
