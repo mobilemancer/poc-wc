@@ -1,4 +1,4 @@
-export declare function defineElementDeco(target: any): <T extends new (...args: any[]) => {}>(constructor: T) => {
+export declare function defineElementDeco(): <T extends new (...args: any[]) => {}>(constructor: T) => {
     new (...args: any[]): {
         newProperty: string;
         hello: string;

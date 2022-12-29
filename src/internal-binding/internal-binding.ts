@@ -3,7 +3,7 @@ import template from "./internal-binding.html";
 import style from "./internal-binding.css";
 import { defineElementDeco } from "../base/defineElementDeco";
 
-@defineElementDeco
+@defineElementDeco()
 export default class InternalBinding extends ReactiveBase {
   public mode = "untouched 🆕";
   constructor() {

@@ -222,14 +222,16 @@ var css_248z = "";
 //   console.log(`defining element ${ReactiveBase.getElementName(target.name)}`);
 //   customElements.define(ReactiveBase.getElementName(target.name), target);
 // }
-function defineElementDeco(target) {
+function defineElementDeco() {
     return function classDecorator(constructor) {
         console.log("Define: " + constructor.name);
+        //extend the class
         const generated = class extends constructor {
             newProperty = "decorator";
             hello = "decorator";
         };
-        window.customElements.define(ReactiveBase.getElementName(target.name), generated);
+        // define the custom element
+        window.customElements.define(ReactiveBase.getElementName(generated.name), generated);
         return generated;
     };
 }
@@ -252,7 +254,7 @@ let InternalBinding = class InternalBinding extends ReactiveBase {
     }
 };
 InternalBinding = __decorate([
-    defineElementDeco
+    defineElementDeco()
 ], InternalBinding);
 var InternalBinding$1 = InternalBinding;
 

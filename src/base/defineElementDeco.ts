@@ -5,19 +5,24 @@ import { ReactiveBase } from "./reactive-base";
 //   customElements.define(ReactiveBase.getElementName(target.name), target);
 // }
 
-export function defineElementDeco(target: any) {
+export function defineElementDeco() {
   return function classDecorator<T extends { new (...args: any[]): {} }>(
     constructor: T
   ) {
     console.log("Define: " + constructor.name);
+
+    //extend the class
     const generated = class extends constructor {
       newProperty = "decorator";
       hello = "decorator";
     };
+
+    // define the custom element
     window.customElements.define(
-      ReactiveBase.getElementName(target.name),
+      ReactiveBase.getElementName(generated.name),
       <any>generated
     );
+
     return generated;
   };
 }
