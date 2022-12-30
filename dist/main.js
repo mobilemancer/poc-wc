@@ -219,6 +219,22 @@ var template = "<button onclick=\"clicked()\">Change mode</button>\r\n\r\n<p>${m
 var css_248z = "";
 
 const CustomElement = () => (cls) => {
+    /**
+     * Runs each time the element is appended to or moved in the DOM
+     */
+    cls.prototype.connectedCallback = () => {
+        if (!cls) {
+            console.warn("Element is undefined?");
+            return;
+        }
+        // Attach a click event listener to the button
+        let btn = cls.querySelector("button");
+        if (!btn)
+            return;
+        btn.addEventListener("click", function (event) {
+            console.log("clicked");
+        });
+    };
     window.customElements.define(ReactiveBase.getElementName(cls.name), cls);
 };
 

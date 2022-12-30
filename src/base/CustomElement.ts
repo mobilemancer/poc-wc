@@ -45,5 +45,22 @@ export function defineClass() {
 }
 
 export const CustomElement = () => (cls: any) => {
+  /**
+   * Runs each time the element is appended to or moved in the DOM
+   */
+  cls.prototype.connectedCallback = () => {
+    if (!cls) {
+      console.warn("Element is undefined?");
+      return;
+    }
+
+    // Attach a click event listener to the button
+    let btn = cls.querySelector("button");
+    if (!btn) return;
+    btn.addEventListener("click", function (event: any) {
+      console.log("clicked");
+    });
+  };
+
   window.customElements.define(ReactiveBase.getElementName(cls.name), <any>cls);
 };
