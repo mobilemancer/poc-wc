@@ -3,5 +3,4 @@ export default class InternalBinding extends ReactiveBase {
     mode: string;
     constructor();
     clicked(): void;
-    connectedCallback(): void;
 }

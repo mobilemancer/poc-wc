@@ -31,6 +31,7 @@ export declare class ReactiveBase extends HTMLElement {
      * @constructor
      */
     constructor(template?: string, style?: string);
+    connectedCallback: () => void;
     /**
      * Update the component state
      * @date 2022-12-28 - 01:08:02

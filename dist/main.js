@@ -116,6 +116,9 @@ class ReactiveBase extends HTMLElement {
         }
         console.log("Reactive base constructor finished.");
     }
+    connectedCallback = function () {
+        console.log("Connected callback");
+    };
     /**
      * Update the component state
      * @date 2022-12-28 - 01:08:02
@@ -251,9 +254,6 @@ let InternalBinding = class InternalBinding extends ReactiveBase {
         else {
             this.mode = "dark 🌒";
         }
-    }
-    connectedCallback() {
-        console.log("connected callback");
     }
 };
 InternalBinding = __decorate([
