@@ -4,14 +4,10 @@
 
 To build, bundle and package, use
 
-```
-npm run bundle
-```
+    npm run bundle
 
 ## Run tests
 
 Run the tests and see coverage report by running
 
-```
-npm run test
-```
+    npm run test
