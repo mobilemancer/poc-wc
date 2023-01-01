@@ -39,6 +39,8 @@ export default class TemplateParser {
           let start = element.innerHTML.indexOf('${', index);
           let end = element.innerHTML.indexOf('}', start);
           let stringLiteral = element.innerHTML.substring(start, end + 1);
+
+          // TODO: change too <span slot="my-text">...
           element.innerHTML = element.innerHTML.replace(stringLiteral, '<template>stringLiteral</template>');
           index = end + 1;
         }
