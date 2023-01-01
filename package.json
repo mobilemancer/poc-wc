@@ -6,10 +6,10 @@
   "module": "dist/main.js",
   "type": "module",
   "scripts": {
-    "test": "jest --coverage",
+    "clean": "rimraf ./dist",
     "build": "npm run clean && tsc && copyfiles -u 1 src/**/*.html ./dist",
     "bundle": "npm run clean && npx rollup -c",
-    "clean": "rimraf ./dist"
+    "test": "jest --coverage"
   },
   "repository": {
     "type": "git",
