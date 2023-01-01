@@ -155,7 +155,7 @@ class ReactiveBase extends HTMLElement {
     constructor(template, style) {
         super();
         // look for string literal bindings and replace them
-        this.parseTemplate(template);
+        template = this.parseTemplate(template);
         // set template if available
         if (!!template && template.length > 0) {
             this.setTemplate(template);
