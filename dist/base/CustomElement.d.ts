@@ -10,4 +10,4 @@ export declare function defineClass(): <T extends new (...args: any[]) => {}>(co
         hello: string;
     };
 } & T;
-export declare const CustomElement: () => (cls: any) => void;
+export declare const CustomElement: () => (customElement: any) => any;

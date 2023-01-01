@@ -7,6 +7,8 @@ export default class TemplateParser {
      * @returns an array of all HTMLElements
      */
     static getElements(template: string): Array<Element>;
+    static stringLiteralCounter: number;
+    static stringLiteralReplacements: Map<string, string[]>;
     static findStringLiterals(elements: Element[]): Element[];
     static serializeElements(elements: Element[]): void;
 }

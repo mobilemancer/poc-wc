@@ -83,8 +83,8 @@ class TemplateParser {
     }
     static convertNodesToString(nodes) {
         let result = "";
-        nodes.forEach(node => {
-            result += (node.outerHTML || node.nodeValue);
+        nodes.forEach((node) => {
+            result += node.outerHTML || node.nodeValue;
         });
         return result;
     }
@@ -99,25 +99,33 @@ class TemplateParser {
         const allElements = htmlDoc.getElementsByTagName("*");
         const elementsArray = [...allElements];
         // the DOMParser adds a few elements we're not inteerested in, remove them and return the rest
-        return elementsArray.filter(e => (e.tagName !== 'HTML' && e.tagName !== 'HEAD' && e.tagName !== 'BODY'));
+        return elementsArray.filter((e) => e.tagName !== "HTML" && e.tagName !== "HEAD" && e.tagName !== "BODY");
     }
+    static stringLiteralCounter = 0;
+    static stringLiteralReplacements = new Map();
     static findStringLiterals(elements) {
-        elements.forEach(element => {
-            if (element.innerHTML.includes('${')) {
+        elements.forEach((element) => {
+            if (element.innerHTML.includes("${")) {
                 let index = 0;
-                while (element.innerHTML.indexOf('${', index) > -1) {
-                    let start = element.innerHTML.indexOf('${', index);
-                    let end = element.innerHTML.indexOf('}', start);
+                while (element.innerHTML.indexOf("${", index) > -1) {
+                    let start = element.innerHTML.indexOf("${", index);
+                    let end = element.innerHTML.indexOf("}", start);
                     let stringLiteral = element.innerHTML.substring(start, end + 1);
-                    element.innerHTML = element.innerHTML.replace(stringLiteral, '<template>stringLiteral</template>');
+                    let stringLiteralName = element.innerHTML.substring(start + 2, end);
+                    element.innerHTML = element.innerHTML.replace(stringLiteral, `<span id='${stringLiteralName + this.stringLiteralCounter++}'></span>`);
+                    if (!this.stringLiteralReplacements.has(stringLiteralName)) {
+                        this.stringLiteralReplacements.set(stringLiteralName, []);
+                    }
+                    this.stringLiteralReplacements
+                        .get(stringLiteralName)
+                        ?.push(stringLiteralName + this.stringLiteralCounter);
                     index = end + 1;
                 }
             }
         });
         return elements;
     }
-    static serializeElements(elements) {
-    }
+    static serializeElements(elements) { }
 }
 
 /**
@@ -157,14 +165,20 @@ class ReactiveBase extends HTMLElement {
         // look for string literal bindings and replace them
         template = this.parseTemplate(template);
         // set template if available
-        if (!!template && template.length > 0) {
-            this.setTemplate(template);
-            // set style if available
-            if (!!style && style.length > 0) {
-                this.setStyle(style);
-            }
+        if (!template || template.length === 0) {
+            console.warn("No template to set for element");
+            return;
         }
+        this.setTemplate(template);
+        // set style if available
+        if (!!style && style.length > 0) {
+            this.setStyle(style);
+        }
+        this.connectedCallback = this.constructConnectedCallback();
         console.log("Reactive base constructor finished.");
+    }
+    constructConnectedCallback() {
+        return function () { };
     }
     parseTemplate(template) {
         if (template === undefined) {
@@ -278,12 +292,23 @@ var template = "<button onclick=\"clicked\">Change mode</button>\r\n\r\n<p>${mod
 
 var css_248z = "";
 
-const CustomElement = () => (cls) => {
+const CustomElement = () => (customElement) => {
+    // save a reference to the original constructor
+    var original = customElement;
+    // the new constructor behaviour
+    var f = function (...args) {
+        console.log("ClassWrapper: before class constructor", original.name);
+        let instance = original.apply(this, args);
+        console.log("ClassWrapper: after class constructor", original.name);
+        return instance;
+    };
+    // copy prototype so intanceof operator still works
+    f.prototype = original.prototype;
     /**
      * Runs each time the element is appended to or moved in the DOM
      */
-    cls.prototype.connectedCallback || function () { };
-    cls.prototype.connectedCallback = function () {
+    // customElement.prototype.connectedCallback || function () {};
+    customElement.prototype.connectedCallback = function () {
         if (!this) {
             console.warn("Element is undefined?");
             return;
@@ -296,7 +321,10 @@ const CustomElement = () => (cls) => {
             console.log("clicked");
         });
     };
-    window.customElements.define(ReactiveBase.getElementName(cls.name), cls);
+    // define the custom element
+    window.customElements.define(ReactiveBase.getElementName(customElement.name), customElement);
+    // return new constructor (will override original)
+    return f;
 };
 
 let InternalBinding = class InternalBinding extends ReactiveBase {

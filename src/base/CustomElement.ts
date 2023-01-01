@@ -44,12 +44,26 @@ export function defineClass() {
   };
 }
 
-export const CustomElement = () => (cls: any) => {
+export const CustomElement = () => (customElement: any) => {
+  // save a reference to the original constructor
+  var original = customElement;
+
+  // the new constructor behaviour
+  var f: any = function (this: any, ...args: any) {
+    console.log("ClassWrapper: before class constructor", original.name);
+    let instance = original.apply(this, args);
+    console.log("ClassWrapper: after class constructor", original.name);
+    return instance;
+  };
+
+  // copy prototype so intanceof operator still works
+  f.prototype = original.prototype;
+
   /**
    * Runs each time the element is appended to or moved in the DOM
    */
-  const connectedCallback = cls.prototype.connectedCallback || function () {};
-  cls.prototype.connectedCallback = function () {
+  // customElement.prototype.connectedCallback || function () {};
+  customElement.prototype.connectedCallback = function () {
     if (!this) {
       console.warn("Element is undefined?");
       return;
@@ -63,5 +77,12 @@ export const CustomElement = () => (cls: any) => {
     });
   };
 
-  window.customElements.define(ReactiveBase.getElementName(cls.name), <any>cls);
+  // define the custom element
+  window.customElements.define(
+    ReactiveBase.getElementName(customElement.name),
+    <any>customElement
+  );
+
+  // return new constructor (will override original)
+  return f;
 };

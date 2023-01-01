@@ -31,6 +31,7 @@ export declare class ReactiveBase extends HTMLElement {
      * @constructor
      */
     constructor(template?: string, style?: string);
+    constructConnectedCallback(): () => void;
     parseTemplate(template: string | undefined): string | undefined;
     connectedCallback: () => void;
     /**

@@ -41,21 +41,29 @@ export class ReactiveBase extends HTMLElement {
     template = this.parseTemplate(template);
 
     // set template if available
-    if (!!template && template.length > 0) {
-      this.setTemplate(template);
-
-      // set style if available
-      if (!!style && style.length > 0) {
-        this.setStyle(style);
-      }
+    if (!template || template.length === 0) {
+      console.warn("No template to set for element");
+      return;
     }
+    this.setTemplate(template);
+
+    // set style if available
+    if (!!style && style.length > 0) {
+      this.setStyle(style);
+    }
+
+    this.connectedCallback = this.constructConnectedCallback();
 
     console.log("Reactive base constructor finished.");
   }
 
+  constructConnectedCallback(): () => void {
+    return function () {};
+  }
+
   parseTemplate(template: string | undefined) {
     if (template === undefined) {
-      console.warn(`Component ${this} has no template.`)
+      console.warn(`Component ${this} has no template.`);
       return template;
     }
 
