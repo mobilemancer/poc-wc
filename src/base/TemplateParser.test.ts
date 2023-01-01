@@ -1,16 +1,16 @@
 import TemplateParser from "./TemplateParser";
 
-let template = "<div onclick='clicked()'>apa</div>";
+let template = "<div onclick=\"clicked()\">apa</div>";
 let template2 = "<div>${test}</div>";
 
 describe("accordion", () => {
-  it("initialise component", () => {
+  it("parse events", () => {
     const result = TemplateParser.parse(template);
-    expect(result.length).toBe(1);
+    expect(result).toBe(template);
   });
 
-  it("initialise component with scope", () => {
+  it("parse string literals", () => {
     const result = TemplateParser.parse(template2);
-    expect(result.length).toBe(1);
+    expect(result).toBe("<div><template>stringLiteral</template></div>");
   });
 });

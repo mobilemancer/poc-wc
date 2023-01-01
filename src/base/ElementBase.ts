@@ -1,3 +1,5 @@
+import TemplateParser from "./TemplateParser";
+
 /**
  * Description placeholder
  * @date 2022-12-28 - 01:08:02
@@ -35,6 +37,9 @@ export class ReactiveBase extends HTMLElement {
   constructor(template?: string, style?: string) {
     super();
 
+    // look for string literal bindings and replace them
+    this.parseTemplate(template);
+
     // set template if available
     if (!!template && template.length > 0) {
       this.setTemplate(template);
@@ -45,12 +50,17 @@ export class ReactiveBase extends HTMLElement {
       }
     }
 
-    this.parseTemplate(template);
-
     console.log("Reactive base constructor finished.");
   }
 
-  parseTemplate(template: string | undefined) {}
+  parseTemplate(template: string | undefined) {
+    if (template === undefined) {
+      console.warn(`Component ${this} has no template.`)
+      return template;
+    }
+
+    return TemplateParser.parse(template);
+  }
 
   connectedCallback = function () {
     console.log("Connected callback");
