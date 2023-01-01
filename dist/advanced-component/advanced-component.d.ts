@@ -1,4 +1,4 @@
-import { ReactiveBase } from "./../base/reactive-base";
+import { ReactiveBase } from "../base/ElementBase";
 declare class AdvancedComponent extends ReactiveBase {
     constructor();
 }

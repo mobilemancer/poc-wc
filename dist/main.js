@@ -108,14 +108,18 @@ class ReactiveBase extends HTMLElement {
      */
     constructor(template, style) {
         super();
+        // set template if available
         if (!!template && template.length > 0) {
             this.setTemplate(template);
+            // set style if available
             if (!!style && style.length > 0) {
                 this.setStyle(style);
             }
         }
+        this.parseTemplate(template);
         console.log("Reactive base constructor finished.");
     }
+    parseTemplate(template) { }
     connectedCallback = function () {
         console.log("Connected callback");
     };
@@ -163,7 +167,7 @@ class ReactiveBase extends HTMLElement {
      */
     setStyle(style) {
         if (this.shadow === undefined) {
-            console.warn(`Failed to set styling on element ${this.tagName}, shadoe root is undefined`);
+            console.warn(`Failed to set styling on element ${this.tagName}, shadow root is undefined`);
             return;
         }
         const styleElement = document.createElement("style");
@@ -217,7 +221,7 @@ function __decorate(decorators, target, key, desc) {
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 }
 
-var template = "<button onclick=\"clicked()\">Change mode</button>\r\n\r\n<p>${mode}</p>";
+var template = "<button onclick=\"clicked\">Change mode</button>\r\n\r\n<p>${mode}</p>";
 
 var css_248z = "";
 

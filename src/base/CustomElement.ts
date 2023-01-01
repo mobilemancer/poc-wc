@@ -1,4 +1,4 @@
-import { ReactiveBase } from "./reactive-base";
+import { ReactiveBase } from "./ElementBase";
 
 // export function defineElementDeco(target: any): void {
 //   console.log(`defining element ${ReactiveBase.getElementName(target.name)}`);

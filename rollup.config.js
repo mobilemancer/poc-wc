@@ -14,7 +14,7 @@ export default {
             extract: false,
             inject: false
         }),
-        typescript(),
+        typescript({ exclude: "**/*.test.ts" }),
         html({
             include: "src/**/*.html",
         }),

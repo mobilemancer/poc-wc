@@ -35,15 +35,22 @@ export class ReactiveBase extends HTMLElement {
   constructor(template?: string, style?: string) {
     super();
 
+    // set template if available
     if (!!template && template.length > 0) {
       this.setTemplate(template);
 
+      // set style if available
       if (!!style && style.length > 0) {
         this.setStyle(style);
       }
     }
+
+    this.parseTemplate(template);
+
     console.log("Reactive base constructor finished.");
   }
+
+  parseTemplate(template: string | undefined) {}
 
   connectedCallback = function () {
     console.log("Connected callback");
@@ -97,7 +104,7 @@ export class ReactiveBase extends HTMLElement {
   public setStyle(style: string): void {
     if (this.shadow === undefined) {
       console.warn(
-        `Failed to set styling on element ${this.tagName}, shadoe root is undefined`
+        `Failed to set styling on element ${this.tagName}, shadow root is undefined`
       );
       return;
     }

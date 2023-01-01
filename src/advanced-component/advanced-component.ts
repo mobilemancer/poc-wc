@@ -1,4 +1,4 @@
-import { ReactiveBase } from "./../base/reactive-base";
+import { ReactiveBase } from "../base/ElementBase";
 import template from "./advanced-component.html";
 import style from "./style.css";
 

@@ -1,4 +1,4 @@
-import { ReactiveBase } from "../base/reactive-base";
+import { ReactiveBase } from "../base/ElementBase";
 import template from "./internal-binding.html";
 import style from "./internal-binding.css";
 import { CustomElement, defineElementDeco } from "../base/CustomElement";
