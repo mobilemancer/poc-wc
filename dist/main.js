@@ -173,7 +173,11 @@ class ReactiveBase extends HTMLElement {
         if (!!style && style.length > 0) {
             this.setStyle(style);
         }
+        console.log("connectedCallback looks like the following - pre new:");
+        console.log(this.connectedCallback.toString());
         this.connectedCallback = this.constructConnectedCallback();
+        console.log("connectedCallback looks like the following - post new:");
+        console.log(this.connectedCallback.toString());
         console.log("Reactive base constructor finished.");
     }
     constructConnectedCallback() {
@@ -184,8 +188,6 @@ class ReactiveBase extends HTMLElement {
             });
         });
         const connectedCallback = new Function(functionBody);
-        console.log("connectedCallback looks like the following:");
-        console.log(connectedCallback.toString());
         // TODO: fix typing
         return connectedCallback;
     }
