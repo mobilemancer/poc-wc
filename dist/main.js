@@ -175,7 +175,7 @@ class ReactiveBase extends HTMLElement {
         }
         console.log("connectedCallback looks like the following - pre new:");
         console.log(this.connectedCallback.toString());
-        this.connectedCallback = this.constructConnectedCallback();
+        this.connectedCallback = () => this.constructConnectedCallback();
         console.log("connectedCallback looks like the following - post new:");
         console.log(this.connectedCallback.toString());
         console.log("Reactive base constructor finished.");
@@ -195,7 +195,6 @@ class ReactiveBase extends HTMLElement {
     connectedCallback() {
         console.log("Connected callback original");
     }
-    ;
     parseTemplate(template) {
         if (template === undefined) {
             console.warn(`Component ${this} has no template.`);
