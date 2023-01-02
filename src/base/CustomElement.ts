@@ -51,12 +51,12 @@ export function CustomElement() {
   ) {
     // save a reference to the original constructor
     var original = customElement;
-
+    let instance: any;
     // the new constructor behaviour
     var f: any = function (this: any, ...args: any) {
       console.log("ClassWrapper: before class constructor", original.name);
       // let instance = original.apply(this, args);
-      let instance = new original(...args);
+      instance = new original(...args);
       console.log("ClassWrapper: after class constructor", original.name);
       return instance;
     };
@@ -70,13 +70,26 @@ export function CustomElement() {
 
     // f.prototype.connectedCallback = (<any>original).super?.connectedCallback;
     // customElement.prototype.connectedCallback || function () {};
-    customElement.prototype.connectedCallback = function () {
-      if (!this) {
-        console.warn("Element is undefined?");
-        return;
-      }
-      console.log("This is from the decorator")
-    };
+    if (!instance?.constructConnectedCallbackString) {
+      customElement.prototype.connectedCallback =
+        function () {
+          if (!this) {
+            console.warn("Element is undefined?");
+            return;
+          }
+          console.log("This is from the decorator")
+        };
+    } else {
+      customElement.prototype.connectedCallback = Function(instance?.constructConnectedCallbackString);
+    }
+
+    // function () {
+    //   if (!this) {
+    //     console.warn("Element is undefined?");
+    //     return;
+    //   }
+    //   console.log("This is from the decorator")
+    // };
 
     //   // Attach a click event listener to the button
     //   let btn = this.querySelector("button");

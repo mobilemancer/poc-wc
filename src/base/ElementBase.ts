@@ -70,9 +70,12 @@ export class ReactiveBase extends HTMLElement {
       });
     });
 
-    // TODO: fix typing
+    this.constructConnectedCallbackString = functionBody;
     return functionBody;
   }
+
+  public constructConnectedCallbackString = "";
+
 
   /* istanbul ignore next */
   connectedCallback() {

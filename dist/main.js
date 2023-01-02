@@ -187,9 +187,10 @@ class ReactiveBase extends HTMLElement {
                 functionBody += `document.querySelector("#${instance}").innerHtml = host.getAttribute('key');\r\n`;
             });
         });
-        // TODO: fix typing
+        this.constructConnectedCallbackString = functionBody;
         return functionBody;
     }
+    constructConnectedCallbackString = "";
     /* istanbul ignore next */
     connectedCallback() {
         console.log("Connected callback original");
@@ -346,11 +347,12 @@ function CustomElement() {
     return function classDecorator(customElement) {
         // save a reference to the original constructor
         var original = customElement;
+        let instance;
         // the new constructor behaviour
         var f = function (...args) {
             console.log("ClassWrapper: before class constructor", original.name);
             // let instance = original.apply(this, args);
-            let instance = new original(...args);
+            instance = new original(...args);
             console.log("ClassWrapper: after class constructor", original.name);
             return instance;
         };
@@ -361,13 +363,26 @@ function CustomElement() {
          */
         // f.prototype.connectedCallback = (<any>original).super?.connectedCallback;
         // customElement.prototype.connectedCallback || function () {};
-        customElement.prototype.connectedCallback = function () {
-            if (!this) {
-                console.warn("Element is undefined?");
-                return;
-            }
-            console.log("This is from the decorator");
-        };
+        if (!instance?.constructConnectedCallbackString) {
+            customElement.prototype.connectedCallback =
+                function () {
+                    if (!this) {
+                        console.warn("Element is undefined?");
+                        return;
+                    }
+                    console.log("This is from the decorator");
+                };
+        }
+        else {
+            customElement.prototype.connectedCallback = Function(instance?.constructConnectedCallbackString);
+        }
+        // function () {
+        //   if (!this) {
+        //     console.warn("Element is undefined?");
+        //     return;
+        //   }
+        //   console.log("This is from the decorator")
+        // };
         //   // Attach a click event listener to the button
         //   let btn = this.querySelector("button");
         //   if (!btn) return;
