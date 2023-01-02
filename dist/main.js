@@ -173,25 +173,25 @@ class ReactiveBase extends HTMLElement {
         if (!!style && style.length > 0) {
             this.setStyle(style);
         }
-        // this.connectedCallback = this.constructConnectedCallback();
+        this.connectedCallback = this.constructConnectedCallback();
         console.log("Reactive base constructor finished.");
     }
     constructConnectedCallback() {
-        let functionBody = "";
+        let functionBody = `console.log("Connected callback - replaced");\r\n`;
         TemplateParser.stringLiteralReplacements.forEach((val, key, map) => {
             val.forEach((instance) => {
-                functionBody += `document.querySelector("#${instance}").innerHtml = this[${key}]`;
+                functionBody += `document.querySelector("#${instance}").innerHtml = host.getAttribute('key');\r\n`;
             });
         });
         const connectedCallback = new Function(functionBody);
         console.log("connectedCallback looks like the following:");
-        console.log(connectedCallback);
+        console.log(connectedCallback.toString());
         // TODO: fix typing
         return connectedCallback;
     }
     /* istanbul ignore next */
     connectedCallback() {
-        console.log("Connected callback");
+        console.log("Connected callback original");
     }
     ;
     parseTemplate(template) {
@@ -303,6 +303,44 @@ var template = "<button onclick=\"clicked\">Change mode</button>\r\n\r\n<p>${mod
 
 var css_248z = "";
 
+// // export function defineElementDeco(target: any): void {
+// //   console.log(`defining element ${ReactiveBase.getElementName(target.name)}`);
+// //   customElements.define(ReactiveBase.getElementName(target.name), target);
+// // }
+// export function defineElementDeco() {
+//   return function classDecorator<T extends { new(...args: any[]): {} }>(
+//     constructor: T
+//   ) {
+//     console.log("Define: " + constructor.name);
+//     //extend the class
+//     const generated = class extends constructor {
+//       newProperty = "decorator";
+//       hello = "decorator";
+//     };
+//     // define the custom element
+//     window.customElements.define(
+//       ReactiveBase.getElementName(constructor.name),
+//       <any>generated
+//     );
+//     return generated;
+//   };
+// }
+// export function defineClass() {
+//   return function classDecorator<T extends { new(...args: any[]): {} }>(
+//     constructor: T
+//   ) {
+//     console.log("Define: " + constructor.name);
+//     const generated = class extends constructor {
+//       newProperty = "decorator";
+//       hello = "decorator";
+//     };
+//     window.customElements.define(
+//       ReactiveBase.getElementName(constructor.name),
+//       <any>generated
+//     );
+//     return generated;
+//   };
+// }
 // export const CustomElement = () => (customElement: any) => {
 function CustomElement() {
     return function classDecorator(customElement) {
@@ -312,9 +350,9 @@ function CustomElement() {
         var f = function (...args) {
             console.log("ClassWrapper: before class constructor", original.name);
             // let instance = original.apply(this, args);
-            // let instance = new original(...args);
+            let instance = new original(...args);
             console.log("ClassWrapper: after class constructor", original.name);
-            return original;
+            return instance;
         };
         // copy prototype so intanceof operator still works
         f.prototype = original.prototype;

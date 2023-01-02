@@ -3,13 +3,13 @@ import { CustomElement } from "../base/CustomElement";
 
 @CustomElement()
 export default class TestElement extends ReactiveBase {
-    private static mockStyle = "";
-    private static mockTemplate = '<button onclick="clicked">Change mode</button><p>${mode}</p>';
 
     public mode = "untouched 🆕";
 
-    constructor(testTemplate?: string, testStyle?: string) {
-        super(testTemplate ?? TestElement.mockTemplate, testStyle ?? TestElement.mockStyle);
+    constructor(mockTemplate?: string, mockStyle?: string) {
+        const defaultMockStyle = "";
+        const defaultMockTemplate = '<button onclick="clicked">Change mode</button><p>${mode}</p>';
+        super(mockTemplate ?? defaultMockTemplate, mockStyle ?? defaultMockStyle);
     }
 
     public clicked(): void {
@@ -19,8 +19,4 @@ export default class TestElement extends ReactiveBase {
             this.mode = "dark 🌒";
         }
     }
-
-    // connectedCallback(){
-    //     super.connectedCallback();
-    // }
 }

@@ -52,22 +52,22 @@ export class ReactiveBase extends HTMLElement {
       this.setStyle(style);
     }
 
-    // this.connectedCallback = this.constructConnectedCallback();
+    this.connectedCallback = this.constructConnectedCallback();
 
     console.log("Reactive base constructor finished.");
   }
 
   constructConnectedCallback(): () => void {
-    let functionBody = "";
+    let functionBody = `console.log("Connected callback - replaced");\r\n`;
     TemplateParser.stringLiteralReplacements.forEach((val, key, map) => {
       val.forEach((instance) => {
-        functionBody += `document.querySelector("#${instance}").innerHtml = this[${key}]`;
+        functionBody += `document.querySelector("#${instance}").innerHtml = host.getAttribute('key');\r\n`;
       });
     });
 
     const connectedCallback = new Function(functionBody);
     console.log("connectedCallback looks like the following:");
-    console.log(connectedCallback);
+    console.log(connectedCallback.toString());
 
     // TODO: fix typing
     return <any>connectedCallback;
@@ -75,7 +75,7 @@ export class ReactiveBase extends HTMLElement {
 
   /* istanbul ignore next */
   connectedCallback() {
-    console.log("Connected callback");
+    console.log("Connected callback original");
   };
 
 

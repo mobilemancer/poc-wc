@@ -10,7 +10,8 @@
     "build": "npm run clean && tsc && copyfiles -u 1 src/**/*.html ./dist",
     "bundle": "npm run clean && npx rollup -c",
     "test": "jest",
-    "test-coverage": "jest --coverage"
+    "test-coverage": "jest --coverage",
+    "test-watch": "jest --watch"
   },
   "repository": {
     "type": "git",

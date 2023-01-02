@@ -1,48 +1,48 @@
 import { ReactiveBase } from "./ElementBase";
 
-// export function defineElementDeco(target: any): void {
-//   console.log(`defining element ${ReactiveBase.getElementName(target.name)}`);
-//   customElements.define(ReactiveBase.getElementName(target.name), target);
+// // export function defineElementDeco(target: any): void {
+// //   console.log(`defining element ${ReactiveBase.getElementName(target.name)}`);
+// //   customElements.define(ReactiveBase.getElementName(target.name), target);
+// // }
+
+// export function defineElementDeco() {
+//   return function classDecorator<T extends { new(...args: any[]): {} }>(
+//     constructor: T
+//   ) {
+//     console.log("Define: " + constructor.name);
+
+//     //extend the class
+//     const generated = class extends constructor {
+//       newProperty = "decorator";
+//       hello = "decorator";
+//     };
+
+//     // define the custom element
+//     window.customElements.define(
+//       ReactiveBase.getElementName(constructor.name),
+//       <any>generated
+//     );
+
+//     return generated;
+//   };
 // }
 
-export function defineElementDeco() {
-  return function classDecorator<T extends { new(...args: any[]): {} }>(
-    constructor: T
-  ) {
-    console.log("Define: " + constructor.name);
-
-    //extend the class
-    const generated = class extends constructor {
-      newProperty = "decorator";
-      hello = "decorator";
-    };
-
-    // define the custom element
-    window.customElements.define(
-      ReactiveBase.getElementName(constructor.name),
-      <any>generated
-    );
-
-    return generated;
-  };
-}
-
-export function defineClass() {
-  return function classDecorator<T extends { new(...args: any[]): {} }>(
-    constructor: T
-  ) {
-    console.log("Define: " + constructor.name);
-    const generated = class extends constructor {
-      newProperty = "decorator";
-      hello = "decorator";
-    };
-    window.customElements.define(
-      ReactiveBase.getElementName(constructor.name),
-      <any>generated
-    );
-    return generated;
-  };
-}
+// export function defineClass() {
+//   return function classDecorator<T extends { new(...args: any[]): {} }>(
+//     constructor: T
+//   ) {
+//     console.log("Define: " + constructor.name);
+//     const generated = class extends constructor {
+//       newProperty = "decorator";
+//       hello = "decorator";
+//     };
+//     window.customElements.define(
+//       ReactiveBase.getElementName(constructor.name),
+//       <any>generated
+//     );
+//     return generated;
+//   };
+// }
 
 // export const CustomElement = () => (customElement: any) => {
 export function CustomElement() {
@@ -56,9 +56,9 @@ export function CustomElement() {
     var f: any = function (this: any, ...args: any) {
       console.log("ClassWrapper: before class constructor", original.name);
       // let instance = original.apply(this, args);
-      // let instance = new original(...args);
+      let instance = new original(...args);
       console.log("ClassWrapper: after class constructor", original.name);
-      return original;
+      return instance;
     };
 
     // copy prototype so intanceof operator still works
