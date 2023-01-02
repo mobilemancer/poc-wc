@@ -52,7 +52,7 @@ export class ReactiveBase extends HTMLElement {
       this.setStyle(style);
     }
 
-    this.connectedCallback = this.constructConnectedCallback();
+    // this.connectedCallback = this.constructConnectedCallback();
 
     console.log("Reactive base constructor finished.");
   }
@@ -73,7 +73,13 @@ export class ReactiveBase extends HTMLElement {
     return <any>connectedCallback;
   }
 
-  parseTemplate(template: string | undefined) {
+  /* istanbul ignore next */
+  connectedCallback() {
+    console.log("Connected callback");
+  };
+
+
+  private parseTemplate(template: string | undefined) {
     if (template === undefined) {
       console.warn(`Component ${this} has no template.`);
       return template;
@@ -82,9 +88,6 @@ export class ReactiveBase extends HTMLElement {
     return TemplateParser.parse(template);
   }
 
-  connectedCallback = function () {
-    console.log("Connected callback");
-  };
 
   /**
    * Update the component state
@@ -119,7 +122,7 @@ export class ReactiveBase extends HTMLElement {
    * @public
    * @param {string} template
    */
-  public setTemplate(template: string): void {
+  private setTemplate(template: string): void {
     this.shadow = this.attachShadow({ mode: "open" });
     this.shadow.innerHTML = template;
   }
@@ -131,7 +134,7 @@ export class ReactiveBase extends HTMLElement {
    * @public
    * @param {string} style
    */
-  public setStyle(style: string): void {
+  private setStyle(style: string): void {
     if (this.shadow === undefined) {
       console.warn(
         `Failed to set styling on element ${this.tagName}, shadow root is undefined`

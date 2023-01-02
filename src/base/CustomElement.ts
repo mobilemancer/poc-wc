@@ -44,47 +44,53 @@ export function defineClass() {
   };
 }
 
-export const CustomElement = () => (customElement: any) => {
-  // save a reference to the original constructor
-  var original = customElement;
+// export const CustomElement = () => (customElement: any) => {
+export function CustomElement() {
+  return function classDecorator<T extends { new(...args: any[]): {} }>(
+    customElement: T
+  ) {
+    // save a reference to the original constructor
+    var original = customElement;
 
-  // the new constructor behaviour
-  var f: any = function (this: any, ...args: any) {
-    console.log("ClassWrapper: before class constructor", original.name);
-    let instance = original.apply(this, args);
-    console.log("ClassWrapper: after class constructor", original.name);
-    return instance;
-  };
+    // the new constructor behaviour
+    var f: any = function (this: any, ...args: any) {
+      console.log("ClassWrapper: before class constructor", original.name);
+      // let instance = original.apply(this, args);
+      // let instance = new original(...args);
+      console.log("ClassWrapper: after class constructor", original.name);
+      return original;
+    };
 
-  // copy prototype so intanceof operator still works
-  f.prototype = original.prototype;
+    // copy prototype so intanceof operator still works
+    f.prototype = original.prototype;
 
-  /**
-   * Runs each time the element is appended to or moved in the DOM
-   */
-  debugger;
-  f.prototype.connectedCallback = original.super?.connectedCallback;
-  // customElement.prototype.connectedCallback || function () {};
-  // function () {
-  //   if (!this) {
-  //     console.warn("Element is undefined?");
-  //     return;
-  //   }
+    /**
+     * Runs each time the element is appended to or moved in the DOM
+     */
 
-  //   // Attach a click event listener to the button
-  //   let btn = this.querySelector("button");
-  //   if (!btn) return;
-  //   btn.addEventListener("click", function (event: any) {
-  //     console.log("clicked");
-  //   });
-  // };
+    // f.prototype.connectedCallback = (<any>original).super?.connectedCallback;
+    // customElement.prototype.connectedCallback || function () {};
+    // function () {
+    //   if (!this) {
+    //     console.warn("Element is undefined?");
+    //     return;
+    //   }
 
-  // define the custom element
-  window.customElements.define(
-    ReactiveBase.getElementName(customElement.name),
-    <any>customElement
-  );
+    //   // Attach a click event listener to the button
+    //   let btn = this.querySelector("button");
+    //   if (!btn) return;
+    //   btn.addEventListener("click", function (event: any) {
+    //     console.log("clicked");
+    //   });
+    // };
 
-  // return new constructor (will override original)
-  return f;
+    // define the custom element
+    window.customElements.define(
+      ReactiveBase.getElementName(customElement.name),
+      <any>customElement
+    );
+
+    // return new constructor (will override original)
+    return f;
+  }
 };

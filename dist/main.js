@@ -173,7 +173,7 @@ class ReactiveBase extends HTMLElement {
         if (!!style && style.length > 0) {
             this.setStyle(style);
         }
-        this.connectedCallback = this.constructConnectedCallback();
+        // this.connectedCallback = this.constructConnectedCallback();
         console.log("Reactive base constructor finished.");
     }
     constructConnectedCallback() {
@@ -189,6 +189,11 @@ class ReactiveBase extends HTMLElement {
         // TODO: fix typing
         return connectedCallback;
     }
+    /* istanbul ignore next */
+    connectedCallback() {
+        console.log("Connected callback");
+    }
+    ;
     parseTemplate(template) {
         if (template === undefined) {
             console.warn(`Component ${this} has no template.`);
@@ -196,9 +201,6 @@ class ReactiveBase extends HTMLElement {
         }
         return TemplateParser.parse(template);
     }
-    connectedCallback = function () {
-        console.log("Connected callback");
-    };
     /**
      * Update the component state
      * @date 2022-12-28 - 01:08:02
@@ -301,41 +303,44 @@ var template = "<button onclick=\"clicked\">Change mode</button>\r\n\r\n<p>${mod
 
 var css_248z = "";
 
-const CustomElement = () => (customElement) => {
-    // save a reference to the original constructor
-    var original = customElement;
-    // the new constructor behaviour
-    var f = function (...args) {
-        console.log("ClassWrapper: before class constructor", original.name);
-        let instance = original.apply(this, args);
-        console.log("ClassWrapper: after class constructor", original.name);
-        return instance;
+// export const CustomElement = () => (customElement: any) => {
+function CustomElement() {
+    return function classDecorator(customElement) {
+        // save a reference to the original constructor
+        var original = customElement;
+        // the new constructor behaviour
+        var f = function (...args) {
+            console.log("ClassWrapper: before class constructor", original.name);
+            // let instance = original.apply(this, args);
+            // let instance = new original(...args);
+            console.log("ClassWrapper: after class constructor", original.name);
+            return original;
+        };
+        // copy prototype so intanceof operator still works
+        f.prototype = original.prototype;
+        /**
+         * Runs each time the element is appended to or moved in the DOM
+         */
+        // f.prototype.connectedCallback = (<any>original).super?.connectedCallback;
+        // customElement.prototype.connectedCallback || function () {};
+        // function () {
+        //   if (!this) {
+        //     console.warn("Element is undefined?");
+        //     return;
+        //   }
+        //   // Attach a click event listener to the button
+        //   let btn = this.querySelector("button");
+        //   if (!btn) return;
+        //   btn.addEventListener("click", function (event: any) {
+        //     console.log("clicked");
+        //   });
+        // };
+        // define the custom element
+        window.customElements.define(ReactiveBase.getElementName(customElement.name), customElement);
+        // return new constructor (will override original)
+        return f;
     };
-    // copy prototype so intanceof operator still works
-    f.prototype = original.prototype;
-    /**
-     * Runs each time the element is appended to or moved in the DOM
-     */
-    debugger;
-    f.prototype.connectedCallback = original.super?.connectedCallback;
-    // customElement.prototype.connectedCallback || function () {};
-    // function () {
-    //   if (!this) {
-    //     console.warn("Element is undefined?");
-    //     return;
-    //   }
-    //   // Attach a click event listener to the button
-    //   let btn = this.querySelector("button");
-    //   if (!btn) return;
-    //   btn.addEventListener("click", function (event: any) {
-    //     console.log("clicked");
-    //   });
-    // };
-    // define the custom element
-    window.customElements.define(ReactiveBase.getElementName(customElement.name), customElement);
-    // return new constructor (will override original)
-    return f;
-};
+}
 
 let InternalBinding = class InternalBinding extends ReactiveBase {
     mode = "untouched 🆕";

@@ -9,7 +9,8 @@
     "clean": "rimraf ./dist",
     "build": "npm run clean && tsc && copyfiles -u 1 src/**/*.html ./dist",
     "bundle": "npm run clean && npx rollup -c",
-    "test": "jest --coverage"
+    "test": "jest",
+    "test-coverage": "jest --coverage"
   },
   "repository": {
     "type": "git",

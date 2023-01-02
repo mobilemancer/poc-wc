@@ -32,8 +32,8 @@ export declare class ReactiveBase extends HTMLElement {
      */
     constructor(template?: string, style?: string);
     constructConnectedCallback(): () => void;
-    parseTemplate(template: string | undefined): string | undefined;
-    connectedCallback: () => void;
+    connectedCallback(): void;
+    private parseTemplate;
     /**
      * Update the component state
      * @date 2022-12-28 - 01:08:02
@@ -56,7 +56,7 @@ export declare class ReactiveBase extends HTMLElement {
      * @public
      * @param {string} template
      */
-    setTemplate(template: string): void;
+    private setTemplate;
     /**
      * Set the style of the component
      * @date 2022-12-28 - 01:08:02
@@ -64,7 +64,7 @@ export declare class ReactiveBase extends HTMLElement {
      * @public
      * @param {string} style
      */
-    setStyle(style: string): void;
+    private setStyle;
     /**
      * Returns the name of the element
      *
