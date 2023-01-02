@@ -179,9 +179,13 @@ class ReactiveBase extends HTMLElement {
     constructConnectedCallback() {
         let functionBody = "";
         TemplateParser.stringLiteralReplacements.forEach((val, key, map) => {
-            console.log(val, key, map);
+            val.forEach((instance) => {
+                functionBody += `document.querySelector("#${instance}").innerHtml = this[${key}]`;
+            });
         });
         const connectedCallback = new Function(functionBody);
+        console.log("connectedCallback looks like the following:");
+        console.log(connectedCallback);
         // TODO: fix typing
         return connectedCallback;
     }
