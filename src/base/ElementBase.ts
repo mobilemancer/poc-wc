@@ -55,16 +55,14 @@ export class ReactiveBase extends HTMLElement {
 
     console.log("connectedCallback looks like the following - pre new:");
     console.log(this.connectedCallback.toString());
-    this.connectedCallback = () => this.constructConnectedCallback;
+    this.connectedCallback = <any>Function(this.constructConnectedCallback());
     console.log("connectedCallback looks like the following - post new:");
     console.log(this.connectedCallback.toString());
-
-    this.connectedCallback();
 
     console.log("Reactive base constructor finished.");
   }
 
-  constructConnectedCallback(): () => void {
+  constructConnectedCallback(): string {
     let functionBody = `console.log("Connected callback - replaced");\r\n`;
     TemplateParser.stringLiteralReplacements.forEach((val, key, map) => {
       val.forEach((instance) => {
@@ -73,7 +71,7 @@ export class ReactiveBase extends HTMLElement {
     });
 
     // TODO: fix typing
-    return <any>Function(functionBody);
+    return functionBody;
   }
 
   /* istanbul ignore next */
