@@ -62,8 +62,9 @@ export const CustomElement = () => (customElement: any) => {
   /**
    * Runs each time the element is appended to or moved in the DOM
    */
+  debugger;
+  f.prototype.connectedCallback = original.super?.connectedCallback;
   // customElement.prototype.connectedCallback || function () {};
-  customElement.prototype.connectedCallback = customElement.super.connectedCallback;
   // function () {
   //   if (!this) {
   //     console.warn("Element is undefined?");
