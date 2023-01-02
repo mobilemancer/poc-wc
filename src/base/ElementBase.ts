@@ -55,7 +55,7 @@ export class ReactiveBase extends HTMLElement {
 
     console.log("connectedCallback looks like the following - pre new:");
     console.log(this.connectedCallback.toString());
-    this.connectedCallback = () => this.constructConnectedCallback();
+    this.connectedCallback = () => this.constructConnectedCallback;
     console.log("connectedCallback looks like the following - post new:");
     console.log(this.connectedCallback.toString());
 
@@ -70,11 +70,8 @@ export class ReactiveBase extends HTMLElement {
       });
     });
 
-    const connectedCallback = new Function(functionBody);
-
-
     // TODO: fix typing
-    return <any>connectedCallback;
+    return <any>Function(functionBody);
   }
 
   /* istanbul ignore next */

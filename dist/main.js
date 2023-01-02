@@ -175,7 +175,7 @@ class ReactiveBase extends HTMLElement {
         }
         console.log("connectedCallback looks like the following - pre new:");
         console.log(this.connectedCallback.toString());
-        this.connectedCallback = () => this.constructConnectedCallback();
+        this.connectedCallback = () => this.constructConnectedCallback;
         console.log("connectedCallback looks like the following - post new:");
         console.log(this.connectedCallback.toString());
         console.log("Reactive base constructor finished.");
@@ -187,9 +187,8 @@ class ReactiveBase extends HTMLElement {
                 functionBody += `document.querySelector("#${instance}").innerHtml = host.getAttribute('key');\r\n`;
             });
         });
-        const connectedCallback = new Function(functionBody);
         // TODO: fix typing
-        return connectedCallback;
+        return Function(functionBody);
     }
     /* istanbul ignore next */
     connectedCallback() {
