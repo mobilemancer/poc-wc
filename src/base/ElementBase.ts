@@ -58,7 +58,15 @@ export class ReactiveBase extends HTMLElement {
   }
 
   constructConnectedCallback(): () => void {
-    return function () {};
+    let functionBody = "";
+    TemplateParser.stringLiteralReplacements.forEach((val, key, map) => {
+      console.log(val, key, map);
+    });
+
+    const connectedCallback = new Function(functionBody);
+
+    // TODO: fix typing
+    return <any>connectedCallback;
   }
 
   parseTemplate(template: string | undefined) {

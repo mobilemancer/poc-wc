@@ -104,23 +104,22 @@ class TemplateParser {
     static stringLiteralCounter = 0;
     static stringLiteralReplacements = new Map();
     static findStringLiterals(elements) {
-        elements.forEach((element) => {
-            if (element.innerHTML.includes("${")) {
-                let index = 0;
-                while (element.innerHTML.indexOf("${", index) > -1) {
-                    let start = element.innerHTML.indexOf("${", index);
-                    let end = element.innerHTML.indexOf("}", start);
-                    let stringLiteral = element.innerHTML.substring(start, end + 1);
-                    let stringLiteralName = element.innerHTML.substring(start + 2, end);
-                    element.innerHTML = element.innerHTML.replace(stringLiteral, `<span id='${stringLiteralName + this.stringLiteralCounter++}'></span>`);
-                    if (!this.stringLiteralReplacements.has(stringLiteralName)) {
-                        this.stringLiteralReplacements.set(stringLiteralName, []);
-                    }
-                    this.stringLiteralReplacements
-                        .get(stringLiteralName)
-                        ?.push(stringLiteralName + this.stringLiteralCounter);
-                    index = end + 1;
+        elements.filter(element => element.innerHTML.includes("${")).forEach(element => {
+            let end = 0;
+            while (element.innerHTML.indexOf("${", end) > -1) {
+                let start = element.innerHTML.indexOf("${", end);
+                end = element.innerHTML.indexOf("}", start);
+                let stringLiteral = element.innerHTML.substring(start, end + 1);
+                let stringLiteralName = element.innerHTML.substring(start + 2, end);
+                if (!this.stringLiteralReplacements.has(stringLiteralName)) {
+                    this.stringLiteralReplacements.set(stringLiteralName, []);
                 }
+                let idSuffix = this.stringLiteralReplacements
+                    .get(stringLiteralName)?.length;
+                this.stringLiteralReplacements
+                    .get(stringLiteralName)
+                    ?.push(stringLiteralName + idSuffix);
+                element.innerHTML = element.innerHTML.replace(stringLiteral, `<span id='${stringLiteralName + idSuffix}'></span>`);
             }
         });
         return elements;
@@ -178,7 +177,13 @@ class ReactiveBase extends HTMLElement {
         console.log("Reactive base constructor finished.");
     }
     constructConnectedCallback() {
-        return function () { };
+        let functionBody = "";
+        TemplateParser.stringLiteralReplacements.forEach((val, key, map) => {
+            console.log(val, key, map);
+        });
+        const connectedCallback = new Function(functionBody);
+        // TODO: fix typing
+        return connectedCallback;
     }
     parseTemplate(template) {
         if (template === undefined) {
