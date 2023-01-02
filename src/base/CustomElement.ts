@@ -70,11 +70,13 @@ export function CustomElement() {
 
     // f.prototype.connectedCallback = (<any>original).super?.connectedCallback;
     // customElement.prototype.connectedCallback || function () {};
-    // function () {
-    //   if (!this) {
-    //     console.warn("Element is undefined?");
-    //     return;
-    //   }
+    customElement.prototype.connectedCallback = function () {
+      if (!this) {
+        console.warn("Element is undefined?");
+        return;
+      }
+      console.log("This is from the decorator")
+    };
 
     //   // Attach a click event listener to the button
     //   let btn = this.querySelector("button");
