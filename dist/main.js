@@ -178,6 +178,7 @@ class ReactiveBase extends HTMLElement {
         this.connectedCallback = () => this.constructConnectedCallback;
         console.log("connectedCallback looks like the following - post new:");
         console.log(this.connectedCallback.toString());
+        this.connectedCallback();
         console.log("Reactive base constructor finished.");
     }
     constructConnectedCallback() {
