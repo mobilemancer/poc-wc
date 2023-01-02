@@ -6,7 +6,7 @@ import { ReactiveBase } from "./ElementBase";
 // }
 
 export function defineElementDeco() {
-  return function classDecorator<T extends { new (...args: any[]): {} }>(
+  return function classDecorator<T extends { new(...args: any[]): {} }>(
     constructor: T
   ) {
     console.log("Define: " + constructor.name);
@@ -28,7 +28,7 @@ export function defineElementDeco() {
 }
 
 export function defineClass() {
-  return function classDecorator<T extends { new (...args: any[]): {} }>(
+  return function classDecorator<T extends { new(...args: any[]): {} }>(
     constructor: T
   ) {
     console.log("Define: " + constructor.name);
@@ -63,19 +63,20 @@ export const CustomElement = () => (customElement: any) => {
    * Runs each time the element is appended to or moved in the DOM
    */
   // customElement.prototype.connectedCallback || function () {};
-  customElement.prototype.connectedCallback = function () {
-    if (!this) {
-      console.warn("Element is undefined?");
-      return;
-    }
+  customElement.prototype.connectedCallback = customElement.super.connectedCallback;
+  // function () {
+  //   if (!this) {
+  //     console.warn("Element is undefined?");
+  //     return;
+  //   }
 
-    // Attach a click event listener to the button
-    let btn = this.querySelector("button");
-    if (!btn) return;
-    btn.addEventListener("click", function (event: any) {
-      console.log("clicked");
-    });
-  };
+  //   // Attach a click event listener to the button
+  //   let btn = this.querySelector("button");
+  //   if (!btn) return;
+  //   btn.addEventListener("click", function (event: any) {
+  //     console.log("clicked");
+  //   });
+  // };
 
   // define the custom element
   window.customElements.define(

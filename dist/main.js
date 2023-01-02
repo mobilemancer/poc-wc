@@ -317,19 +317,19 @@ const CustomElement = () => (customElement) => {
      * Runs each time the element is appended to or moved in the DOM
      */
     // customElement.prototype.connectedCallback || function () {};
-    customElement.prototype.connectedCallback = function () {
-        if (!this) {
-            console.warn("Element is undefined?");
-            return;
-        }
-        // Attach a click event listener to the button
-        let btn = this.querySelector("button");
-        if (!btn)
-            return;
-        btn.addEventListener("click", function (event) {
-            console.log("clicked");
-        });
-    };
+    customElement.prototype.connectedCallback = customElement.super.connectedCallback;
+    // function () {
+    //   if (!this) {
+    //     console.warn("Element is undefined?");
+    //     return;
+    //   }
+    //   // Attach a click event listener to the button
+    //   let btn = this.querySelector("button");
+    //   if (!btn) return;
+    //   btn.addEventListener("click", function (event: any) {
+    //     console.log("clicked");
+    //   });
+    // };
     // define the custom element
     window.customElements.define(ReactiveBase.getElementName(customElement.name), customElement);
     // return new constructor (will override original)
