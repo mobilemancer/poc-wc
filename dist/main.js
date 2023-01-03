@@ -387,9 +387,9 @@ function CustomElement() {
         var original = target;
         // the new constructor behaviour
         var f = function (...args) {
-            console.log('ClassWrapper: before class constructor', original.name);
+            console.log(`ClassWrapper: before class constructor ${target?.name}`);
             let instance = original.apply(this, args);
-            console.log('ClassWrapper: after class constructor', original.name);
+            console.log(`ClassWrapper: after class constructor ${target?.name}`);
             return instance;
         };
         // copy prototype so intanceof operator still works

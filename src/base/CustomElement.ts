@@ -121,9 +121,9 @@ export function CustomElement() {
 
     // the new constructor behaviour
     var f: any = function (this: any, ...args: any[]) {
-      console.log('ClassWrapper: before class constructor', original.name);
+      console.log(`ClassWrapper: before class constructor ${(<any>target)?.name}`);
       let instance = original.apply(this, args)
-      console.log('ClassWrapper: after class constructor', original.name);
+      console.log(`ClassWrapper: after class constructor ${(<any>target)?.name}`);
       return instance;
     }
 
