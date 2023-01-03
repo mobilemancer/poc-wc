@@ -399,7 +399,6 @@ function CustomElement() {
     };
 }
 
-// @CustomElement(template, style)
 let InternalBinding = class InternalBinding extends ElementBase {
     mode = "untouched 🆕";
     constructor() {
