@@ -363,32 +363,35 @@ function getElementName(className) {
 //     return f;
 //   }
 // };
-const CustomElement = (template, style) => (customElement) => {
-    console.log(`Decorator started for ${customElement.name}`);
-    // save a reference to the original constructor
-    const original = customElement;
-    // the new constructor behaviour
-    const f = function (...args) {
-        console.log("ClassWrapper: before class constructor", (original).name);
-        let instance = original.apply(this, args);
-        // let instance = new (<any>original)(...args);
-        console.log("ClassWrapper: after class constructor", (original).name);
-        setTemplate(template, instance);
-        setStyle(style, template, customElement);
-        const connectedCallback = customElement.prototype.connectedCallback || function () { };
-        instance.prototype.connectedCallback = function () {
-            console.log("This is conCB specified in the decorator");
-            connectedCallback.call(this);
+// const CustomElement = (template?: string, style?: string): any => (customElement: ElementBase) => {
+function CustomElement(template, style) {
+    return function classDecorator(customElement) {
+        console.log(`Decorator started for ${customElement.name}`);
+        // save a reference to the original constructor
+        const original = customElement;
+        // the new constructor behaviour
+        const f = function (...args) {
+            console.log("ClassWrapper: before class constructor", (original).name);
+            let instance = original.apply(this, args);
+            // let instance = new (<any>original)(...args);
+            console.log("ClassWrapper: after class constructor", (original).name);
+            setTemplate(template, instance);
+            setStyle(style, template, customElement);
+            const connectedCallback = customElement.prototype.connectedCallback || function () { };
+            instance.prototype.connectedCallback = function () {
+                console.log("This is conCB specified in the decorator");
+                connectedCallback.call(this);
+            };
+            // define the element
+            window.customElements.define(getElementName(customElement.name), customElement);
+            return instance;
         };
-        // define the element
-        window.customElements.define(getElementName(customElement.name), customElement);
-        return instance;
+        // copy prototype so intanceof operator still works
+        f.prototype = original.prototype;
+        console.log(f);
+        return f;
     };
-    // copy prototype so intanceof operator still works
-    f.prototype = original.prototype;
-    console.log(f);
-    return f;
-};
+}
 function setStyle(style, template, customElement) {
     if (style && template) {
         customElement.setStyle(style);

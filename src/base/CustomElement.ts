@@ -66,40 +66,46 @@ import { getElementName } from "./utils/utils";
 //   }
 // };
 
-const CustomElement = (template?: string, style?: string): any => (customElement: ElementBase) => {
-  console.log(`Decorator started for ${(<any>customElement).name}`);
+// const CustomElement = (template?: string, style?: string): any => (customElement: ElementBase) => {
 
-  // save a reference to the original constructor
-  const original = <any>customElement;
-  // the new constructor behaviour
-  const f: any = function (this: any, ...args: any) {
-    console.log("ClassWrapper: before class constructor", (original).name);
-    let instance = original.apply(this, args);
-    // let instance = new (<any>original)(...args);
-    console.log("ClassWrapper: after class constructor", (original).name);
+function CustomElement(template?: string, style?: string) {
+  return function classDecorator<T extends { new(...args: any[]): {} }>(
+    customElement: T
+  ) {
+    console.log(`Decorator started for ${(<any>customElement).name}`);
 
-    setTemplate(template, instance);
+    // save a reference to the original constructor
+    const original = <any>customElement;
+    // the new constructor behaviour
+    const f: any = function (this: any, ...args: any) {
+      console.log("ClassWrapper: before class constructor", (original).name);
+      let instance = original.apply(this, args);
+      // let instance = new (<any>original)(...args);
+      console.log("ClassWrapper: after class constructor", (original).name);
 
-    setStyle(style, template, customElement);
+      setTemplate(template, instance);
 
-    const connectedCallback = (<any>customElement).prototype.connectedCallback || function () { };
-    (<any>instance).prototype.connectedCallback = function () {
-      console.log("This is conCB specified in the decorator")
-      connectedCallback.call(this);
+      setStyle(style, template, <any>customElement);
+
+      const connectedCallback = (<any>customElement).prototype.connectedCallback || function () { };
+      (<any>instance).prototype.connectedCallback = function () {
+        console.log("This is conCB specified in the decorator")
+        connectedCallback.call(this);
+      };
+
+      // define the element
+      window.customElements.define(getElementName((<any>customElement).name), <any>customElement);
+
+      return instance;
     };
 
-    // define the element
-    window.customElements.define(getElementName((<any>customElement).name), <any>customElement);
+    // copy prototype so intanceof operator still works
+    f.prototype = original.prototype;
 
-    return instance;
-  };
+    console.log(f);
+    return f;
 
-  // copy prototype so intanceof operator still works
-  f.prototype = original.prototype;
-
-  console.log(f);
-  return f;
-
+  }
 }
 
 export { CustomElement };
