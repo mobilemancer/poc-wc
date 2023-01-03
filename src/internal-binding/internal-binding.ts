@@ -3,12 +3,12 @@ import template from "./internal-binding.html";
 import style from "./internal-binding.css";
 import { CustomElement } from "../base/CustomElement";
 
-@CustomElement()
+@CustomElement(template, style)
 export default class InternalBinding extends ElementBase {
   public mode = "untouched 🆕";
 
   constructor() {
-    super(template, style);
+    super();
   }
 
   public clicked(): void {

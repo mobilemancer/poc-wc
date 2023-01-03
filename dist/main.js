@@ -390,7 +390,7 @@ const CustomElement = (template, style) => (customElement) => {
 let InternalBinding = class InternalBinding extends ElementBase {
     mode = "untouched 🆕";
     constructor() {
-        super(template, css_248z);
+        super();
     }
     clicked() {
         if (this.mode.startsWith("dark")) {
@@ -402,7 +402,7 @@ let InternalBinding = class InternalBinding extends ElementBase {
     }
 };
 InternalBinding = __decorate([
-    CustomElement()
+    CustomElement(template, css_248z)
 ], InternalBinding);
 var InternalBinding$1 = InternalBinding;
 
