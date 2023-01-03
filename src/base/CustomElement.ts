@@ -67,34 +67,56 @@ import { getElementName } from "./utils/utils";
 // };
 
 const CustomElement = (template?: string, style?: string): any => (customElement: ElementBase) => {
+
+  // save a reference to the original constructor
+  var original = <any>customElement;
+  let instance: any;
+  // the new constructor behaviour
+  var f: any = function (this: any, ...args: any) {
+    console.log("ClassWrapper: before class constructor", (original).name);
+    // let instance = original.apply(this, args);
+    instance = new (<any>original)(...args);
+    console.log("ClassWrapper: after class constructor", (original).name);
+
+    setTemplate(template, instance);
+
+    setStyle(style, template, customElement);
+
+    const connectedCallback = (<any>customElement).prototype.connectedCallback || function () { };
+    (<any>instance).prototype.connectedCallback = function () {
+      console.log("This is conCB specified in the decorator")
+      connectedCallback.call(this);
+    };
+
+    // define the element
+    window.customElements.define(getElementName((<any>customElement).name), <any>customElement);
+
+    return instance;
+  };
+
+  // copy prototype so intanceof operator still works
+  f.prototype = original.prototype;
+
+  return f;
+
+}
+
+export { CustomElement };
+
+
+
+function setStyle(style: string | undefined, template: string | undefined, customElement: ElementBase) {
+  if (style && template) {
+    customElement.setStyle(style);
+  }
+}
+
+function setTemplate(template: string | undefined, customElement: ElementBase) {
   if (!template) {
     console.info(`No template provided for element ${getElementName((<any>customElement).name)}`);
   }
   else {
     customElement.setTemplate(template);
   }
-  // const element = document.createElement('template');
-
-
-  if (style && template) {
-    // template = `<style>${style}</style> ${template}`;
-    customElement.setStyle(style);
-  }
-  // if (template) element.innerHTML = template;
-
-  const connectedCallback = (<any>customElement).prototype.connectedCallback || function () { };
-  (<any>customElement).prototype.connectedCallback = function () {
-    // const clone = document.importNode(element.content, true);
-    // this.attachShadow({ mode: 'open' }).appendChild(clone);
-    console.log("This is conCB specified in the decorator")
-    connectedCallback.call(this);
-  };
-
-  // define the element
-  window.customElements.define(getElementName((<any>customElement).name), <any>customElement);
 }
-
-export { CustomElement };
-
-
 
