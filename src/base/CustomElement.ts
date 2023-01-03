@@ -67,12 +67,12 @@ import { getElementName } from "./utils/utils";
 // };
 
 const CustomElement = (template?: string, style?: string): any => (customElement: ElementBase) => {
+  console.log(`Decorator started for ${(<any>customElement).name}`);
 
   // save a reference to the original constructor
-  var original = <any>customElement;
-  let instance: any;
+  const original = <any>customElement;
   // the new constructor behaviour
-  var f: any = function (this: any, ...args: any) {
+  const f: any = function (this: any, ...args: any) {
     console.log("ClassWrapper: before class constructor", (original).name);
     let instance = original.apply(this, args);
     // let instance = new (<any>original)(...args);
@@ -97,6 +97,7 @@ const CustomElement = (template?: string, style?: string): any => (customElement
   // copy prototype so intanceof operator still works
   f.prototype = original.prototype;
 
+  console.log(f);
   return f;
 
 }
