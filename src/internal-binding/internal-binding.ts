@@ -3,7 +3,8 @@ import template from "./internal-binding.html";
 import style from "./internal-binding.css";
 import { CustomElement } from "../base/CustomElement";
 
-@CustomElement(template, style)
+// @CustomElement(template, style)
+@CustomElement()
 export default class InternalBinding extends ElementBase {
   public mode = "untouched 🆕";
 
