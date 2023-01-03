@@ -1,2 +1,2 @@
-declare function CustomElement(): <T extends new (...args: any[]) => {}>(customElement: T) => any;
+declare function CustomElement(): (target: any) => any;
 export { CustomElement };
