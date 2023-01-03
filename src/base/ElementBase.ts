@@ -1,4 +1,4 @@
-import TemplateParser from "./TemplateParser";
+import TemplateParser from "./utils/TemplateParser";
 
 /**
  * Description placeholder
@@ -6,10 +6,10 @@ import TemplateParser from "./TemplateParser";
  *
  * @export
  * @class ReactiveBase
- * @typedef {ReactiveBase}
+ * @typedef {ElementBase}
  * @extends {HTMLElement}
  */
-export class ReactiveBase extends HTMLElement {
+export class ElementBase extends HTMLElement {
   /**
    * Description placeholder
    * @date 2022-12-28 - 01:08:02
@@ -17,7 +17,7 @@ export class ReactiveBase extends HTMLElement {
    * @private
    * @type {(ShadowRoot | undefined)}
    */
-  private shadow: ShadowRoot | undefined;
+  public shadow: ShadowRoot | undefined;
 
   /**
    * Description placeholder
@@ -37,27 +37,27 @@ export class ReactiveBase extends HTMLElement {
   constructor(template?: string, style?: string) {
     super();
 
-    // look for string literal bindings and replace them
-    template = this.parseTemplate(template);
+    // // look for string literal bindings and replace them
+    // template = this.parseTemplate(template);
 
-    // set template if available
-    if (!template || template.length === 0) {
-      console.warn("No template to set for element");
-      return;
-    }
-    this.setTemplate(template);
+    // // set template if available
+    // if (!template || template.length === 0) {
+    //   console.warn("No template to set for element");
+    //   return;
+    // }
+    // this.setTemplate(template);
 
-    // set style if available
-    if (!!style && style.length > 0) {
-      this.setStyle(style);
-    }
+    // // set style if available
+    // if (!!style && style.length > 0) {
+    //   this.setStyle(style);
+    // }
 
 
-    console.log("connectedCallback looks like the following - pre new:");
-    console.log(this.connectedCallback.toString());
-    this.connectedCallback = <any>Function(this.constructConnectedCallback());
-    console.log("connectedCallback looks like the following - post new:");
-    console.log(this.connectedCallback.toString());
+    // console.log("connectedCallback looks like the following - pre new:");
+    // console.log(this.connectedCallback.toString());
+    // this.connectedCallback = <any>Function(this.constructConnectedCallback());
+    // console.log("connectedCallback looks like the following - post new:");
+    // console.log(this.connectedCallback.toString());
 
     console.log("Reactive base constructor finished.");
   }
@@ -126,8 +126,8 @@ export class ReactiveBase extends HTMLElement {
    * @public
    * @param {string} template
    */
-  private setTemplate(template: string): void {
-    this.shadow = this.attachShadow({ mode: "open" });
+  public setTemplate(template: string): void {
+    if (!this.shadow) this.shadow = this.attachShadow({ mode: "open" });
     this.shadow.innerHTML = template;
   }
 
@@ -138,7 +138,7 @@ export class ReactiveBase extends HTMLElement {
    * @public
    * @param {string} style
    */
-  private setStyle(style: string): void {
+  public setStyle(style: string): void {
     if (this.shadow === undefined) {
       console.warn(
         `Failed to set styling on element ${this.tagName}, shadow root is undefined`
@@ -149,17 +149,5 @@ export class ReactiveBase extends HTMLElement {
     const styleElement = document.createElement("style");
     styleElement.textContent = style;
     this.shadow.appendChild(styleElement);
-  }
-
-  /**
-   * Returns the name of the element
-   *
-   * @param className name of the cextending class
-   * @returns an hyphenated element name
-   */
-  public static getElementName(className: string): string {
-    const wordRegex = /[A-Z]?[a-z]+|[0-9]+|[A-Z]+(?![a-z])/g;
-    const resultingWords = className.match(wordRegex);
-    return !!resultingWords ? resultingWords.join("-").toLowerCase() : "";
   }
 }

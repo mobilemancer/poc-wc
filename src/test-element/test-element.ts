@@ -1,8 +1,8 @@
-import { ReactiveBase } from "../base/ElementBase";
+import { ElementBase } from "../base/ElementBase";
 import { CustomElement } from "../base/CustomElement";
 
 @CustomElement()
-export default class TestElement extends ReactiveBase {
+export default class TestElement extends ElementBase {
 
     public mode = "untouched 🆕";
 

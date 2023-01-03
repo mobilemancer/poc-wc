@@ -4,10 +4,10 @@
  *
  * @export
  * @class ReactiveBase
- * @typedef {ReactiveBase}
+ * @typedef {ElementBase}
  * @extends {HTMLElement}
  */
-export declare class ReactiveBase extends HTMLElement {
+export declare class ElementBase extends HTMLElement {
     /**
      * Description placeholder
      * @date 2022-12-28 - 01:08:02
@@ -15,7 +15,7 @@ export declare class ReactiveBase extends HTMLElement {
      * @private
      * @type {(ShadowRoot | undefined)}
      */
-    private shadow;
+    shadow: ShadowRoot | undefined;
     /**
      * Description placeholder
      * @date 2022-12-28 - 01:08:02
@@ -57,7 +57,7 @@ export declare class ReactiveBase extends HTMLElement {
      * @public
      * @param {string} template
      */
-    private setTemplate;
+    setTemplate(template: string): void;
     /**
      * Set the style of the component
      * @date 2022-12-28 - 01:08:02
@@ -65,12 +65,5 @@ export declare class ReactiveBase extends HTMLElement {
      * @public
      * @param {string} style
      */
-    private setStyle;
-    /**
-     * Returns the name of the element
-     *
-     * @param className name of the cextending class
-     * @returns an hyphenated element name
-     */
-    static getElementName(className: string): string;
+    setStyle(style: string): void;
 }

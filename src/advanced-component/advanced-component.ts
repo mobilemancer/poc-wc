@@ -1,8 +1,8 @@
-import { ReactiveBase } from "../base/ElementBase";
+import { ElementBase } from "../base/ElementBase";
 import template from "./advanced-component.html";
 import style from "./style.css";
 
-class AdvancedComponent extends ReactiveBase {
+class AdvancedComponent extends ElementBase {
   constructor() {
     super(template, style);
   }

@@ -1,10 +1,10 @@
-import { ReactiveBase } from "../base/ElementBase";
+import { ElementBase } from "../base/ElementBase";
 import template from "./internal-binding.html";
 import style from "./internal-binding.css";
 import { CustomElement } from "../base/CustomElement";
 
 @CustomElement()
-export default class InternalBinding extends ReactiveBase {
+export default class InternalBinding extends ElementBase {
   public mode = "untouched 🆕";
 
   constructor() {

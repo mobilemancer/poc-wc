@@ -12,11 +12,7 @@ describe("CustomElement decorator tests", () => {
 
     it("connectedCallback initiated with callbacks", () => {
         const element = new TestElement(template1, '');
-        const expectedCB = `function anonymous(
-            ) {
-            console.log("Connected callback - replaced");
-            document.querySelector("#test0").innerHtml = host.getAttribute('key');
-            }`.replace(/\s+/g, '');
+        const expectedCB = `function(){//constclone=document.importNode(element.content,true);//this.attachShadow({mode:'open'}).appendChild(clone);console.log(\"ThisisconCBspecifiedinthedecorator\");connectedCallback.call(this);}`.replace(/\s+/g, '');
         expect((<any>element).connectedCallback.toString().replace(/\s+/g, '')).toBe(expectedCB);
     });
 

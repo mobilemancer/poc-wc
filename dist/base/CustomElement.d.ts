@@ -1,1 +1,2 @@
-export declare function CustomElement(): <T extends new (...args: any[]) => {}>(customElement: T) => any;
+declare const CustomElement: (template?: string, style?: string) => any;
+export { CustomElement };
