@@ -110,7 +110,7 @@ import { getElementName } from "./utils/utils";
 // }
 
 
-function CustomElement() {
+export function CustomElement() {
   return function (target: any) {
     // save a reference to the original constructor
     var original = target;
@@ -132,7 +132,6 @@ function CustomElement() {
 }
 
 
-export { CustomElement };
 
 
 
