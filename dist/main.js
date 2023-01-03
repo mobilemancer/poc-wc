@@ -178,7 +178,7 @@ class ElementBase extends HTMLElement {
         // this.connectedCallback = <any>Function(this.constructConnectedCallback());
         // console.log("connectedCallback looks like the following - post new:");
         // console.log(this.connectedCallback.toString());
-        console.log("Reactive base constructor finished.");
+        console.log(`Element base constructor executed - ${this?.tagName}`);
     }
     constructConnectedCallback() {
         let functionBody = `console.log("Connected callback - replaced");\r\n`;
@@ -193,7 +193,7 @@ class ElementBase extends HTMLElement {
     constructConnectedCallbackString = "";
     /* istanbul ignore next */
     connectedCallback() {
-        console.log("Connected callback original");
+        console.log(`Connected callback original - ${this?.tagName}`);
     }
     parseTemplate(template) {
         if (template === undefined) {
@@ -386,6 +386,7 @@ function CustomElement(template, style) {
             window.customElements.define(getElementName(customElement.name), customElement);
             return instance;
         };
+        console.log(original);
         // copy prototype so intanceof operator still works
         f.prototype = original.prototype;
         console.log(f);

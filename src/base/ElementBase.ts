@@ -59,7 +59,7 @@ export class ElementBase extends HTMLElement {
     // console.log("connectedCallback looks like the following - post new:");
     // console.log(this.connectedCallback.toString());
 
-    console.log("Reactive base constructor finished.");
+    console.log(`Element base constructor executed - ${this?.tagName}`);
   }
 
   constructConnectedCallback(): string {
@@ -79,7 +79,7 @@ export class ElementBase extends HTMLElement {
 
   /* istanbul ignore next */
   connectedCallback() {
-    console.log("Connected callback original");
+    console.log(`Connected callback original - ${this?.tagName}`);
   }
 
 

@@ -99,6 +99,8 @@ function CustomElement(template?: string, style?: string) {
       return instance;
     };
 
+    console.log(original);
+
     // copy prototype so intanceof operator still works
     f.prototype = original.prototype;
 
