@@ -366,12 +366,11 @@ function getElementName(className) {
 const CustomElement = (template, style) => (customElement) => {
     // save a reference to the original constructor
     var original = customElement;
-    let instance;
     // the new constructor behaviour
     var f = function (...args) {
         console.log("ClassWrapper: before class constructor", (original).name);
-        // let instance = original.apply(this, args);
-        instance = new original(...args);
+        let instance = original.apply(this, args);
+        // let instance = new (<any>original)(...args);
         console.log("ClassWrapper: after class constructor", (original).name);
         setTemplate(template, instance);
         setStyle(style, template, customElement);

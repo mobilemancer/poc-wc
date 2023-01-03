@@ -74,8 +74,8 @@ const CustomElement = (template?: string, style?: string): any => (customElement
   // the new constructor behaviour
   var f: any = function (this: any, ...args: any) {
     console.log("ClassWrapper: before class constructor", (original).name);
-    // let instance = original.apply(this, args);
-    instance = new (<any>original)(...args);
+    let instance = original.apply(this, args);
+    // let instance = new (<any>original)(...args);
     console.log("ClassWrapper: after class constructor", (original).name);
 
     setTemplate(template, instance);
