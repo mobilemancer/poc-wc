@@ -9,7 +9,9 @@ export default class InternalBinding extends ElementBase {
   public mode = "untouched 🆕";
 
   constructor() {
+    console.log("Constructor for InternalBinding started");
     super();
+    console.log("Constructor for InternalBinding finished");
   }
 
   public clicked(): void {

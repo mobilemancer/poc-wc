@@ -403,7 +403,9 @@ function CustomElement() {
 let InternalBinding = class InternalBinding extends ElementBase {
     mode = "untouched 🆕";
     constructor() {
+        console.log("Constructor for InternalBinding started");
         super();
+        console.log("Constructor for InternalBinding finished");
     }
     clicked() {
         if (this.mode.startsWith("dark")) {
