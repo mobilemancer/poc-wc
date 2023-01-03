@@ -111,7 +111,11 @@ import { getElementName } from "./utils/utils";
 
 
 export function CustomElement() {
+  console.log(`Decorator factory called`);
+
   return function (target: any) {
+    console.log(`Decorator started for ${(<any>target)?.name}`);
+
     // save a reference to the original constructor
     var original = target;
 

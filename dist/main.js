@@ -380,7 +380,9 @@ function __decorate(decorators, target, key, desc) {
 //   }
 // }
 function CustomElement() {
+    console.log(`Decorator factory called`);
     return function (target) {
+        console.log(`Decorator started for ${target?.name}`);
         // save a reference to the original constructor
         var original = target;
         // the new constructor behaviour
