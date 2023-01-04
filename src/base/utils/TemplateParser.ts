@@ -33,7 +33,7 @@ export default class TemplateParser {
   }
 
   static stringLiteralCounter = 0;
-  static stringLiteralReplacements = new Map<string, string[]>();
+  static stringLiteralReplacements: Set<string> = new Set();
   static findStringLiterals(elements: Element[]): Element[] {
     elements.filter(element => element.innerHTML.includes("${")).forEach(element => {
       let end = 0;
@@ -44,20 +44,10 @@ export default class TemplateParser {
         let stringLiteralName = element.innerHTML.substring(start + 2, end);
 
         if (!this.stringLiteralReplacements.has(stringLiteralName)) {
-          this.stringLiteralReplacements.set(stringLiteralName, []);
+          this.stringLiteralReplacements.add(stringLiteralName);
         }
-        let idSuffix = this.stringLiteralReplacements
-          .get(stringLiteralName)?.length;
 
-        this.stringLiteralReplacements
-          .get(stringLiteralName)
-          ?.push(stringLiteralName + idSuffix);
-
-        element.innerHTML = element.innerHTML.replace(
-          stringLiteral,
-          `<span id='${stringLiteralName + idSuffix
-          }'></span>`
-        );
+        element.innerHTML = element.innerHTML.replace(stringLiteral, `<span data-bind='${stringLiteralName}'></span>`);
       }
     });
     return elements;

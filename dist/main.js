@@ -102,7 +102,6 @@ class TemplateParser {
     }
     static findStringLiterals(elements) {
         elements.filter(element => element.innerHTML.includes("${")).forEach(element => {
-            var _a, _b;
             let end = 0;
             while (element.innerHTML.indexOf("${", end) > -1) {
                 let start = element.innerHTML.indexOf("${", end);
@@ -110,13 +109,9 @@ class TemplateParser {
                 let stringLiteral = element.innerHTML.substring(start, end + 1);
                 let stringLiteralName = element.innerHTML.substring(start + 2, end);
                 if (!this.stringLiteralReplacements.has(stringLiteralName)) {
-                    this.stringLiteralReplacements.set(stringLiteralName, []);
+                    this.stringLiteralReplacements.add(stringLiteralName);
                 }
-                let idSuffix = (_a = this.stringLiteralReplacements
-                    .get(stringLiteralName)) === null || _a === void 0 ? void 0 : _a.length;
-                (_b = this.stringLiteralReplacements
-                    .get(stringLiteralName)) === null || _b === void 0 ? void 0 : _b.push(stringLiteralName + idSuffix);
-                element.innerHTML = element.innerHTML.replace(stringLiteral, `<span id='${stringLiteralName + idSuffix}'></span>`);
+                element.innerHTML = element.innerHTML.replace(stringLiteral, `<span data-bind='${stringLiteralName}'></span>`);
             }
         });
         return elements;
@@ -124,7 +119,7 @@ class TemplateParser {
     static serializeElements(elements) { }
 }
 TemplateParser.stringLiteralCounter = 0;
-TemplateParser.stringLiteralReplacements = new Map();
+TemplateParser.stringLiteralReplacements = new Set();
 
 /**
  * Description placeholder
@@ -136,6 +131,9 @@ TemplateParser.stringLiteralReplacements = new Map();
  * @extends {HTMLElement}
  */
 class ElementBase extends HTMLElement {
+    static get observedAttributes() {
+        return ElementBase.observedAttributesArray;
+    }
     /**
      * Creates an instance of ReactiveBase.
      * @date 2022-12-28 - 01:08:02
@@ -154,10 +152,12 @@ class ElementBase extends HTMLElement {
         this.state = {};
         this.constructConnectedCallbackString = "";
         this.shadow = this.attachShadow({ mode: "open" });
-        if (template)
-            this.setTemplate(template);
+        const parsedTemplate = this.parseTemplate(template);
+        if (parsedTemplate)
+            this.setTemplate(parsedTemplate);
         if (style)
             this.setStyle(style);
+        this.addValuesToOnChangeWatchList();
         // // look for string literal bindings and replace them
         // template = this.parseTemplate(template);
         // console.log("connectedCallback looks like the following - pre new:");
@@ -167,12 +167,16 @@ class ElementBase extends HTMLElement {
         // console.log(this.connectedCallback.toString());
         console.log(`Element base constructor executed - ${this === null || this === void 0 ? void 0 : this.tagName}`);
     }
+    addValuesToOnChangeWatchList(values) {
+        values = TemplateParser.stringLiteralReplacements;
+        values.forEach(v => ElementBase.observedAttributesArray.push(v));
+    }
     constructConnectedCallback() {
         let functionBody = `console.log("Connected callback - replaced");\r\n`;
         TemplateParser.stringLiteralReplacements.forEach((val, key, map) => {
-            val.forEach((instance) => {
-                functionBody += `document.querySelector("#${instance}").innerHtml = host.getAttribute('key');\r\n`;
-            });
+            // val.forEach((instance) => {
+            //   functionBody += `document.querySelector("#${instance}").innerHtml = host.getAttribute('key');\r\n`;
+            // });
         });
         this.constructConnectedCallbackString = functionBody;
         return functionBody;
@@ -238,6 +242,7 @@ class ElementBase extends HTMLElement {
         (instance || this).shadow.appendChild(styleElement);
     }
 }
+ElementBase.observedAttributesArray = [];
 
 var template$1 = "<h1>Hello!!!</h1>";
 
@@ -253,7 +258,7 @@ customElements.define("advanced-component", AdvancedComponent);
 
 var template = "<div class=\"internal-binding\">\r\n  <button onclick=\"clicked\">Change mode</button>\r\n\r\n  <p>${mode}</p>\r\n</div>\r\n";
 
-var css_248z = ".internal-binding {\r\n    background-color: blueviolet;\r\n    color: aliceblue;\r\n    border: 2px solid white;\r\n    border-radius: 0.5;\r\n}";
+var css_248z = ".internal-binding {\r\n    background-color: blueviolet;\r\n    color: aliceblue;\r\n    border: 2px solid white;\r\n    border-radius: 0.5em;\r\n    padding: 8px;\r\n}";
 
 /**
  * Returns the name of the element

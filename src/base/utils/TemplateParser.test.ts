@@ -1,13 +1,13 @@
 import TemplateParser from "./TemplateParser";
 
 let template2 = "<div>${test}</div>";
-let template2expected = '<div><span id="test0"></span></div>';
+let template2expected = '<div><span data-bind="test"></span></div>';
 
-let template3 = "<p>tihs is a pretty booring ${test}, but it ${test}s a lot</p>";
-let template3expected = '<p>tihs is a pretty booring <span id="test1"></span>, but it <span id="test2"></span>s a lot</p>';
+let template3 = "<p>tihs is a pretty booring ${test1}, but it ${test2}s a lot</p>";
+let template3expected = '<p>tihs is a pretty booring <span data-bind="test1"></span>, but it <span data-bind="test2"></span>s a lot</p>';
 
 let template4 = "<p>tihs is a pretty booring ${xyz}, but it ${xyz}s a lot</p>";
-let template4expected = '<p>tihs is a pretty booring <span id="xyz0"></span>, but it <span id="xyz1"></span>s a lot</p>';
+let template4expected = '<p>tihs is a pretty booring <span data-bind="xyz"></span>, but it <span data-bind="xyz"></span>s a lot</p>';
 
 describe("string literal parsing", () => {
 

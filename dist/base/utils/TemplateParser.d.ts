@@ -8,7 +8,7 @@ export default class TemplateParser {
      */
     static getElements(template: string): Array<Element>;
     static stringLiteralCounter: number;
-    static stringLiteralReplacements: Map<string, string[]>;
+    static stringLiteralReplacements: Set<string>;
     static findStringLiterals(elements: Element[]): Element[];
     static serializeElements(elements: Element[]): void;
 }

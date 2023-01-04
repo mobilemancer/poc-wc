@@ -1,6 +1,7 @@
 import TestElement from "../test-element/test-element";
 
-let template1 = "<div class=\"test-class\">${test}</div>";
+let template1 = "<div class=\"test-class\">A very simple element</div>";
+let expected1 = "<div class=\"test-class\">A very simple element</div>";
 let style1 = ".test-class { color: black; }";
 const expectedCB =
     "connectedCallback(){console.log(`Connectedcallbackoriginal-${this===null||this===void0?void0:this.tagName}`);}".replace(

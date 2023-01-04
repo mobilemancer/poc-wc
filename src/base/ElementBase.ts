@@ -11,6 +11,13 @@ import { getElementName } from "./utils/utils";
  * @extends {HTMLElement}
  */
 export class ElementBase extends HTMLElement {
+
+  static get observedAttributes() {
+    return ElementBase.observedAttributesArray;
+  }
+
+  static observedAttributesArray: string[] = [];
+
   /**
    * Description placeholder
    * @date 2022-12-28 - 01:08:02
@@ -40,8 +47,10 @@ export class ElementBase extends HTMLElement {
 
     this.shadow = this.attachShadow({ mode: "open" });
 
-    if (template) this.setTemplate(template);
+    const parsedTemplate = this.parseTemplate(template);
+    if (parsedTemplate) this.setTemplate(parsedTemplate);
     if (style) this.setStyle(style);
+    this.addValuesToOnChangeWatchList();
 
     // // look for string literal bindings and replace them
     // template = this.parseTemplate(template);
@@ -55,12 +64,17 @@ export class ElementBase extends HTMLElement {
     console.log(`Element base constructor executed - ${this?.tagName}`);
   }
 
+  private addValuesToOnChangeWatchList(values?: Set<string>) {
+    values = TemplateParser.stringLiteralReplacements;
+    values.forEach(v => ElementBase.observedAttributesArray.push(v));
+  }
+
   constructConnectedCallback(): string {
     let functionBody = `console.log("Connected callback - replaced");\r\n`;
     TemplateParser.stringLiteralReplacements.forEach((val, key, map) => {
-      val.forEach((instance) => {
-        functionBody += `document.querySelector("#${instance}").innerHtml = host.getAttribute('key');\r\n`;
-      });
+      // val.forEach((instance) => {
+      //   functionBody += `document.querySelector("#${instance}").innerHtml = host.getAttribute('key');\r\n`;
+      // });
     });
 
     this.constructConnectedCallbackString = functionBody;

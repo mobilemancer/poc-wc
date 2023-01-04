@@ -8,6 +8,8 @@
  * @extends {HTMLElement}
  */
 export declare class ElementBase extends HTMLElement {
+    static get observedAttributes(): string[];
+    static observedAttributesArray: string[];
     /**
      * Description placeholder
      * @date 2022-12-28 - 01:08:02
@@ -31,6 +33,7 @@ export declare class ElementBase extends HTMLElement {
      * @constructor
      */
     constructor(template?: string, style?: string);
+    private addValuesToOnChangeWatchList;
     constructConnectedCallback(): string;
     constructConnectedCallbackString: string;
     connectedCallback(): void;
