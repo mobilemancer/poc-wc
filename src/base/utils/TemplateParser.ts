@@ -9,7 +9,9 @@ export default class TemplateParser {
   static convertNodesToString(nodes: Element[]): string {
     let result = "";
     nodes.forEach((node) => {
-      result += node.outerHTML || node.nodeValue;
+      if (node.parentNode?.nodeName === 'BODY') {
+        result += node.outerHTML || node.nodeValue;
+      }
     });
     return result;
   }
@@ -35,7 +37,7 @@ export default class TemplateParser {
   static stringLiteralCounter = 0;
   static stringLiteralReplacements: Set<string> = new Set();
   static findStringLiterals(elements: Element[]): Element[] {
-    elements.filter(element => element.innerHTML.includes("${")).forEach(element => {
+    elements.filter(element => element.childElementCount === 0 && element.innerHTML.includes("${")).forEach(element => {
       let end = 0;
       while (element.innerHTML.indexOf("${", end) > -1) {
         let start = element.innerHTML.indexOf("${", end);

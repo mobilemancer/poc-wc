@@ -9,6 +9,9 @@ let template3expected = '<p>tihs is a pretty booring <span data-bind="test1"></s
 let template4 = "<p>tihs is a pretty booring ${xyz}, but it ${xyz}s a lot</p>";
 let template4expected = '<p>tihs is a pretty booring <span data-bind="xyz"></span>, but it <span data-bind="xyz"></span>s a lot</p>';
 
+let template5 = '<div class="internal-binding"><button onclick="clicked">Change mode</button><p>${mode}</p></div>';
+let template5expected = '<div class="internal-binding"><button onclick="clicked">Change mode</button><p><span data-bind="mode"></span></p></div>';
+
 describe("string literal parsing", () => {
 
   it("parse string literals", () => {
@@ -24,6 +27,11 @@ describe("string literal parsing", () => {
   it("parse string literals, multi instance with unused template", () => {
     const result = TemplateParser.parse(template4);
     expect(result).toBe(template4expected);
+  });
+
+  it("parse string literals, nested elements", () => {
+    const result = TemplateParser.parse(template5);
+    expect(result).toBe(template5expected);
   });
 
 });
