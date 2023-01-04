@@ -379,13 +379,13 @@ function CustomElement(template, style) {
     console.log(`Decorator factory called`);
     return function (customElement) {
         console.log(`Decorator started for ${customElement === null || customElement === void 0 ? void 0 : customElement.name}`);
+        // define the element
+        window.customElements.define(getElementName(customElement.name), customElement);
         // save a reference to the original constructor
         var original = customElement;
         // the new constructor behaviour
         var f = function (...args) {
             console.log(`ClassWrapper: before class constructor ${customElement === null || customElement === void 0 ? void 0 : customElement.name}`);
-            // define the element
-            window.customElements.define(getElementName(customElement.name), customElement);
             // let instance = original.apply(this, args);
             let instance = new customElement(...args);
             console.log(`ClassWrapper: after class constructor ${customElement === null || customElement === void 0 ? void 0 : customElement.name}`);

@@ -115,6 +115,12 @@ export function CustomElement(template?: string, style?: string) {
   return function (customElement: any) {
     console.log(`Decorator started for ${(<any>customElement)?.name}`);
 
+    // define the element
+    window.customElements.define(
+      getElementName((<any>customElement).name),
+      <any>customElement
+    );
+
     // save a reference to the original constructor
     var original = customElement;
 
@@ -122,12 +128,6 @@ export function CustomElement(template?: string, style?: string) {
     var f: any = function (this: any, ...args: any[]) {
       console.log(
         `ClassWrapper: before class constructor ${(<any>customElement)?.name}`
-      );
-
-      // define the element
-      window.customElements.define(
-        getElementName((<any>customElement).name),
-        <any>customElement
       );
 
       // let instance = original.apply(this, args);
