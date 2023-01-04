@@ -169,12 +169,9 @@ class ElementBase extends HTMLElement {
         // this.connectedCallback = <any>Function(this.constructConnectedCallback());
         // console.log("connectedCallback looks like the following - post new:");
         // console.log(this.connectedCallback.toString());
+        this.mutationObserver = new MutationObserver(this.mutationObserverCallback);
+        this.mutationObserver.observe(this, { attributes: true, attributeOldValue: true });
         console.log(`Element base constructor executed - ${this === null || this === void 0 ? void 0 : this.tagName}`);
-    }
-    /* istanbul ignore next */
-    attributeChangedCallback(name, oldValue, newValue) {
-        console.log("element attributes changed.");
-        console.log(name, oldValue, newValue);
     }
     /* istanbul ignore next */
     connectedCallback() {
@@ -183,6 +180,7 @@ class ElementBase extends HTMLElement {
     /* istanbul ignore next */
     disconnectedCallback() {
         console.log(`disconnectedCallback base - ${this === null || this === void 0 ? void 0 : this.tagName}`);
+        this.mutationObserver.disconnect();
     }
     /* istanbul ignore next */
     adoptedCallback() {
@@ -192,9 +190,19 @@ class ElementBase extends HTMLElement {
         if (!values) {
             return;
         }
-        values.forEach((v) => ElementBase.observedAttributesArray.push(v));
+        // values.forEach((v) => ElementBase.observedAttributesArray.push(v));
+        //TODO: ?
         console.log("Added values to watchlist");
         console.log(new Array(...values).join(" "));
+    }
+    mutationObserverCallback(mutationList, observer) {
+        for (const mutation of mutationList) {
+            if (mutation.type === 'attributes'
+                && mutation.attributeName.startsWith(':')
+                && mutation.oldValue !== mutation.target.getAttribute(mutation.attributeName)) {
+                console.log(`The dynamic ${mutation.attributeName} attribute was modified.`);
+            }
+        }
     }
     constructConnectedCallback() {
         let functionBody = `console.log("Connected callback - replaced");\r\n`;
@@ -263,12 +271,6 @@ class ElementBase extends HTMLElement {
         (instance || this).shadow.appendChild(styleElement);
     }
 }
-// static get observedAttributes() {
-//   console.log("Returning observed attributes");
-//   console.log(...ElementBase.observedAttributesArray);
-//   return ElementBase.observedAttributesArray;
-// }
-ElementBase.observedAttributesArray = [];
 
 var template$1 = "<h1>Hello!!!</h1>";
 
@@ -300,12 +302,6 @@ function getElementName(className) {
 
 // @CustomElement(template, style)
 class InternalBinding extends ElementBase {
-    // {
-    //   return ['mode'];
-    //   console.log("getting observed attributes");
-    //   console.log(ElementBase.observedAttributesArray);
-    //   return (ElementBase.observedAttributesArray);
-    // }
     constructor() {
         var _a;
         console.log("Constructor for InternalBinding started");
@@ -326,18 +322,9 @@ class InternalBinding extends ElementBase {
         if (btn) {
             btn.onclick = this.clicked;
         }
-        ElementBase.observedAttributesArray.forEach(attr => InternalBinding.observedAttributes.push(attr));
         console.log("Constructor for InternalBinding finished");
     }
-    attributeChangedCallback(name, oldValue, newValue) {
-        console.log("attr changed");
-        console.log(name);
-    }
-    connectedCallback() {
-        console.log("callback from internal-binding");
-    }
 }
-InternalBinding.observedAttributes = [];
 // define the element
 window.customElements.define(getElementName(InternalBinding.name), InternalBinding);
 

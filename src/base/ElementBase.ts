@@ -11,13 +11,6 @@ import { getElementName } from "./utils/utils";
  * @extends {HTMLElement}
  */
 export class ElementBase extends HTMLElement {
-  // static get observedAttributes() {
-  //   console.log("Returning observed attributes");
-  //   console.log(...ElementBase.observedAttributesArray);
-  //   return ElementBase.observedAttributesArray;
-  // }
-
-  static observedAttributesArray: string[] = [];
 
   /**
    * Description placeholder
@@ -36,6 +29,7 @@ export class ElementBase extends HTMLElement {
    * @type {*}
    */
   private state: any = {};
+  private mutationObserver: MutationObserver;
 
   /**
    * Creates an instance of ReactiveBase.
@@ -62,14 +56,13 @@ export class ElementBase extends HTMLElement {
     // console.log("connectedCallback looks like the following - post new:");
     // console.log(this.connectedCallback.toString());
 
+    this.mutationObserver = new MutationObserver(this.mutationObserverCallback);
+    this.mutationObserver.observe(this, { attributes: true, attributeOldValue: true });
+
     console.log(`Element base constructor executed - ${this?.tagName}`);
   }
 
-  /* istanbul ignore next */
-  attributeChangedCallback(name: string, oldValue: any, newValue: any) {
-    console.log("element attributes changed.");
-    console.log(name, oldValue, newValue);
-  }
+
   /* istanbul ignore next */
   connectedCallback() {
     console.log(`connectedCallbackbase - ${this?.tagName}`);
@@ -78,6 +71,7 @@ export class ElementBase extends HTMLElement {
   /* istanbul ignore next */
   disconnectedCallback() {
     console.log(`disconnectedCallback base - ${this?.tagName}`);
+    this.mutationObserver.disconnect();
   }
 
   /* istanbul ignore next */
@@ -89,11 +83,21 @@ export class ElementBase extends HTMLElement {
     if (!values) {
       return;
     }
-    values.forEach((v) => ElementBase.observedAttributesArray.push(v));
+    // values.forEach((v) => ElementBase.observedAttributesArray.push(v));
+    //TODO: ?
     console.log("Added values to watchlist");
     console.log(new Array(...values).join(" "));
   }
 
+  mutationObserverCallback(mutationList: any, observer: any) {
+    for (const mutation of mutationList) {
+      if (mutation.type === 'attributes'
+        && mutation.attributeName.startsWith(':')
+        && mutation.oldValue !== mutation.target.getAttribute(mutation.attributeName)) {
+        console.log(`The dynamic ${mutation.attributeName} attribute was modified.`);
+      }
+    }
+  }
   constructConnectedCallback(): string {
     let functionBody = `console.log("Connected callback - replaced");\r\n`;
     // TemplateParser.stringLiteralReplacements.forEach((val, key, map) => {
@@ -164,8 +168,7 @@ export class ElementBase extends HTMLElement {
   public setStyle(style: string, instance?: any): void {
     if ((instance || this).shadow === undefined) {
       console.warn(
-        `Failed to set styling on element ${
-          (instance || this).tagName
+        `Failed to set styling on element ${(instance || this).tagName
         }, shadow root is undefined`
       );
       return;

@@ -8,7 +8,6 @@
  * @extends {HTMLElement}
  */
 export declare class ElementBase extends HTMLElement {
-    static observedAttributesArray: string[];
     /**
      * Description placeholder
      * @date 2022-12-28 - 01:08:02
@@ -25,6 +24,7 @@ export declare class ElementBase extends HTMLElement {
      * @type {*}
      */
     private state;
+    private mutationObserver;
     /**
      * Creates an instance of ReactiveBase.
      * @date 2022-12-28 - 01:08:02
@@ -32,11 +32,11 @@ export declare class ElementBase extends HTMLElement {
      * @constructor
      */
     constructor(template?: string, style?: string);
-    attributeChangedCallback(name: string, oldValue: any, newValue: any): void;
     connectedCallback(): void;
     disconnectedCallback(): void;
     adoptedCallback(): void;
     private addValuesToOnChangeWatchList;
+    mutationObserverCallback(mutationList: any, observer: any): void;
     constructConnectedCallback(): string;
     constructConnectedCallbackString: string;
     private parseTemplate;
