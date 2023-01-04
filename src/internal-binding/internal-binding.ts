@@ -8,7 +8,7 @@ import { getElementName } from "../base/utils/utils";
 export default class InternalBinding extends ElementBase {
   public mode = "untouched 🆕";
 
-  static observedAttributes = ElementBase.observedAttributesArray;
+  static observedAttributes: string[] = [];
   // {
   //   return ['mode'];
   //   console.log("getting observed attributes");
@@ -25,6 +25,8 @@ export default class InternalBinding extends ElementBase {
     if (btn) {
       btn.onclick = this.clicked;
     }
+
+    ElementBase.observedAttributesArray.forEach(attr => InternalBinding.observedAttributes.push(attr));
     console.log("Constructor for InternalBinding finished");
   }
 

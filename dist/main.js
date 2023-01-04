@@ -326,6 +326,7 @@ class InternalBinding extends ElementBase {
         if (btn) {
             btn.onclick = this.clicked;
         }
+        ElementBase.observedAttributesArray.forEach(attr => InternalBinding.observedAttributes.push(attr));
         console.log("Constructor for InternalBinding finished");
     }
     attributeChangedCallback(name, oldValue, newValue) {
@@ -336,7 +337,7 @@ class InternalBinding extends ElementBase {
         console.log("callback from internal-binding");
     }
 }
-InternalBinding.observedAttributes = ElementBase.observedAttributesArray;
+InternalBinding.observedAttributes = [];
 // define the element
 window.customElements.define(getElementName(InternalBinding.name), InternalBinding);
 
