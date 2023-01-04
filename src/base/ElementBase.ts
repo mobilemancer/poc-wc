@@ -92,9 +92,9 @@ export class ElementBase extends HTMLElement {
   mutationObserverCallback(mutationList: any, observer: any) {
     for (const mutation of mutationList) {
       if (mutation.type === 'attributes'
-        && mutation.attributeName.startsWith(':')
         && mutation.oldValue !== mutation.target.getAttribute(mutation.attributeName)) {
         console.log(`The dynamic ${mutation.attributeName} attribute was modified.`);
+
       }
     }
   }
