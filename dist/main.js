@@ -302,6 +302,10 @@ class InternalBinding extends ElementBase {
         console.log("Constructor for InternalBinding started");
         super(template, css_248z);
         this.mode = "untouched 🆕";
+        const btn = document.querySelector("button");
+        if (btn) {
+            btn.onclick = (() => { alert("clicked"); });
+        }
         console.log("Constructor for InternalBinding finished");
     }
     clicked() {
@@ -314,10 +318,6 @@ class InternalBinding extends ElementBase {
     }
     connectedCallback() {
         console.log("callback from internal-binding");
-        const btn = document.querySelector("button");
-        if (btn) {
-            btn.onclick = (() => { alert("clicked"); });
-        }
     }
 }
 // define the element

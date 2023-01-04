@@ -11,6 +11,11 @@ export default class InternalBinding extends ElementBase {
   constructor() {
     console.log("Constructor for InternalBinding started");
     super(template, style);
+
+    const btn = document.querySelector("button");
+    if (btn) {
+      btn.onclick = (() => { alert("clicked") });
+    }
     console.log("Constructor for InternalBinding finished");
   }
 
@@ -24,10 +29,7 @@ export default class InternalBinding extends ElementBase {
 
   override connectedCallback(): void {
     console.log("callback from internal-binding")
-    const btn = document.querySelector("button");
-    if (btn) {
-      btn.onclick = (() => { alert("clicked") });
-    }
+
   }
 }
 
