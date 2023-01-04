@@ -127,6 +127,18 @@ TemplateParser.stringLiteralCounter = 0;
 TemplateParser.stringLiteralReplacements = new Map();
 
 /**
+ * Returns the name of the element
+ *
+ * @param className name of the custom element class
+ * @returns an hyphenated element name
+ */
+function getElementName(className) {
+    const wordRegex = /[A-Z]?[a-z]+|[0-9]+|[A-Z]+(?![a-z])/g;
+    const resultingWords = className.match(wordRegex);
+    return !!resultingWords ? resultingWords.join("-").toLowerCase() : "";
+}
+
+/**
  * Description placeholder
  * @date 2022-12-28 - 01:08:02
  *
@@ -154,6 +166,12 @@ class ElementBase extends HTMLElement {
         this.state = {};
         this.constructConnectedCallbackString = "";
         this.shadow = this.attachShadow({ mode: "open" });
+        if (template)
+            this.setTemplate(template);
+        if (style)
+            this.setStyle(style);
+        // define the element
+        window.customElements.define(getElementName(this.name), this);
         // // look for string literal bindings and replace them
         // template = this.parseTemplate(template);
         // console.log("connectedCallback looks like the following - pre new:");
@@ -248,189 +266,15 @@ class AdvancedComponent extends ElementBase {
 // Define the new element
 customElements.define("advanced-component", AdvancedComponent);
 
-/******************************************************************************
-Copyright (c) Microsoft Corporation.
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
-***************************************************************************** */
-
-function __decorate(decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-}
-
 var template = "<button onclick=\"clicked\">Change mode</button>\r\n\r\n<p>${mode}</p>";
 
 var css_248z = "";
 
-/**
- * Returns the name of the element
- *
- * @param className name of the custom element class
- * @returns an hyphenated element name
- */
-function getElementName(className) {
-    const wordRegex = /[A-Z]?[a-z]+|[0-9]+|[A-Z]+(?![a-z])/g;
-    const resultingWords = className.match(wordRegex);
-    return !!resultingWords ? resultingWords.join("-").toLowerCase() : "";
-}
-
-// function CustomElement() {
-//   return function classDecorator<T extends { new(...args: any[]): {} }>(
-//     customElement: T
-//   ) {
-//     // save a reference to the original constructor
-//     var original = customElement;
-//     let instance: any;
-//     // the new constructor behaviour
-//     var f: any = function (this: any, ...args: any) {
-//       console.log("ClassWrapper: before class constructor", original.name);
-//       // let instance = original.apply(this, args);
-//       instance = new original(...args);
-//       console.log("ClassWrapper: after class constructor", original.name);
-//       return instance;
-//     };
-//     // copy prototype so intanceof operator still works
-//     f.prototype = original.prototype;
-//     /**
-//      * Runs each time the element is appended to or moved in the DOM
-//      */
-//     // f.prototype.connectedCallback = (<any>original).super?.connectedCallback;
-//     // customElement.prototype.connectedCallback || function () {};
-//     // if (!instance?.constructConnectedCallbackString) {
-//     //   customElement.prototype.connectedCallback =
-//     //     function () {
-//     //       if (!this) {
-//     //         console.warn("Element is undefined?");
-//     //         return;
-//     //       }
-//     //       console.log("This is from the decorator")
-//     //     };
-//     // } else {
-//     //   customElement.prototype.connectedCallback = Function(instance?.constructConnectedCallbackString);
-//     // }
-//     // function () {
-//     //   if (!this) {
-//     //     console.warn("Element is undefined?");
-//     //     return;
-//     //   }
-//     //   console.log("This is from the decorator")
-//     // };
-//     //   // Attach a click event listener to the button
-//     //   let btn = this.querySelector("button");
-//     //   if (!btn) return;
-//     //   btn.addEventListener("click", function (event: any) {
-//     //     console.log("clicked");
-//     //   });
-//     // };
-//     // define the custom element
-//     window.customElements.define(
-//       getElementName(customElement.name),
-//       <any>customElement
-//     );
-//     // return new constructor (will override original)
-//     return f;
-//   }
-// };
-// const CustomElement = (template?: string, style?: string): any => (customElement: ElementBase) => {
-// function CustomElement(template?: string, style?: string) {
-//   return function classDecorator<T extends { new(...args: any[]): {} }>(
-//     customElement: T
-//   ) {
-//     console.log(`Decorator started for ${(<any>customElement).name}`);
-//     // save a reference to the original constructor
-//     const original = <any>customElement;
-//     // the new constructor behaviour
-//     const f: any = function (this: any, ...args: any) {
-//       console.log("ClassWrapper: before class constructor", (original).name);
-//       let instance = original.apply(this, args);
-//       // let instance = new (<any>original)(...args);
-//       console.log("ClassWrapper: after class constructor", (original).name);
-//       setTemplate(template, instance);
-//       setStyle(style, template, <any>customElement);
-//       const connectedCallback = (<any>customElement).prototype.connectedCallback || function () { };
-//       (<any>instance).prototype.connectedCallback = function () {
-//         console.log("This is conCB specified in the decorator")
-//         connectedCallback.call(this);
-//       };
-//       // define the element
-//       window.customElements.define(getElementName((<any>customElement).name), <any>customElement);
-//       return instance;
-//     };
-//     console.log(original);
-//     // copy prototype so intanceof operator still works
-//     f.prototype = original.prototype;
-//     console.log(f);
-//     return f;
-//   }
-// }
-function CustomElement(template, style) {
-    console.log(`Decorator factory called`);
-    return function (customElement) {
-        console.log(`Decorator started for ${customElement === null || customElement === void 0 ? void 0 : customElement.name}`);
-        // define the element
-        window.customElements.define(getElementName(customElement.name), customElement);
-        // save a reference to the original constructor
-        var original = customElement;
-        // the new constructor behaviour
-        var f = function (...args) {
-            console.log(`ClassWrapper: before class constructor ${customElement === null || customElement === void 0 ? void 0 : customElement.name}`);
-            // let instance = original.apply(this, args);
-            let instance = new customElement(...args);
-            console.log(`ClassWrapper: after class constructor ${customElement === null || customElement === void 0 ? void 0 : customElement.name}`);
-            this.setTemplate(template, instance);
-            this.setStyle(style, instance);
-            const connectedCallback = customElement.prototype.connectedCallback || function () { };
-            instance.connectedCallback = function () {
-                console.log("This is conCB specified in the decorator");
-                // append the elements own callback if it was defined
-                connectedCallback.call(this);
-            };
-            return instance;
-        };
-        // copy prototype so intanceof operator still works
-        f.prototype = original.prototype;
-        // return new constructor (will override original)
-        return f;
-    };
-}
-// function setStyle(
-//   style: string | undefined,
-//   template: string | undefined,
-//   customElement: ElementBase
-// ) {
-//   if (style && template) {
-//     customElement.setStyle(style);
-//   }
-// }
-// function setTemplate(template: string | undefined, customElement: ElementBase) {
-//   if (!template) {
-//     console.info(
-//       `No template provided for element ${getElementName(
-//         (<any>customElement).name
-//       )}`
-//     );
-//   } else {
-//     debugger;
-//     customElement.setTemplate(template);
-//   }
-// }
-
-let InternalBinding = class InternalBinding extends ElementBase {
+// @CustomElement(template, style)
+class InternalBinding extends ElementBase {
     constructor() {
         console.log("Constructor for InternalBinding started");
-        super();
+        super(template, css_248z);
         this.mode = "untouched 🆕";
         console.log("Constructor for InternalBinding finished");
     }
@@ -442,10 +286,6 @@ let InternalBinding = class InternalBinding extends ElementBase {
             this.mode = "dark 🌒";
         }
     }
-};
-InternalBinding = __decorate([
-    CustomElement(template, css_248z)
-], InternalBinding);
-var InternalBinding$1 = InternalBinding;
+}
 
-export { AdvancedComponent, HeaderComponent, HeaderComponent2, InternalBinding$1 as InternalBinding };
+export { AdvancedComponent, HeaderComponent, HeaderComponent2, InternalBinding };

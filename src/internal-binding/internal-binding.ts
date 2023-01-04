@@ -3,13 +3,13 @@ import template from "./internal-binding.html";
 import style from "./internal-binding.css";
 import { CustomElement } from "../base/CustomElement";
 
-@CustomElement(template, style)
+// @CustomElement(template, style)
 export default class InternalBinding extends ElementBase {
   public mode = "untouched 🆕";
 
   constructor() {
     console.log("Constructor for InternalBinding started");
-    super();
+    super(template, style);
     console.log("Constructor for InternalBinding finished");
   }
 

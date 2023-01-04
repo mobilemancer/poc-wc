@@ -115,11 +115,7 @@ export function CustomElement(template?: string, style?: string) {
   return function (customElement: any) {
     console.log(`Decorator started for ${(<any>customElement)?.name}`);
 
-    // define the element
-    window.customElements.define(
-      getElementName((<any>customElement).name),
-      <any>customElement
-    );
+
 
     // save a reference to the original constructor
     var original = customElement;
@@ -140,10 +136,17 @@ export function CustomElement(template?: string, style?: string) {
       this.setStyle(style, instance);
 
       const connectedCallback =
-        (<any>customElement).prototype.connectedCallback || function () {};
+        (<any>customElement).prototype.connectedCallback || function () { };
 
       (<any>instance).connectedCallback = function () {
         console.log("This is conCB specified in the decorator");
+
+        // define the element
+        window.customElements.define(
+          getElementName((<any>customElement).name),
+          <any>customElement
+        );
+
         // append the elements own callback if it was defined
         connectedCallback.call(this);
       };

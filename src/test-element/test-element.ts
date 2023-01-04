@@ -1,7 +1,6 @@
 import { ElementBase } from "../base/ElementBase";
 import { CustomElement } from "../base/CustomElement";
 
-@CustomElement()
 export default class TestElement extends ElementBase {
 
     public mode = "untouched 🆕";

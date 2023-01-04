@@ -1,4 +1,5 @@
 import TemplateParser from "./utils/TemplateParser";
+import { getElementName } from "./utils/utils";
 
 /**
  * Description placeholder
@@ -38,6 +39,15 @@ export class ElementBase extends HTMLElement {
     super();
 
     this.shadow = this.attachShadow({ mode: "open" });
+
+    if (template) this.setTemplate(template);
+    if (style) this.setStyle(style);
+
+    // define the element
+    window.customElements.define(
+      getElementName((<any>this).name),
+      <any>this
+    );
 
     // // look for string literal bindings and replace them
     // template = this.parseTemplate(template);
@@ -127,8 +137,7 @@ export class ElementBase extends HTMLElement {
   public setStyle(style: string, instance?: any): void {
     if ((instance || this).shadow === undefined) {
       console.warn(
-        `Failed to set styling on element ${
-          (instance || this).tagName
+        `Failed to set styling on element ${(instance || this).tagName
         }, shadow root is undefined`
       );
       return;
