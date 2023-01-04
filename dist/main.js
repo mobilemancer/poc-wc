@@ -299,10 +299,11 @@ function getElementName(className) {
 // @CustomElement(template, style)
 class InternalBinding extends ElementBase {
     constructor() {
+        var _a;
         console.log("Constructor for InternalBinding started");
         super(template, css_248z);
         this.mode = "untouched 🆕";
-        const btn = document.querySelector("button");
+        const btn = (_a = this === null || this === void 0 ? void 0 : this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector("button");
         if (btn) {
             btn.onclick = (() => { alert("clicked"); });
         }
