@@ -46,10 +46,25 @@ export class ElementBase extends HTMLElement {
     const templateAndProps = this.parseTemplate(template);
     if (templateAndProps) this.setTemplate(templateAndProps.templateString);
     if (style) this.setStyle(style);
-    this.addValuesToOnChangeWatchList(templateAndProps?.propertiesToWatch);
+    // this.addValuesToOnChangeWatchList(templateAndProps?.propertiesToWatch);
 
     // create getters and setters for props to observe
-    for (let propName in templateAndProps?.propertiesToWatch) {
+    this.setupAcessorsForWatchedProps(templateAndProps?.propertiesToWatch);
+
+
+
+    this.mutationObserver = new MutationObserver(this.mutationObserverCallback);
+    this.mutationObserver.observe(this, { attributes: true, attributeOldValue: true });
+
+    console.log(`Element base constructor executed - ${this?.tagName}`);
+  }
+
+  setupAcessorsForWatchedProps(propertiesToWatch: Set<string> | undefined) {
+    console.log("setupAcessorsForWatchedProps")
+    if (!propertiesToWatch) { return; }
+    console.log(new Array(...propertiesToWatch));
+
+    for (let propName in new Array(...propertiesToWatch)) {
       console.log("getters and setters for $1", propName);
       Object.defineProperty(this, propName, {
         get: () => {
@@ -68,11 +83,6 @@ export class ElementBase extends HTMLElement {
       });
     }
 
-
-    this.mutationObserver = new MutationObserver(this.mutationObserverCallback);
-    this.mutationObserver.observe(this, { attributes: true, attributeOldValue: true });
-
-    console.log(`Element base constructor executed - ${this?.tagName}`);
   }
 
 

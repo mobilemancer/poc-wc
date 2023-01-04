@@ -162,9 +162,20 @@ class ElementBase extends HTMLElement {
             this.setTemplate(templateAndProps.templateString);
         if (style)
             this.setStyle(style);
-        this.addValuesToOnChangeWatchList(templateAndProps === null || templateAndProps === void 0 ? void 0 : templateAndProps.propertiesToWatch);
+        // this.addValuesToOnChangeWatchList(templateAndProps?.propertiesToWatch);
         // create getters and setters for props to observe
-        for (let propName in templateAndProps === null || templateAndProps === void 0 ? void 0 : templateAndProps.propertiesToWatch) {
+        this.setupAcessorsForWatchedProps(templateAndProps === null || templateAndProps === void 0 ? void 0 : templateAndProps.propertiesToWatch);
+        this.mutationObserver = new MutationObserver(this.mutationObserverCallback);
+        this.mutationObserver.observe(this, { attributes: true, attributeOldValue: true });
+        console.log(`Element base constructor executed - ${this === null || this === void 0 ? void 0 : this.tagName}`);
+    }
+    setupAcessorsForWatchedProps(propertiesToWatch) {
+        console.log("setupAcessorsForWatchedProps");
+        if (!propertiesToWatch) {
+            return;
+        }
+        console.log(new Array(...propertiesToWatch));
+        for (let propName in new Array(...propertiesToWatch)) {
             console.log("getters and setters for $1", propName);
             Object.defineProperty(this, propName, {
                 get: () => {
@@ -182,9 +193,6 @@ class ElementBase extends HTMLElement {
                 },
             });
         }
-        this.mutationObserver = new MutationObserver(this.mutationObserverCallback);
-        this.mutationObserver.observe(this, { attributes: true, attributeOldValue: true });
-        console.log(`Element base constructor executed - ${this === null || this === void 0 ? void 0 : this.tagName}`);
     }
     /* istanbul ignore next */
     connectedCallback() {

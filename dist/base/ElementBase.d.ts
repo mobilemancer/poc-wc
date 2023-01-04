@@ -33,6 +33,7 @@ export declare class ElementBase extends HTMLElement {
      * @constructor
      */
     constructor(template?: string, style?: string);
+    setupAcessorsForWatchedProps(propertiesToWatch: Set<string> | undefined): void;
     connectedCallback(): void;
     disconnectedCallback(): void;
     adoptedCallback(): void;
