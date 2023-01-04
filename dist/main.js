@@ -165,10 +165,17 @@ class ElementBase extends HTMLElement {
         this.addValuesToOnChangeWatchList(templateAndProps === null || templateAndProps === void 0 ? void 0 : templateAndProps.propertiesToWatch);
         // create getters and setters for props to observe
         for (let propName in templateAndProps === null || templateAndProps === void 0 ? void 0 : templateAndProps.propertiesToWatch) {
+            console.log("getters and setters for $1", propName);
             Object.defineProperty(this, propName, {
-                get: () => { return this.watchedProperties.get("_" + propName); },
+                get: () => {
+                    console.log("getting $1", propName);
+                    console.log("result", this.watchedProperties.get("_" + propName));
+                    return this.watchedProperties.get("_" + propName);
+                },
                 set: (value) => {
+                    console.log("setting $1", propName, value);
                     this.watchedProperties.set("_" + propName, value);
+                    console.log("result", this.watchedProperties.get("_" + propName));
                     if (this.getAttribute(propName) !== value) {
                         this.setAttribute(propName, value);
                     }
