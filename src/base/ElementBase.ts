@@ -43,12 +43,6 @@ export class ElementBase extends HTMLElement {
     if (template) this.setTemplate(template);
     if (style) this.setStyle(style);
 
-    // define the element
-    window.customElements.define(
-      getElementName((<any>this).name),
-      <any>this
-    );
-
     // // look for string literal bindings and replace them
     // template = this.parseTemplate(template);
 
@@ -123,7 +117,7 @@ export class ElementBase extends HTMLElement {
    * @param {string} template
    */
   public setTemplate(template: string, instance?: any): void {
-    debugger;
+
     (instance || this).shadow!.innerHTML = template;
   }
 

@@ -1,5 +1,6 @@
 import { ElementBase } from "../base/ElementBase";
 import { CustomElement } from "../base/CustomElement";
+import { getElementName } from "../base/utils/utils";
 
 export default class TestElement extends ElementBase {
 
@@ -19,3 +20,6 @@ export default class TestElement extends ElementBase {
         }
     }
 }
+
+// define the element
+window.customElements.define(getElementName(TestElement.name), TestElement);

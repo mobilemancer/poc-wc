@@ -127,18 +127,6 @@ TemplateParser.stringLiteralCounter = 0;
 TemplateParser.stringLiteralReplacements = new Map();
 
 /**
- * Returns the name of the element
- *
- * @param className name of the custom element class
- * @returns an hyphenated element name
- */
-function getElementName(className) {
-    const wordRegex = /[A-Z]?[a-z]+|[0-9]+|[A-Z]+(?![a-z])/g;
-    const resultingWords = className.match(wordRegex);
-    return !!resultingWords ? resultingWords.join("-").toLowerCase() : "";
-}
-
-/**
  * Description placeholder
  * @date 2022-12-28 - 01:08:02
  *
@@ -170,8 +158,6 @@ class ElementBase extends HTMLElement {
             this.setTemplate(template);
         if (style)
             this.setStyle(style);
-        // define the element
-        window.customElements.define(getElementName(this.name), this);
         // // look for string literal bindings and replace them
         // template = this.parseTemplate(template);
         // console.log("connectedCallback looks like the following - pre new:");
@@ -233,7 +219,6 @@ class ElementBase extends HTMLElement {
      * @param {string} template
      */
     setTemplate(template, instance) {
-        debugger;
         (instance || this).shadow.innerHTML = template;
     }
     /**
@@ -270,6 +255,18 @@ var template = "<button onclick=\"clicked\">Change mode</button>\r\n\r\n<p>${mod
 
 var css_248z = "";
 
+/**
+ * Returns the name of the element
+ *
+ * @param className name of the custom element class
+ * @returns an hyphenated element name
+ */
+function getElementName(className) {
+    const wordRegex = /[A-Z]?[a-z]+|[0-9]+|[A-Z]+(?![a-z])/g;
+    const resultingWords = className.match(wordRegex);
+    return !!resultingWords ? resultingWords.join("-").toLowerCase() : "";
+}
+
 // @CustomElement(template, style)
 class InternalBinding extends ElementBase {
     constructor() {
@@ -287,5 +284,7 @@ class InternalBinding extends ElementBase {
         }
     }
 }
+// define the element
+window.customElements.define(getElementName(InternalBinding.name), InternalBinding);
 
 export { AdvancedComponent, HeaderComponent, HeaderComponent2, InternalBinding };
