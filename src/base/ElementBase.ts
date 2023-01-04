@@ -47,10 +47,10 @@ export class ElementBase extends HTMLElement {
 
     this.shadow = this.attachShadow({ mode: "open" });
 
-    const parsedTemplate = this.parseTemplate(template);
-    if (parsedTemplate) this.setTemplate(parsedTemplate);
+    const templateAndProps = this.parseTemplate(template);
+    if (templateAndProps) this.setTemplate(templateAndProps.templateString);
     if (style) this.setStyle(style);
-    this.addValuesToOnChangeWatchList();
+    this.addValuesToOnChangeWatchList(templateAndProps?.propertiesToWatch);
 
 
     // // look for string literal bindings and replace them
@@ -65,25 +65,43 @@ export class ElementBase extends HTMLElement {
     console.log(`Element base constructor executed - ${this?.tagName}`);
   }
 
+  /* istanbul ignore next */
   attributeChangedCallback(name: string, oldValue: any, newValue: any) {
     console.log('element attributes changed.');
     console.log(name, oldValue, newValue);
   }
+  /* istanbul ignore next */
+  connectedCallback() {
+    console.log(`connectedCallbackbase - ${this?.tagName}`);
+  }
+
+  /* istanbul ignore next */
+  disconnectedCallback() {
+    console.log(`disconnectedCallback base - ${this?.tagName}`);
+  }
+
+  /* istanbul ignore next */
+  adoptedCallback() {
+    console.log(`adoptedCallback base - ${this?.tagName}`);
+  }
+
 
   private addValuesToOnChangeWatchList(values?: Set<string>) {
-    values = TemplateParser.stringLiteralReplacements;
+    if (!values) {
+      return;
+    }
     values.forEach(v => ElementBase.observedAttributesArray.push(v));
     console.log("Added values to watchlist");
-    console.log(values.values);
+    console.log(new Array(...values).join(' '));
   }
 
   constructConnectedCallback(): string {
     let functionBody = `console.log("Connected callback - replaced");\r\n`;
-    TemplateParser.stringLiteralReplacements.forEach((val, key, map) => {
-      // val.forEach((instance) => {
-      //   functionBody += `document.querySelector("#${instance}").innerHtml = host.getAttribute('key');\r\n`;
-      // });
-    });
+    // TemplateParser.stringLiteralReplacements.forEach((val, key, map) => {
+    //   // val.forEach((instance) => {
+    //   //   functionBody += `document.querySelector("#${instance}").innerHtml = host.getAttribute('key');\r\n`;
+    //   // });
+    // });
 
     this.constructConnectedCallbackString = functionBody;
     return functionBody;
@@ -91,10 +109,7 @@ export class ElementBase extends HTMLElement {
 
   public constructConnectedCallbackString = "";
 
-  /* istanbul ignore next */
-  connectedCallback() {
-    console.log(`Connected callback original - ${this?.tagName}`);
-  }
+
 
   private parseTemplate(template: string | undefined) {
     if (template === undefined) {

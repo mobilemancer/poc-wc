@@ -1,5 +1,8 @@
 export default class TemplateParser {
-    static parse(template: string): string;
+    static parse(template: string): {
+        templateString: string;
+        propertiesToWatch: Set<string>;
+    };
     static convertNodesToString(nodes: Element[]): string;
     /**
      *
@@ -8,7 +11,9 @@ export default class TemplateParser {
      */
     static getElements(template: string): Array<Element>;
     static stringLiteralCounter: number;
-    static stringLiteralReplacements: Set<string>;
-    static findStringLiterals(elements: Element[]): Element[];
+    static replaceStringLiterals(elements: Element[]): {
+        elements: Element[];
+        propertiesToWatch: Set<string>;
+    };
     static serializeElements(elements: Element[]): void;
 }

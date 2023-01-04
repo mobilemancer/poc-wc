@@ -1,9 +1,10 @@
 export default class TemplateParser {
-  static parse(template: string): string {
+  static parse(template: string): { templateString: string, propertiesToWatch: Set<string> } {
     const elements = this.getElements(template);
-    const modifiedElements = this.findStringLiterals(elements);
-    const templateString = this.convertNodesToString(modifiedElements);
-    return templateString;
+    const elementsAndPropsToWatch = this.replaceStringLiterals(elements);
+    const propertiesToWatch = elementsAndPropsToWatch.propertiesToWatch;
+    const templateString = this.convertNodesToString(elementsAndPropsToWatch.elements);
+    return { templateString, propertiesToWatch };
   }
 
   static convertNodesToString(nodes: Element[]): string {
@@ -35,8 +36,11 @@ export default class TemplateParser {
   }
 
   static stringLiteralCounter = 0;
-  static stringLiteralReplacements: Set<string> = new Set();
-  static findStringLiterals(elements: Element[]): Element[] {
+  static replaceStringLiterals(elements: Element[]): { elements: Element[], propertiesToWatch: Set<string> } {
+    // gather all property names used in string literals
+    const propertiesToWatch: Set<string> = new Set();
+
+    // walk over all leaf elements and check for string literals
     elements.filter(element => element.childElementCount === 0 && element.innerHTML.includes("${")).forEach(element => {
       let end = 0;
       while (element.innerHTML.indexOf("${", end) > -1) {
@@ -45,14 +49,15 @@ export default class TemplateParser {
         let stringLiteral = element.innerHTML.substring(start, end + 1);
         let stringLiteralName = element.innerHTML.substring(start + 2, end);
 
-        if (!this.stringLiteralReplacements.has(stringLiteralName)) {
-          this.stringLiteralReplacements.add(stringLiteralName);
+        if (!propertiesToWatch.has(stringLiteralName)) {
+          propertiesToWatch.add(stringLiteralName);
         }
 
+        // replace string literal with a span that has a data-binding attr
         element.innerHTML = element.innerHTML.replace(stringLiteral, `<span data-bind='${stringLiteralName}'></span>`);
       }
     });
-    return elements;
+    return { elements, propertiesToWatch };
   }
 
   static serializeElements(elements: Element[]) { }

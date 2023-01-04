@@ -23,7 +23,7 @@ describe("CustomElement tests", () => {
     //     ).toBe(expectedCB);
     //   });
 
-    it("element can be initiated with template and style", () => {
+    it("element can be initiated with template", () => {
         const element = new TestElement(template1, "");
         expect(!!element).toBe(true);
     });

@@ -34,10 +34,12 @@ export declare class ElementBase extends HTMLElement {
      */
     constructor(template?: string, style?: string);
     attributeChangedCallback(name: string, oldValue: any, newValue: any): void;
+    connectedCallback(): void;
+    disconnectedCallback(): void;
+    adoptedCallback(): void;
     private addValuesToOnChangeWatchList;
     constructConnectedCallback(): string;
     constructConnectedCallbackString: string;
-    connectedCallback(): void;
     private parseTemplate;
     /**
      * Update the component state

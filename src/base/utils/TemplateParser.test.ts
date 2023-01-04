@@ -16,22 +16,22 @@ describe("string literal parsing", () => {
 
   it("parse string literals", () => {
     const result = TemplateParser.parse(template2);
-    expect(result).toBe(template2expected);
+    expect(result.templateString).toBe(template2expected);
   });
 
   it("parse string literals, multi instance with used template", () => {
     const result = TemplateParser.parse(template3);
-    expect(result).toBe(template3expected);
+    expect(result.templateString).toBe(template3expected);
   });
 
   it("parse string literals, multi instance with unused template", () => {
     const result = TemplateParser.parse(template4);
-    expect(result).toBe(template4expected);
+    expect(result.templateString).toBe(template4expected);
   });
 
   it("parse string literals, nested elements", () => {
     const result = TemplateParser.parse(template5);
-    expect(result).toBe(template5expected);
+    expect(result.templateString).toBe(template5expected);
   });
 
 });

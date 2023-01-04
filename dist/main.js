@@ -76,9 +76,10 @@ customElements.define("header-component2", HeaderComponent2);
 class TemplateParser {
     static parse(template) {
         const elements = this.getElements(template);
-        const modifiedElements = this.findStringLiterals(elements);
-        const templateString = this.convertNodesToString(modifiedElements);
-        return templateString;
+        const elementsAndPropsToWatch = this.replaceStringLiterals(elements);
+        const propertiesToWatch = elementsAndPropsToWatch.propertiesToWatch;
+        const templateString = this.convertNodesToString(elementsAndPropsToWatch.elements);
+        return { templateString, propertiesToWatch };
     }
     static convertNodesToString(nodes) {
         let result = "";
@@ -103,7 +104,10 @@ class TemplateParser {
         // the DOMParser adds a few elements we're not inteerested in, remove them and return the rest
         return elementsArray.filter((e) => e.tagName !== "HTML" && e.tagName !== "HEAD" && e.tagName !== "BODY");
     }
-    static findStringLiterals(elements) {
+    static replaceStringLiterals(elements) {
+        // gather all property names used in string literals
+        const propertiesToWatch = new Set();
+        // walk over all leaf elements and check for string literals
         elements.filter(element => element.childElementCount === 0 && element.innerHTML.includes("${")).forEach(element => {
             let end = 0;
             while (element.innerHTML.indexOf("${", end) > -1) {
@@ -111,18 +115,18 @@ class TemplateParser {
                 end = element.innerHTML.indexOf("}", start);
                 let stringLiteral = element.innerHTML.substring(start, end + 1);
                 let stringLiteralName = element.innerHTML.substring(start + 2, end);
-                if (!this.stringLiteralReplacements.has(stringLiteralName)) {
-                    this.stringLiteralReplacements.add(stringLiteralName);
+                if (!propertiesToWatch.has(stringLiteralName)) {
+                    propertiesToWatch.add(stringLiteralName);
                 }
+                // replace string literal with a span that has a data-binding attr
                 element.innerHTML = element.innerHTML.replace(stringLiteral, `<span data-bind='${stringLiteralName}'></span>`);
             }
         });
-        return elements;
+        return { elements, propertiesToWatch };
     }
     static serializeElements(elements) { }
 }
 TemplateParser.stringLiteralCounter = 0;
-TemplateParser.stringLiteralReplacements = new Set();
 
 /**
  * Description placeholder
@@ -155,12 +159,12 @@ class ElementBase extends HTMLElement {
         this.state = {};
         this.constructConnectedCallbackString = "";
         this.shadow = this.attachShadow({ mode: "open" });
-        const parsedTemplate = this.parseTemplate(template);
-        if (parsedTemplate)
-            this.setTemplate(parsedTemplate);
+        const templateAndProps = this.parseTemplate(template);
+        if (templateAndProps)
+            this.setTemplate(templateAndProps.templateString);
         if (style)
             this.setStyle(style);
-        this.addValuesToOnChangeWatchList();
+        this.addValuesToOnChangeWatchList(templateAndProps === null || templateAndProps === void 0 ? void 0 : templateAndProps.propertiesToWatch);
         // // look for string literal bindings and replace them
         // template = this.parseTemplate(template);
         // console.log("connectedCallback looks like the following - pre new:");
@@ -170,29 +174,40 @@ class ElementBase extends HTMLElement {
         // console.log(this.connectedCallback.toString());
         console.log(`Element base constructor executed - ${this === null || this === void 0 ? void 0 : this.tagName}`);
     }
+    /* istanbul ignore next */
     attributeChangedCallback(name, oldValue, newValue) {
         console.log('element attributes changed.');
         console.log(name, oldValue, newValue);
     }
+    /* istanbul ignore next */
+    connectedCallback() {
+        console.log(`connectedCallbackbase - ${this === null || this === void 0 ? void 0 : this.tagName}`);
+    }
+    /* istanbul ignore next */
+    disconnectedCallback() {
+        console.log(`disconnectedCallback base - ${this === null || this === void 0 ? void 0 : this.tagName}`);
+    }
+    /* istanbul ignore next */
+    adoptedCallback() {
+        console.log(`adoptedCallback base - ${this === null || this === void 0 ? void 0 : this.tagName}`);
+    }
     addValuesToOnChangeWatchList(values) {
-        values = TemplateParser.stringLiteralReplacements;
+        if (!values) {
+            return;
+        }
         values.forEach(v => ElementBase.observedAttributesArray.push(v));
         console.log("Added values to watchlist");
-        console.log(values.values);
+        console.log(new Array(...values).join(' '));
     }
     constructConnectedCallback() {
         let functionBody = `console.log("Connected callback - replaced");\r\n`;
-        TemplateParser.stringLiteralReplacements.forEach((val, key, map) => {
-            // val.forEach((instance) => {
-            //   functionBody += `document.querySelector("#${instance}").innerHtml = host.getAttribute('key');\r\n`;
-            // });
-        });
+        // TemplateParser.stringLiteralReplacements.forEach((val, key, map) => {
+        //   // val.forEach((instance) => {
+        //   //   functionBody += `document.querySelector("#${instance}").innerHtml = host.getAttribute('key');\r\n`;
+        //   // });
+        // });
         this.constructConnectedCallbackString = functionBody;
         return functionBody;
-    }
-    /* istanbul ignore next */
-    connectedCallback() {
-        console.log(`Connected callback original - ${this === null || this === void 0 ? void 0 : this.tagName}`);
     }
     parseTemplate(template) {
         if (template === undefined) {
