@@ -42,18 +42,6 @@ export class ElementBase extends HTMLElement {
     // // look for string literal bindings and replace them
     // template = this.parseTemplate(template);
 
-    // // set template if available
-    // if (!template || template.length === 0) {
-    //   console.warn("No template to set for element");
-    //   return;
-    // }
-    // this.setTemplate(template);
-
-    // // set style if available
-    // if (!!style && style.length > 0) {
-    //   this.setStyle(style);
-    // }
-
     // console.log("connectedCallback looks like the following - pre new:");
     // console.log(this.connectedCallback.toString());
     // this.connectedCallback = <any>Function(this.constructConnectedCallback());

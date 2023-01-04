@@ -156,16 +156,6 @@ class ElementBase extends HTMLElement {
         this.shadow = this.attachShadow({ mode: "open" });
         // // look for string literal bindings and replace them
         // template = this.parseTemplate(template);
-        // // set template if available
-        // if (!template || template.length === 0) {
-        //   console.warn("No template to set for element");
-        //   return;
-        // }
-        // this.setTemplate(template);
-        // // set style if available
-        // if (!!style && style.length > 0) {
-        //   this.setStyle(style);
-        // }
         // console.log("connectedCallback looks like the following - pre new:");
         // console.log(this.connectedCallback.toString());
         // this.connectedCallback = <any>Function(this.constructConnectedCallback());
@@ -246,13 +236,13 @@ class ElementBase extends HTMLElement {
     }
 }
 
-var template = "<h1>Hello!!!</h1>";
+var template$1 = "<h1>Hello!!!</h1>";
 
-var css_248z = "h1 {\r\n  color: hotpink;\r\n  font-style: italic;\r\n  font-weight: bolder;\r\n}\r\n";
+var css_248z$1 = "h1 {\r\n  color: hotpink;\r\n  font-style: italic;\r\n  font-weight: bolder;\r\n}\r\n";
 
 class AdvancedComponent extends ElementBase {
     constructor() {
-        super(template, css_248z);
+        super(template$1, css_248z$1);
     }
 }
 // Define the new element
@@ -279,6 +269,10 @@ function __decorate(decorators, target, key, desc) {
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 }
+
+var template = "<button onclick=\"clicked\">Change mode</button>\r\n\r\n<p>${mode}</p>";
+
+var css_248z = "";
 
 /**
  * Returns the name of the element
@@ -450,7 +444,7 @@ let InternalBinding = class InternalBinding extends ElementBase {
     }
 };
 InternalBinding = __decorate([
-    CustomElement()
+    CustomElement(template, css_248z)
 ], InternalBinding);
 var InternalBinding$1 = InternalBinding;
 
