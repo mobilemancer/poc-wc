@@ -11,10 +11,11 @@ import { getElementName } from "./utils/utils";
  * @extends {HTMLElement}
  */
 export class ElementBase extends HTMLElement {
-
-  static get observedAttributes() {
-    return ElementBase.observedAttributesArray;
-  }
+  // static get observedAttributes() {
+  //   console.log("Returning observed attributes");
+  //   console.log(...ElementBase.observedAttributesArray);
+  //   return ElementBase.observedAttributesArray;
+  // }
 
   static observedAttributesArray: string[] = [];
 
@@ -52,7 +53,6 @@ export class ElementBase extends HTMLElement {
     if (style) this.setStyle(style);
     this.addValuesToOnChangeWatchList(templateAndProps?.propertiesToWatch);
 
-
     // // look for string literal bindings and replace them
     // template = this.parseTemplate(template);
 
@@ -67,7 +67,7 @@ export class ElementBase extends HTMLElement {
 
   /* istanbul ignore next */
   attributeChangedCallback(name: string, oldValue: any, newValue: any) {
-    console.log('element attributes changed.');
+    console.log("element attributes changed.");
     console.log(name, oldValue, newValue);
   }
   /* istanbul ignore next */
@@ -85,14 +85,13 @@ export class ElementBase extends HTMLElement {
     console.log(`adoptedCallback base - ${this?.tagName}`);
   }
 
-
   private addValuesToOnChangeWatchList(values?: Set<string>) {
     if (!values) {
       return;
     }
-    values.forEach(v => ElementBase.observedAttributesArray.push(v));
+    values.forEach((v) => ElementBase.observedAttributesArray.push(v));
     console.log("Added values to watchlist");
-    console.log(new Array(...values).join(' '));
+    console.log(new Array(...values).join(" "));
   }
 
   constructConnectedCallback(): string {
@@ -108,8 +107,6 @@ export class ElementBase extends HTMLElement {
   }
 
   public constructConnectedCallbackString = "";
-
-
 
   private parseTemplate(template: string | undefined) {
     if (template === undefined) {
@@ -154,7 +151,6 @@ export class ElementBase extends HTMLElement {
    * @param {string} template
    */
   public setTemplate(template: string, instance?: any): void {
-
     (instance || this).shadow!.innerHTML = template;
   }
 
@@ -168,7 +164,8 @@ export class ElementBase extends HTMLElement {
   public setStyle(style: string, instance?: any): void {
     if ((instance || this).shadow === undefined) {
       console.warn(
-        `Failed to set styling on element ${(instance || this).tagName
+        `Failed to set styling on element ${
+          (instance || this).tagName
         }, shadow root is undefined`
       );
       return;

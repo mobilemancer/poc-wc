@@ -138,9 +138,6 @@ TemplateParser.stringLiteralCounter = 0;
  * @extends {HTMLElement}
  */
 class ElementBase extends HTMLElement {
-    static get observedAttributes() {
-        return ElementBase.observedAttributesArray;
-    }
     /**
      * Creates an instance of ReactiveBase.
      * @date 2022-12-28 - 01:08:02
@@ -176,7 +173,7 @@ class ElementBase extends HTMLElement {
     }
     /* istanbul ignore next */
     attributeChangedCallback(name, oldValue, newValue) {
-        console.log('element attributes changed.');
+        console.log("element attributes changed.");
         console.log(name, oldValue, newValue);
     }
     /* istanbul ignore next */
@@ -195,9 +192,9 @@ class ElementBase extends HTMLElement {
         if (!values) {
             return;
         }
-        values.forEach(v => ElementBase.observedAttributesArray.push(v));
+        values.forEach((v) => ElementBase.observedAttributesArray.push(v));
         console.log("Added values to watchlist");
-        console.log(new Array(...values).join(' '));
+        console.log(new Array(...values).join(" "));
     }
     constructConnectedCallback() {
         let functionBody = `console.log("Connected callback - replaced");\r\n`;
@@ -266,6 +263,11 @@ class ElementBase extends HTMLElement {
         (instance || this).shadow.appendChild(styleElement);
     }
 }
+// static get observedAttributes() {
+//   console.log("Returning observed attributes");
+//   console.log(...ElementBase.observedAttributesArray);
+//   return ElementBase.observedAttributesArray;
+// }
 ElementBase.observedAttributesArray = [];
 
 var template$1 = "<h1>Hello!!!</h1>";
@@ -298,24 +300,31 @@ function getElementName(className) {
 
 // @CustomElement(template, style)
 class InternalBinding extends ElementBase {
+    static get observedAttributes() {
+        console.log("getting observed attributes");
+        console.log(ElementBase.observedAttributesArray);
+        return ElementBase.observedAttributesArray;
+    }
     constructor() {
         var _a;
         console.log("Constructor for InternalBinding started");
         super(template, css_248z);
         this.mode = "untouched 🆕";
+        this.clicked = () => {
+            if (this.mode.startsWith("dark")) {
+                this.mode = "light ☀️";
+            }
+            else {
+                this.mode = "dark 🌒";
+            }
+            console.log(this.mode);
+        };
+        console.table();
         const btn = (_a = this === null || this === void 0 ? void 0 : this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector("button");
         if (btn) {
-            btn.onclick = (() => { alert("clicked"); });
+            btn.onclick = this.clicked;
         }
         console.log("Constructor for InternalBinding finished");
-    }
-    clicked() {
-        if (this.mode.startsWith("dark")) {
-            this.mode = "light ☀️";
-        }
-        else {
-            this.mode = "dark 🌒";
-        }
     }
     connectedCallback() {
         console.log("callback from internal-binding");

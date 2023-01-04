@@ -8,7 +8,6 @@
  * @extends {HTMLElement}
  */
 export declare class ElementBase extends HTMLElement {
-    static get observedAttributes(): string[];
     static observedAttributesArray: string[];
     /**
      * Description placeholder
