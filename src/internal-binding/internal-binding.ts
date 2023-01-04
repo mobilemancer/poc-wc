@@ -35,6 +35,11 @@ export default class InternalBinding extends ElementBase {
     console.log(this.mode);
   };
 
+  override attributeChangedCallback(name: string, oldValue: any, newValue: any): void {
+    console.log("attr changed");
+    console.log(name);
+  }
+
   override connectedCallback(): void {
     console.log("callback from internal-binding");
   }

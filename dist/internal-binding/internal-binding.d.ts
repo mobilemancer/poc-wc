@@ -4,5 +4,6 @@ export default class InternalBinding extends ElementBase {
     static get observedAttributes(): string[];
     constructor();
     clicked: () => void;
+    attributeChangedCallback(name: string, oldValue: any, newValue: any): void;
     connectedCallback(): void;
 }

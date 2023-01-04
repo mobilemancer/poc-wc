@@ -326,6 +326,10 @@ class InternalBinding extends ElementBase {
         }
         console.log("Constructor for InternalBinding finished");
     }
+    attributeChangedCallback(name, oldValue, newValue) {
+        console.log("attr changed");
+        console.log(name);
+    }
     connectedCallback() {
         console.log("callback from internal-binding");
     }
