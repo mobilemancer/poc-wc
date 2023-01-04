@@ -57,7 +57,7 @@ export declare class ElementBase extends HTMLElement {
      * @public
      * @param {string} template
      */
-    setTemplate(template: string): void;
+    setTemplate(template: string, instance?: any): void;
     /**
      * Set the style of the component
      * @date 2022-12-28 - 01:08:02
@@ -65,5 +65,5 @@ export declare class ElementBase extends HTMLElement {
      * @public
      * @param {string} style
      */
-    setStyle(style: string): void;
+    setStyle(style: string, instance?: any): void;
 }

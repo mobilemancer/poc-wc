@@ -109,23 +109,47 @@ import { getElementName } from "./utils/utils";
 //   }
 // }
 
-
-export function CustomElement() {
+export function CustomElement(template?: string, style?: string) {
   console.log(`Decorator factory called`);
 
-  return function (target: any) {
-    console.log(`Decorator started for ${(<any>target)?.name}`);
+  return function (customElement: any) {
+    console.log(`Decorator started for ${(<any>customElement)?.name}`);
 
     // save a reference to the original constructor
-    var original = target;
+    var original = customElement;
 
     // the new constructor behaviour
     var f: any = function (this: any, ...args: any[]) {
-      console.log(`ClassWrapper: before class constructor ${(<any>target)?.name}`);
-      let instance = original.apply(this, args)
-      console.log(`ClassWrapper: after class constructor ${(<any>target)?.name}`);
+      console.log(
+        `ClassWrapper: before class constructor ${(<any>customElement)?.name}`
+      );
+
+      // define the element
+      window.customElements.define(
+        getElementName((<any>customElement).name),
+        <any>customElement
+      );
+
+      // let instance = original.apply(this, args);
+      let instance = new customElement(...args);
+      console.log(
+        `ClassWrapper: after class constructor ${(<any>customElement)?.name}`
+      );
+
+      this.setTemplate(template, instance);
+      this.setStyle(style, instance);
+
+      const connectedCallback =
+        (<any>customElement).prototype.connectedCallback || function () {};
+
+      (<any>instance).connectedCallback = function () {
+        console.log("This is conCB specified in the decorator");
+        // append the elements own callback if it was defined
+        connectedCallback.call(this);
+      };
+
       return instance;
-    }
+    };
 
     // copy prototype so intanceof operator still works
     f.prototype = original.prototype;
@@ -135,22 +159,25 @@ export function CustomElement() {
   };
 }
 
+// function setStyle(
+//   style: string | undefined,
+//   template: string | undefined,
+//   customElement: ElementBase
+// ) {
+//   if (style && template) {
+//     customElement.setStyle(style);
+//   }
+// }
 
-
-
-
-function setStyle(style: string | undefined, template: string | undefined, customElement: ElementBase) {
-  if (style && template) {
-    customElement.setStyle(style);
-  }
-}
-
-function setTemplate(template: string | undefined, customElement: ElementBase) {
-  if (!template) {
-    console.info(`No template provided for element ${getElementName((<any>customElement).name)}`);
-  }
-  else {
-    customElement.setTemplate(template);
-  }
-}
-
+// function setTemplate(template: string | undefined, customElement: ElementBase) {
+//   if (!template) {
+//     console.info(
+//       `No template provided for element ${getElementName(
+//         (<any>customElement).name
+//       )}`
+//     );
+//   } else {
+//     debugger;
+//     customElement.setTemplate(template);
+//   }
+// }

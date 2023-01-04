@@ -37,6 +37,8 @@ export class ElementBase extends HTMLElement {
   constructor(template?: string, style?: string) {
     super();
 
+    this.shadow = this.attachShadow({ mode: "open" });
+
     // // look for string literal bindings and replace them
     // template = this.parseTemplate(template);
 
@@ -51,7 +53,6 @@ export class ElementBase extends HTMLElement {
     // if (!!style && style.length > 0) {
     //   this.setStyle(style);
     // }
-
 
     // console.log("connectedCallback looks like the following - pre new:");
     // console.log(this.connectedCallback.toString());
@@ -76,12 +77,10 @@ export class ElementBase extends HTMLElement {
 
   public constructConnectedCallbackString = "";
 
-
   /* istanbul ignore next */
   connectedCallback() {
     console.log(`Connected callback original - ${this?.tagName}`);
   }
-
 
   private parseTemplate(template: string | undefined) {
     if (template === undefined) {
@@ -91,7 +90,6 @@ export class ElementBase extends HTMLElement {
 
     return TemplateParser.parse(template);
   }
-
 
   /**
    * Update the component state
@@ -126,9 +124,9 @@ export class ElementBase extends HTMLElement {
    * @public
    * @param {string} template
    */
-  public setTemplate(template: string): void {
-    if (!this.shadow) this.shadow = this.attachShadow({ mode: "open" });
-    this.shadow.innerHTML = template;
+  public setTemplate(template: string, instance?: any): void {
+    debugger;
+    (instance || this).shadow!.innerHTML = template;
   }
 
   /**
@@ -138,16 +136,18 @@ export class ElementBase extends HTMLElement {
    * @public
    * @param {string} style
    */
-  public setStyle(style: string): void {
-    if (this.shadow === undefined) {
+  public setStyle(style: string, instance?: any): void {
+    if ((instance || this).shadow === undefined) {
       console.warn(
-        `Failed to set styling on element ${this.tagName}, shadow root is undefined`
+        `Failed to set styling on element ${
+          (instance || this).tagName
+        }, shadow root is undefined`
       );
       return;
     }
 
     const styleElement = document.createElement("style");
     styleElement.textContent = style;
-    this.shadow.appendChild(styleElement);
+    (instance || this).shadow.appendChild(styleElement);
   }
 }

@@ -1,5 +1,4 @@
 class HeaderComponent extends HTMLElement {
-    _text = "";
     get text() {
         return this.getAttribute("text") || "";
     }
@@ -9,6 +8,7 @@ class HeaderComponent extends HTMLElement {
     constructor() {
         // Always call super first in constructor
         super();
+        this._text = "";
         // Create a shadow root
         const shadow = this.attachShadow({ mode: "open" });
         // Create header
@@ -32,8 +32,6 @@ class HeaderComponent extends HTMLElement {
 customElements.define("header-component", HeaderComponent);
 
 class HeaderComponent2 extends HTMLElement {
-    header;
-    _text = "Hoopa unbound";
     get text() {
         return this._text || "Hoopa unbound";
     }
@@ -41,7 +39,6 @@ class HeaderComponent2 extends HTMLElement {
         this._text = value;
         this.header.innerText = this._text;
     }
-    _color = "blue";
     get color() {
         return this._color || "red";
     }
@@ -52,6 +49,8 @@ class HeaderComponent2 extends HTMLElement {
     constructor() {
         // Always call super first in constructor
         super();
+        this._text = "Hoopa unbound";
+        this._color = "blue";
         // Create a shadow root
         const shadow = this.attachShadow({ mode: "open" });
         // Create header
@@ -101,10 +100,9 @@ class TemplateParser {
         // the DOMParser adds a few elements we're not inteerested in, remove them and return the rest
         return elementsArray.filter((e) => e.tagName !== "HTML" && e.tagName !== "HEAD" && e.tagName !== "BODY");
     }
-    static stringLiteralCounter = 0;
-    static stringLiteralReplacements = new Map();
     static findStringLiterals(elements) {
         elements.filter(element => element.innerHTML.includes("${")).forEach(element => {
+            var _a, _b;
             let end = 0;
             while (element.innerHTML.indexOf("${", end) > -1) {
                 let start = element.innerHTML.indexOf("${", end);
@@ -114,11 +112,10 @@ class TemplateParser {
                 if (!this.stringLiteralReplacements.has(stringLiteralName)) {
                     this.stringLiteralReplacements.set(stringLiteralName, []);
                 }
-                let idSuffix = this.stringLiteralReplacements
-                    .get(stringLiteralName)?.length;
-                this.stringLiteralReplacements
-                    .get(stringLiteralName)
-                    ?.push(stringLiteralName + idSuffix);
+                let idSuffix = (_a = this.stringLiteralReplacements
+                    .get(stringLiteralName)) === null || _a === void 0 ? void 0 : _a.length;
+                (_b = this.stringLiteralReplacements
+                    .get(stringLiteralName)) === null || _b === void 0 ? void 0 : _b.push(stringLiteralName + idSuffix);
                 element.innerHTML = element.innerHTML.replace(stringLiteral, `<span id='${stringLiteralName + idSuffix}'></span>`);
             }
         });
@@ -126,6 +123,8 @@ class TemplateParser {
     }
     static serializeElements(elements) { }
 }
+TemplateParser.stringLiteralCounter = 0;
+TemplateParser.stringLiteralReplacements = new Map();
 
 /**
  * Description placeholder
@@ -138,22 +137,6 @@ class TemplateParser {
  */
 class ElementBase extends HTMLElement {
     /**
-     * Description placeholder
-     * @date 2022-12-28 - 01:08:02
-     *
-     * @private
-     * @type {(ShadowRoot | undefined)}
-     */
-    shadow;
-    /**
-     * Description placeholder
-     * @date 2022-12-28 - 01:08:02
-     *
-     * @private
-     * @type {*}
-     */
-    state = {};
-    /**
      * Creates an instance of ReactiveBase.
      * @date 2022-12-28 - 01:08:02
      *
@@ -161,6 +144,16 @@ class ElementBase extends HTMLElement {
      */
     constructor(template, style) {
         super();
+        /**
+         * Description placeholder
+         * @date 2022-12-28 - 01:08:02
+         *
+         * @private
+         * @type {*}
+         */
+        this.state = {};
+        this.constructConnectedCallbackString = "";
+        this.shadow = this.attachShadow({ mode: "open" });
         // // look for string literal bindings and replace them
         // template = this.parseTemplate(template);
         // // set template if available
@@ -178,7 +171,7 @@ class ElementBase extends HTMLElement {
         // this.connectedCallback = <any>Function(this.constructConnectedCallback());
         // console.log("connectedCallback looks like the following - post new:");
         // console.log(this.connectedCallback.toString());
-        console.log(`Element base constructor executed - ${this?.tagName}`);
+        console.log(`Element base constructor executed - ${this === null || this === void 0 ? void 0 : this.tagName}`);
     }
     constructConnectedCallback() {
         let functionBody = `console.log("Connected callback - replaced");\r\n`;
@@ -190,10 +183,9 @@ class ElementBase extends HTMLElement {
         this.constructConnectedCallbackString = functionBody;
         return functionBody;
     }
-    constructConnectedCallbackString = "";
     /* istanbul ignore next */
     connectedCallback() {
-        console.log(`Connected callback original - ${this?.tagName}`);
+        console.log(`Connected callback original - ${this === null || this === void 0 ? void 0 : this.tagName}`);
     }
     parseTemplate(template) {
         if (template === undefined) {
@@ -212,8 +204,7 @@ class ElementBase extends HTMLElement {
         Object.entries(newState).forEach(([key, value]) => {
             this.state[key] =
                 this.isObject(this.state[key]) && this.isObject(value)
-                    ? { ...this.state[key], ...value }
-                    : value;
+                    ? Object.assign(Object.assign({}, this.state[key]), value) : value;
         });
     }
     /**
@@ -233,10 +224,9 @@ class ElementBase extends HTMLElement {
      * @public
      * @param {string} template
      */
-    setTemplate(template) {
-        if (!this.shadow)
-            this.shadow = this.attachShadow({ mode: "open" });
-        this.shadow.innerHTML = template;
+    setTemplate(template, instance) {
+        debugger;
+        (instance || this).shadow.innerHTML = template;
     }
     /**
      * Set the style of the component
@@ -245,14 +235,14 @@ class ElementBase extends HTMLElement {
      * @public
      * @param {string} style
      */
-    setStyle(style) {
-        if (this.shadow === undefined) {
-            console.warn(`Failed to set styling on element ${this.tagName}, shadow root is undefined`);
+    setStyle(style, instance) {
+        if ((instance || this).shadow === undefined) {
+            console.warn(`Failed to set styling on element ${(instance || this).tagName}, shadow root is undefined`);
             return;
         }
         const styleElement = document.createElement("style");
         styleElement.textContent = style;
-        this.shadow.appendChild(styleElement);
+        (instance || this).shadow.appendChild(styleElement);
     }
 }
 
@@ -288,6 +278,18 @@ function __decorate(decorators, target, key, desc) {
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+
+/**
+ * Returns the name of the element
+ *
+ * @param className name of the custom element class
+ * @returns an hyphenated element name
+ */
+function getElementName(className) {
+    const wordRegex = /[A-Z]?[a-z]+|[0-9]+|[A-Z]+(?![a-z])/g;
+    const resultingWords = className.match(wordRegex);
+    return !!resultingWords ? resultingWords.join("-").toLowerCase() : "";
 }
 
 // function CustomElement() {
@@ -379,17 +381,28 @@ function __decorate(decorators, target, key, desc) {
 //     return f;
 //   }
 // }
-function CustomElement() {
+function CustomElement(template, style) {
     console.log(`Decorator factory called`);
-    return function (target) {
-        console.log(`Decorator started for ${target?.name}`);
+    return function (customElement) {
+        console.log(`Decorator started for ${customElement === null || customElement === void 0 ? void 0 : customElement.name}`);
         // save a reference to the original constructor
-        var original = target;
+        var original = customElement;
         // the new constructor behaviour
         var f = function (...args) {
-            console.log(`ClassWrapper: before class constructor ${target?.name}`);
-            let instance = original.apply(this, args);
-            console.log(`ClassWrapper: after class constructor ${target?.name}`);
+            console.log(`ClassWrapper: before class constructor ${customElement === null || customElement === void 0 ? void 0 : customElement.name}`);
+            // define the element
+            window.customElements.define(getElementName(customElement.name), customElement);
+            // let instance = original.apply(this, args);
+            let instance = new customElement(...args);
+            console.log(`ClassWrapper: after class constructor ${customElement === null || customElement === void 0 ? void 0 : customElement.name}`);
+            this.setTemplate(template, instance);
+            this.setStyle(style, instance);
+            const connectedCallback = customElement.prototype.connectedCallback || function () { };
+            instance.connectedCallback = function () {
+                console.log("This is conCB specified in the decorator");
+                // append the elements own callback if it was defined
+                connectedCallback.call(this);
+            };
             return instance;
         };
         // copy prototype so intanceof operator still works
@@ -398,12 +411,33 @@ function CustomElement() {
         return f;
     };
 }
+// function setStyle(
+//   style: string | undefined,
+//   template: string | undefined,
+//   customElement: ElementBase
+// ) {
+//   if (style && template) {
+//     customElement.setStyle(style);
+//   }
+// }
+// function setTemplate(template: string | undefined, customElement: ElementBase) {
+//   if (!template) {
+//     console.info(
+//       `No template provided for element ${getElementName(
+//         (<any>customElement).name
+//       )}`
+//     );
+//   } else {
+//     debugger;
+//     customElement.setTemplate(template);
+//   }
+// }
 
 let InternalBinding = class InternalBinding extends ElementBase {
-    mode = "untouched 🆕";
     constructor() {
         console.log("Constructor for InternalBinding started");
         super();
+        this.mode = "untouched 🆕";
         console.log("Constructor for InternalBinding finished");
     }
     clicked() {

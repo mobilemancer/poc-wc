@@ -1,1 +1,1 @@
-export declare function CustomElement(): (target: any) => any;
+export declare function CustomElement(template?: string, style?: string): (customElement: any) => any;
