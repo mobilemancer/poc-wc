@@ -8,11 +8,12 @@ import { getElementName } from "../base/utils/utils";
 export default class InternalBinding extends ElementBase {
   public mode = "untouched 🆕";
 
-  static observedAttributes = ['mode'];
-  //   {
+  static observedAttributes = ElementBase.observedAttributesArray;
+  // {
+  //   return ['mode'];
   //   console.log("getting observed attributes");
   //   console.log(ElementBase.observedAttributesArray);
-  //   return ElementBase.observedAttributesArray;
+  //   return (ElementBase.observedAttributesArray);
   // }
 
   constructor() {

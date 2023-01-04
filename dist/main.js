@@ -300,10 +300,11 @@ function getElementName(className) {
 
 // @CustomElement(template, style)
 class InternalBinding extends ElementBase {
-    //   {
+    // {
+    //   return ['mode'];
     //   console.log("getting observed attributes");
     //   console.log(ElementBase.observedAttributesArray);
-    //   return ElementBase.observedAttributesArray;
+    //   return (ElementBase.observedAttributesArray);
     // }
     constructor() {
         var _a;
@@ -335,7 +336,7 @@ class InternalBinding extends ElementBase {
         console.log("callback from internal-binding");
     }
 }
-InternalBinding.observedAttributes = ['mode'];
+InternalBinding.observedAttributes = ElementBase.observedAttributesArray;
 // define the element
 window.customElements.define(getElementName(InternalBinding.name), InternalBinding);
 
