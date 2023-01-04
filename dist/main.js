@@ -170,9 +170,15 @@ class ElementBase extends HTMLElement {
         // console.log(this.connectedCallback.toString());
         console.log(`Element base constructor executed - ${this === null || this === void 0 ? void 0 : this.tagName}`);
     }
+    attributeChangedCallback(name, oldValue, newValue) {
+        console.log('element attributes changed.');
+        console.log(name, oldValue, newValue);
+    }
     addValuesToOnChangeWatchList(values) {
         values = TemplateParser.stringLiteralReplacements;
         values.forEach(v => ElementBase.observedAttributesArray.push(v));
+        console.log("Added values to watchlist");
+        console.log(values.values);
     }
     constructConnectedCallback() {
         let functionBody = `console.log("Connected callback - replaced");\r\n`;

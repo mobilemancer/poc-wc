@@ -52,6 +52,7 @@ export class ElementBase extends HTMLElement {
     if (style) this.setStyle(style);
     this.addValuesToOnChangeWatchList();
 
+
     // // look for string literal bindings and replace them
     // template = this.parseTemplate(template);
 
@@ -64,9 +65,16 @@ export class ElementBase extends HTMLElement {
     console.log(`Element base constructor executed - ${this?.tagName}`);
   }
 
+  attributeChangedCallback(name: string, oldValue: any, newValue: any) {
+    console.log('element attributes changed.');
+    console.log(name, oldValue, newValue);
+  }
+
   private addValuesToOnChangeWatchList(values?: Set<string>) {
     values = TemplateParser.stringLiteralReplacements;
     values.forEach(v => ElementBase.observedAttributesArray.push(v));
+    console.log("Added values to watchlist");
+    console.log(values.values);
   }
 
   constructConnectedCallback(): string {

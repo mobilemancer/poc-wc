@@ -33,6 +33,7 @@ export declare class ElementBase extends HTMLElement {
      * @constructor
      */
     constructor(template?: string, style?: string);
+    attributeChangedCallback(name: string, oldValue: any, newValue: any): void;
     private addValuesToOnChangeWatchList;
     constructConnectedCallback(): string;
     constructConnectedCallbackString: string;
