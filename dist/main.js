@@ -251,9 +251,9 @@ class AdvancedComponent extends ElementBase {
 // Define the new element
 customElements.define("advanced-component", AdvancedComponent);
 
-var template = "<button onclick=\"clicked\">Change mode</button>\r\n\r\n<p>${mode}</p>";
+var template = "<div class=\"internal-binding\">\r\n  <button onclick=\"clicked\">Change mode</button>\r\n\r\n  <p>${mode}</p>\r\n</div>\r\n";
 
-var css_248z = "";
+var css_248z = ".internal-binding {\r\n    background-color: blueviolet;\r\n    color: aliceblue;\r\n    border: 2px solid white;\r\n    border-radius: 0.5;\r\n}";
 
 /**
  * Returns the name of the element
