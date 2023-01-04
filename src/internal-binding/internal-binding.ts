@@ -27,7 +27,6 @@ export default class InternalBinding extends ElementBase {
     } else {
       this.mode = "dark 🌒";
     }
-    this.setAttribute('mode', this.mode);
     console.log(this.mode);
   };
 

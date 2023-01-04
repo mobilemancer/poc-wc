@@ -25,6 +25,7 @@ export declare class ElementBase extends HTMLElement {
      */
     private state;
     private mutationObserver;
+    private watchedProperties;
     /**
      * Creates an instance of ReactiveBase.
      * @date 2022-12-28 - 01:08:02

@@ -154,6 +154,7 @@ class ElementBase extends HTMLElement {
          * @type {*}
          */
         this.state = {};
+        this.watchedProperties = new Map();
         this.constructConnectedCallbackString = "";
         this.shadow = this.attachShadow({ mode: "open" });
         const templateAndProps = this.parseTemplate(template);
@@ -162,13 +163,18 @@ class ElementBase extends HTMLElement {
         if (style)
             this.setStyle(style);
         this.addValuesToOnChangeWatchList(templateAndProps === null || templateAndProps === void 0 ? void 0 : templateAndProps.propertiesToWatch);
-        // // look for string literal bindings and replace them
-        // template = this.parseTemplate(template);
-        // console.log("connectedCallback looks like the following - pre new:");
-        // console.log(this.connectedCallback.toString());
-        // this.connectedCallback = <any>Function(this.constructConnectedCallback());
-        // console.log("connectedCallback looks like the following - post new:");
-        // console.log(this.connectedCallback.toString());
+        // create getters and setters for props to observe
+        for (let propName in templateAndProps === null || templateAndProps === void 0 ? void 0 : templateAndProps.propertiesToWatch) {
+            Object.defineProperty(this, propName, {
+                get: () => { return this.watchedProperties.get("_" + propName); },
+                set: (value) => {
+                    this.watchedProperties.set("_" + propName, value);
+                    if (this.getAttribute(propName) !== value) {
+                        this.setAttribute(propName, value);
+                    }
+                },
+            });
+        }
         this.mutationObserver = new MutationObserver(this.mutationObserverCallback);
         this.mutationObserver.observe(this, { attributes: true, attributeOldValue: true });
         console.log(`Element base constructor executed - ${this === null || this === void 0 ? void 0 : this.tagName}`);
@@ -205,12 +211,7 @@ class ElementBase extends HTMLElement {
     }
     constructConnectedCallback() {
         let functionBody = `console.log("Connected callback - replaced");\r\n`;
-        // TemplateParser.stringLiteralReplacements.forEach((val, key, map) => {
-        //   // val.forEach((instance) => {
-        //   //   functionBody += `document.querySelector("#${instance}").innerHtml = host.getAttribute('key');\r\n`;
-        //   // });
-        // });
-        this.constructConnectedCallbackString = functionBody;
+        // this.constructConnectedCallbackString = functionBody;
         return functionBody;
     }
     parseTemplate(template) {
@@ -313,7 +314,6 @@ class InternalBinding extends ElementBase {
             else {
                 this.mode = "dark 🌒";
             }
-            this.setAttribute('mode', this.mode);
             console.log(this.mode);
         };
         console.table();

@@ -30,6 +30,7 @@ export class ElementBase extends HTMLElement {
    */
   private state: any = {};
   private mutationObserver: MutationObserver;
+  private watchedProperties = new Map<string, any>();
 
   /**
    * Creates an instance of ReactiveBase.
@@ -47,14 +48,19 @@ export class ElementBase extends HTMLElement {
     if (style) this.setStyle(style);
     this.addValuesToOnChangeWatchList(templateAndProps?.propertiesToWatch);
 
-    // // look for string literal bindings and replace them
-    // template = this.parseTemplate(template);
+    // create getters and setters for props to observe
+    for (let propName in templateAndProps?.propertiesToWatch) {
+      Object.defineProperty(this, propName, {
+        get: () => { return this.watchedProperties.get("_" + propName); },
+        set: (value: any) => {
+          this.watchedProperties.set("_" + propName, value);
+          if (this.getAttribute(propName) !== value) {
+            this.setAttribute(propName, value);
+          }
+        },
+      });
+    }
 
-    // console.log("connectedCallback looks like the following - pre new:");
-    // console.log(this.connectedCallback.toString());
-    // this.connectedCallback = <any>Function(this.constructConnectedCallback());
-    // console.log("connectedCallback looks like the following - post new:");
-    // console.log(this.connectedCallback.toString());
 
     this.mutationObserver = new MutationObserver(this.mutationObserverCallback);
     this.mutationObserver.observe(this, { attributes: true, attributeOldValue: true });
@@ -100,13 +106,7 @@ export class ElementBase extends HTMLElement {
   }
   constructConnectedCallback(): string {
     let functionBody = `console.log("Connected callback - replaced");\r\n`;
-    // TemplateParser.stringLiteralReplacements.forEach((val, key, map) => {
-    //   // val.forEach((instance) => {
-    //   //   functionBody += `document.querySelector("#${instance}").innerHtml = host.getAttribute('key');\r\n`;
-    //   // });
-    // });
-
-    this.constructConnectedCallbackString = functionBody;
+    // this.constructConnectedCallbackString = functionBody;
     return functionBody;
   }
 
