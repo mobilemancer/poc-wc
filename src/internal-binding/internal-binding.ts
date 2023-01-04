@@ -21,6 +21,14 @@ export default class InternalBinding extends ElementBase {
       this.mode = "dark 🌒";
     }
   }
+
+  override connectedCallback(): void {
+    console.log("callback from internal-binding")
+    const btn = document.querySelector("button");
+    if (btn) {
+      btn.onclick = (() => { alert("clicked") });
+    }
+  }
 }
 
 // define the element

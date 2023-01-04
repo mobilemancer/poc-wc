@@ -312,6 +312,13 @@ class InternalBinding extends ElementBase {
             this.mode = "dark 🌒";
         }
     }
+    connectedCallback() {
+        console.log("callback from internal-binding");
+        const btn = document.querySelector("button");
+        if (btn) {
+            btn.onclick = (() => { alert("clicked"); });
+        }
+    }
 }
 // define the element
 window.customElements.define(getElementName(InternalBinding.name), InternalBinding);
