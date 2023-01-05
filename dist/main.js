@@ -199,9 +199,10 @@ class ElementBase extends HTMLElement {
         });
     }
     updateStringLiteralsInDOM(propName) {
+        var _a;
         console.log("updateStringLiteralsInDOM for ", propName);
-        const elements = this.querySelectorAll(`[data-bind='${propName}']`);
-        elements.forEach(e => {
+        const elements = (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelectorAll(`[data-bind='${propName}']`);
+        elements === null || elements === void 0 ? void 0 : elements.forEach(e => {
             console.log("updating innerhtml for element ", e);
             e.innerHTML = this.watchedProperties.get("_" + propName);
         });
