@@ -64,7 +64,7 @@ export class ElementBase extends HTMLElement {
     if (!propertiesToWatch) { return; }
     console.log(new Array(...propertiesToWatch));
 
-    for (let propName in new Array(...propertiesToWatch)) {
+    propertiesToWatch.forEach(propName => {
       console.log("getters and setters for $1", propName);
       Object.defineProperty(this, propName, {
         get: () => {
@@ -81,7 +81,7 @@ export class ElementBase extends HTMLElement {
           }
         },
       });
-    }
+    });
   }
 
   updateStringLiteralsInDOM(propName: string) {
