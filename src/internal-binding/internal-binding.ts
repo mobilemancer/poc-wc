@@ -12,7 +12,6 @@ export default class InternalBinding extends ElementBase {
     console.log("Constructor for InternalBinding started");
     super(template, style);
 
-    console.table();
     const btn = this?.shadowRoot?.querySelector("button");
     if (btn) {
       btn.onclick = this.clicked;

@@ -129,7 +129,9 @@ class TemplateParser {
 TemplateParser.stringLiteralCounter = 0;
 
 /**
- * Description placeholder
+ * ElementBase
+ * Base functionality for web components
+ *
  * @date 2022-12-28 - 01:08:02
  *
  * @export
@@ -139,73 +141,27 @@ TemplateParser.stringLiteralCounter = 0;
  */
 class ElementBase extends HTMLElement {
     /**
-     * Creates an instance of ReactiveBase.
+     * Creates an instance of ElementBase.
      * @date 2022-12-28 - 01:08:02
      *
      * @constructor
      */
     constructor(template, style) {
         super();
-        /**
-         * Description placeholder
-         * @date 2022-12-28 - 01:08:02
-         *
-         * @private
-         * @type {*}
-         */
-        this.state = {};
         this.watchedProperties = new Map();
-        this.constructConnectedCallbackString = "";
         this.shadow = this.attachShadow({ mode: "open" });
+        // set the template and style
         const templateAndProps = this.parseTemplate(template);
         if (templateAndProps)
             this.setTemplate(templateAndProps.templateString);
         if (style)
             this.setStyle(style);
-        // this.addValuesToOnChangeWatchList(templateAndProps?.propertiesToWatch);
         // create getters and setters for props to observe
         this.setupAcessorsForWatchedProps(templateAndProps === null || templateAndProps === void 0 ? void 0 : templateAndProps.propertiesToWatch);
+        // setup mutation observer
         this.mutationObserver = new MutationObserver(this.mutationObserverCallback);
         this.mutationObserver.observe(this, { attributes: true, attributeOldValue: true });
         console.log(`Element base constructor executed - ${this === null || this === void 0 ? void 0 : this.tagName}`);
-    }
-    setupAcessorsForWatchedProps(propertiesToWatch) {
-        console.log("setupAcessorsForWatchedProps");
-        if (!propertiesToWatch) {
-            return;
-        }
-        console.log(new Array(...propertiesToWatch));
-        propertiesToWatch.forEach(propName => {
-            console.log("getters and setters for $1", propName);
-            Object.defineProperty(this, propName, {
-                get: () => {
-                    console.log("getting $1", propName);
-                    console.log("result", this.watchedProperties.get("_" + propName));
-                    return this.watchedProperties.get("_" + propName);
-                },
-                set: (value) => {
-                    console.log("setting $1", propName, value);
-                    if (this.watchedProperties.get("_" + propName) === value) {
-                        return;
-                    }
-                    this.watchedProperties.set("_" + propName, value);
-                    console.log("result", this.watchedProperties.get("_" + propName));
-                    this.updateStringLiteralsInDOM(propName);
-                    if (this.getAttribute(propName) !== value) {
-                        this.setAttribute(propName, value);
-                    }
-                },
-            });
-        });
-    }
-    updateStringLiteralsInDOM(propName) {
-        var _a;
-        console.log("updateStringLiteralsInDOM for ", propName);
-        const elements = (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelectorAll(`[data-bind='${propName}']`);
-        elements === null || elements === void 0 ? void 0 : elements.forEach(e => {
-            console.log("updating innerhtml for element ", e);
-            e.innerHTML = this.watchedProperties.get("_" + propName);
-        });
     }
     /* istanbul ignore next */
     connectedCallback() {
@@ -220,15 +176,11 @@ class ElementBase extends HTMLElement {
     adoptedCallback() {
         console.log(`adoptedCallback base - ${this === null || this === void 0 ? void 0 : this.tagName}`);
     }
-    addValuesToOnChangeWatchList(values) {
-        if (!values) {
-            return;
-        }
-        // values.forEach((v) => ElementBase.observedAttributesArray.push(v));
-        //TODO: ?
-        console.log("Added values to watchlist");
-        console.log(new Array(...values).join(" "));
-    }
+    /**
+     *  handles mutation observer callbacks
+     * @param mutationList
+     * @param observer
+     */
     mutationObserverCallback(mutationList, observer) {
         for (const mutation of mutationList) {
             if (mutation.type === 'attributes'
@@ -237,40 +189,12 @@ class ElementBase extends HTMLElement {
             }
         }
     }
-    constructConnectedCallback() {
-        let functionBody = `console.log("Connected callback - replaced");\r\n`;
-        // this.constructConnectedCallbackString = functionBody;
-        return functionBody;
-    }
     parseTemplate(template) {
         if (template === undefined) {
             console.warn(`Component ${this} has no template.`);
             return template;
         }
         return TemplateParser.parse(template);
-    }
-    /**
-     * Update the component state
-     * @date 2022-12-28 - 01:08:02
-     *
-     * @param {Object} newState
-     */
-    setState(newState) {
-        Object.entries(newState).forEach(([key, value]) => {
-            this.state[key] =
-                this.isObject(this.state[key]) && this.isObject(value)
-                    ? Object.assign(Object.assign({}, this.state[key]), value) : value;
-        });
-    }
-    /**
-     * Description placeholder
-     * @date 2022-12-28 - 01:08:02
-     *
-     * @param {*} value
-     * @returns {boolean}
-     */
-    isObject(value) {
-        return true;
     }
     /**
      * Set the component template
@@ -297,6 +221,55 @@ class ElementBase extends HTMLElement {
         const styleElement = document.createElement("style");
         styleElement.textContent = style;
         (instance || this).shadow.appendChild(styleElement);
+    }
+    /**
+     * setupAcessorsForWatchedProps
+     * Setup getters and setters for props to be watched
+     *
+     * @param propertiesToWatch
+     * @returns
+     */
+    setupAcessorsForWatchedProps(propertiesToWatch) {
+        console.log("setupAcessorsForWatchedProps for the following props:", new Array(...propertiesToWatch));
+        if (!propertiesToWatch) {
+            return;
+        }
+        propertiesToWatch.forEach(propName => {
+            console.log("getters and setters for $1", propName);
+            Object.defineProperty(this, propName, {
+                get: () => {
+                    console.log("get: ", propName, "value:", this.watchedProperties.get("_" + propName));
+                    return this.watchedProperties.get("_" + propName);
+                },
+                set: (value) => {
+                    console.log("setting", propName, "to:", value);
+                    if (this.watchedProperties.get("_" + propName) === value) {
+                        console.log(propName, "already has value", value);
+                        return;
+                    }
+                    this.watchedProperties.set("_" + propName, value);
+                    this.updateStringLiteralsInDOM(propName, value);
+                    if (this.getAttribute(propName) !== value) {
+                        // keep attribute on element in sync with prop
+                        this.setAttribute(propName, value);
+                    }
+                },
+            });
+        });
+    }
+    /**
+     * updateStringLiteralsInDOM
+     * Set all elements with 'data-bind="propName"' innerHTML to new value
+     * @param propName
+     */
+    updateStringLiteralsInDOM(propName, value) {
+        var _a;
+        console.log("updateStringLiteralsInDOM for ", propName);
+        const elements = (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelectorAll(`[data-bind='${propName}']`);
+        elements === null || elements === void 0 ? void 0 : elements.forEach(e => {
+            console.log("updating innerhtml for element ", e);
+            e.innerHTML = value;
+        });
     }
 }
 
@@ -344,7 +317,6 @@ class InternalBinding extends ElementBase {
             }
             console.log(this.mode);
         };
-        console.table();
         const btn = (_a = this === null || this === void 0 ? void 0 : this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector("button");
         if (btn) {
             btn.onclick = this.clicked;

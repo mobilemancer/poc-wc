@@ -2,7 +2,9 @@ import TemplateParser from "./utils/TemplateParser";
 import { getElementName } from "./utils/utils";
 
 /**
- * Description placeholder
+ * ElementBase
+ * Base functionality for web components
+ * 
  * @date 2022-12-28 - 01:08:02
  *
  * @export
@@ -12,28 +14,13 @@ import { getElementName } from "./utils/utils";
  */
 export class ElementBase extends HTMLElement {
 
-  /**
-   * Description placeholder
-   * @date 2022-12-28 - 01:08:02
-   *
-   * @private
-   * @type {(ShadowRoot | undefined)}
-   */
-  public shadow: ShadowRoot | undefined;
-
-  /**
-   * Description placeholder
-   * @date 2022-12-28 - 01:08:02
-   *
-   * @private
-   * @type {*}
-   */
-  private state: any = {};
   private mutationObserver: MutationObserver;
   private watchedProperties = new Map<string, any>();
 
+  public shadow: ShadowRoot | undefined;
+
   /**
-   * Creates an instance of ReactiveBase.
+   * Creates an instance of ElementBase.
    * @date 2022-12-28 - 01:08:02
    *
    * @constructor
@@ -43,63 +30,24 @@ export class ElementBase extends HTMLElement {
 
     this.shadow = this.attachShadow({ mode: "open" });
 
+    // set the template and style
     const templateAndProps = this.parseTemplate(template);
     if (templateAndProps) this.setTemplate(templateAndProps.templateString);
     if (style) this.setStyle(style);
-    // this.addValuesToOnChangeWatchList(templateAndProps?.propertiesToWatch);
 
     // create getters and setters for props to observe
     this.setupAcessorsForWatchedProps(templateAndProps?.propertiesToWatch);
 
-
-
+    // setup mutation observer
     this.mutationObserver = new MutationObserver(this.mutationObserverCallback);
     this.mutationObserver.observe(this, { attributes: true, attributeOldValue: true });
 
     console.log(`Element base constructor executed - ${this?.tagName}`);
   }
 
-  setupAcessorsForWatchedProps(propertiesToWatch: Set<string> | undefined) {
-    console.log("setupAcessorsForWatchedProps")
-    if (!propertiesToWatch) { return; }
-    console.log(new Array(...propertiesToWatch));
-
-    propertiesToWatch.forEach(propName => {
-      console.log("getters and setters for $1", propName);
-      Object.defineProperty(this, propName, {
-        get: () => {
-          console.log("getting $1", propName)
-          console.log("result", this.watchedProperties.get("_" + propName))
-          return this.watchedProperties.get("_" + propName);
-        },
-        set: (value: any) => {
-          console.log("setting $1", propName, value)
-          if (this.watchedProperties.get("_" + propName) === value) {
-            return;
-          }
 
 
-          this.watchedProperties.set("_" + propName, value);
-          console.log("result", this.watchedProperties.get("_" + propName));
-          this.updateStringLiteralsInDOM(propName);
 
-          if (this.getAttribute(propName) !== value) {
-            this.setAttribute(propName, value);
-          }
-        },
-      });
-    });
-  }
-
-  updateStringLiteralsInDOM(propName: string) {
-    console.log("updateStringLiteralsInDOM for ", propName);
-    const elements = this.shadowRoot?.querySelectorAll(`[data-bind='${propName}']`);
-    elements?.forEach(e => {
-      console.log("updating innerhtml for element ", e);
-
-      e.innerHTML = this.watchedProperties.get("_" + propName);
-    });
-  }
 
   /* istanbul ignore next */
   connectedCallback() {
@@ -117,32 +65,19 @@ export class ElementBase extends HTMLElement {
     console.log(`adoptedCallback base - ${this?.tagName}`);
   }
 
-  private addValuesToOnChangeWatchList(values?: Set<string>) {
-    if (!values) {
-      return;
-    }
-    // values.forEach((v) => ElementBase.observedAttributesArray.push(v));
-    //TODO: ?
-    console.log("Added values to watchlist");
-    console.log(new Array(...values).join(" "));
-  }
-
+  /**
+   *  handles mutation observer callbacks
+   * @param mutationList 
+   * @param observer 
+   */
   mutationObserverCallback(mutationList: any, observer: any) {
     for (const mutation of mutationList) {
       if (mutation.type === 'attributes'
         && mutation.oldValue !== mutation.target.getAttribute(mutation.attributeName)) {
         console.log(`The dynamic ${mutation.attributeName} attribute was modified.`);
-
       }
     }
   }
-  constructConnectedCallback(): string {
-    let functionBody = `console.log("Connected callback - replaced");\r\n`;
-    // this.constructConnectedCallbackString = functionBody;
-    return functionBody;
-  }
-
-  public constructConnectedCallbackString = "";
 
   private parseTemplate(template: string | undefined) {
     if (template === undefined) {
@@ -154,39 +89,13 @@ export class ElementBase extends HTMLElement {
   }
 
   /**
-   * Update the component state
-   * @date 2022-12-28 - 01:08:02
-   *
-   * @param {Object} newState
-   */
-  setState(newState: Object) {
-    Object.entries(newState).forEach(([key, value]) => {
-      this.state[key] =
-        this.isObject(this.state[key]) && this.isObject(value)
-          ? { ...this.state[key], ...value }
-          : value;
-    });
-  }
-
-  /**
-   * Description placeholder
-   * @date 2022-12-28 - 01:08:02
-   *
-   * @param {*} value
-   * @returns {boolean}
-   */
-  private isObject(value: any) {
-    return true;
-  }
-
-  /**
    * Set the component template
    * @date 2022-12-28 - 01:08:02
    *
    * @public
    * @param {string} template
    */
-  public setTemplate(template: string, instance?: any): void {
+  private setTemplate(template: string, instance?: any): void {
     (instance || this).shadow!.innerHTML = template;
   }
 
@@ -197,7 +106,7 @@ export class ElementBase extends HTMLElement {
    * @public
    * @param {string} style
    */
-  public setStyle(style: string, instance?: any): void {
+  private setStyle(style: string, instance?: any): void {
     if ((instance || this).shadow === undefined) {
       console.warn(
         `Failed to set styling on element ${(instance || this).tagName
@@ -209,5 +118,57 @@ export class ElementBase extends HTMLElement {
     const styleElement = document.createElement("style");
     styleElement.textContent = style;
     (instance || this).shadow.appendChild(styleElement);
+  }
+
+  /**
+   * setupAcessorsForWatchedProps
+   * Setup getters and setters for props to be watched
+   * 
+   * @param propertiesToWatch 
+   * @returns 
+   */
+  private setupAcessorsForWatchedProps(propertiesToWatch: Set<string> | undefined) {
+    console.log("setupAcessorsForWatchedProps for the following props:", new Array(...propertiesToWatch!));
+    if (!propertiesToWatch) { return; }
+
+    propertiesToWatch.forEach(propName => {
+      console.log("getters and setters for $1", propName);
+      Object.defineProperty(this, propName, {
+        get: () => {
+          console.log("get: ", propName, "value:", this.watchedProperties.get("_" + propName))
+          return this.watchedProperties.get("_" + propName);
+        },
+
+        set: (value: any) => {
+          console.log("setting", propName, "to:", value)
+          if (this.watchedProperties.get("_" + propName) === value) {
+            console.log(propName, "already has value", value)
+            return;
+          }
+
+          this.watchedProperties.set("_" + propName, value);
+          this.updateStringLiteralsInDOM(propName, value);
+
+          if (this.getAttribute(propName) !== value) {
+            // keep attribute on element in sync with prop
+            this.setAttribute(propName, value);
+          }
+        },
+      });
+    });
+  }
+
+  /**
+   * updateStringLiteralsInDOM
+   * Set all elements with 'data-bind="propName"' innerHTML to new value
+   * @param propName 
+   */
+  private updateStringLiteralsInDOM(propName: string, value: any) {
+    console.log("updateStringLiteralsInDOM for ", propName);
+    const elements = this.shadowRoot?.querySelectorAll(`[data-bind='${propName}']`);
+    elements?.forEach(e => {
+      console.log("updating innerhtml for element ", e);
+      e.innerHTML = value;
+    });
   }
 }

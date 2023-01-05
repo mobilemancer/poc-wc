@@ -1,5 +1,7 @@
 /**
- * Description placeholder
+ * ElementBase
+ * Base functionality for web components
+ *
  * @date 2022-12-28 - 01:08:02
  *
  * @export
@@ -8,56 +10,26 @@
  * @extends {HTMLElement}
  */
 export declare class ElementBase extends HTMLElement {
-    /**
-     * Description placeholder
-     * @date 2022-12-28 - 01:08:02
-     *
-     * @private
-     * @type {(ShadowRoot | undefined)}
-     */
-    shadow: ShadowRoot | undefined;
-    /**
-     * Description placeholder
-     * @date 2022-12-28 - 01:08:02
-     *
-     * @private
-     * @type {*}
-     */
-    private state;
     private mutationObserver;
     private watchedProperties;
+    shadow: ShadowRoot | undefined;
     /**
-     * Creates an instance of ReactiveBase.
+     * Creates an instance of ElementBase.
      * @date 2022-12-28 - 01:08:02
      *
      * @constructor
      */
     constructor(template?: string, style?: string);
-    setupAcessorsForWatchedProps(propertiesToWatch: Set<string> | undefined): void;
-    updateStringLiteralsInDOM(propName: string): void;
     connectedCallback(): void;
     disconnectedCallback(): void;
     adoptedCallback(): void;
-    private addValuesToOnChangeWatchList;
+    /**
+     *  handles mutation observer callbacks
+     * @param mutationList
+     * @param observer
+     */
     mutationObserverCallback(mutationList: any, observer: any): void;
-    constructConnectedCallback(): string;
-    constructConnectedCallbackString: string;
     private parseTemplate;
-    /**
-     * Update the component state
-     * @date 2022-12-28 - 01:08:02
-     *
-     * @param {Object} newState
-     */
-    setState(newState: Object): void;
-    /**
-     * Description placeholder
-     * @date 2022-12-28 - 01:08:02
-     *
-     * @param {*} value
-     * @returns {boolean}
-     */
-    private isObject;
     /**
      * Set the component template
      * @date 2022-12-28 - 01:08:02
@@ -65,7 +37,7 @@ export declare class ElementBase extends HTMLElement {
      * @public
      * @param {string} template
      */
-    setTemplate(template: string, instance?: any): void;
+    private setTemplate;
     /**
      * Set the style of the component
      * @date 2022-12-28 - 01:08:02
@@ -73,5 +45,19 @@ export declare class ElementBase extends HTMLElement {
      * @public
      * @param {string} style
      */
-    setStyle(style: string, instance?: any): void;
+    private setStyle;
+    /**
+     * setupAcessorsForWatchedProps
+     * Setup getters and setters for props to be watched
+     *
+     * @param propertiesToWatch
+     * @returns
+     */
+    private setupAcessorsForWatchedProps;
+    /**
+     * updateStringLiteralsInDOM
+     * Set all elements with 'data-bind="propName"' innerHTML to new value
+     * @param propName
+     */
+    private updateStringLiteralsInDOM;
 }
