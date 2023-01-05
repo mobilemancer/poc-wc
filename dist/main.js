@@ -185,8 +185,12 @@ class ElementBase extends HTMLElement {
                 },
                 set: (value) => {
                     console.log("setting $1", propName, value);
+                    if (this.watchedProperties.get("_" + propName) === value) {
+                        return;
+                    }
                     this.watchedProperties.set("_" + propName, value);
                     console.log("result", this.watchedProperties.get("_" + propName));
+                    this.updateStringLiteralsInDOM(propName);
                     if (this.getAttribute(propName) !== value) {
                         this.setAttribute(propName, value);
                     }
