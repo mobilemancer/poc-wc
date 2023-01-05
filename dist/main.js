@@ -235,26 +235,29 @@ class ElementBase extends HTMLElement {
             return;
         }
         propertiesToWatch.forEach(propName => {
-            console.log("getters and setters for $1", propName);
-            Object.defineProperty(this, propName, {
-                get: () => {
-                    console.log("get: ", propName, "value:", this.watchedProperties.get("_" + propName));
-                    return this.watchedProperties.get("_" + propName);
-                },
-                set: (value) => {
-                    console.log("setting", propName, "to:", value);
-                    if (this.watchedProperties.get("_" + propName) === value) {
-                        console.log(propName, "already has value", value);
-                        return;
-                    }
-                    this.watchedProperties.set("_" + propName, value);
-                    this.updateStringLiteralsInDOM(propName, value);
-                    if (this.getAttribute(propName) !== value) {
-                        // keep attribute on element in sync with prop
-                        this.setAttribute(propName, value);
-                    }
-                },
-            });
+            console.log("defining getters and setters for", propName);
+            this.createAccessorsForProperty(propName);
+        });
+    }
+    createAccessorsForProperty(propName) {
+        Object.defineProperty(this, propName, {
+            get: () => {
+                console.log("get:", propName, "value:", this.watchedProperties.get("_" + propName));
+                return this.watchedProperties.get("_" + propName);
+            },
+            set: (value) => {
+                console.log("setting", propName, "to:", value);
+                if (this.watchedProperties.get("_" + propName) === value) {
+                    console.log(propName, "already has value", value);
+                    return;
+                }
+                this.watchedProperties.set("_" + propName, value);
+                this.updateStringLiteralsInDOM(propName, value);
+                if (this.getAttribute(propName) !== value) {
+                    // keep attribute on element in sync with prop
+                    this.setAttribute(propName, value);
+                }
+            },
         });
     }
     /**
@@ -264,10 +267,10 @@ class ElementBase extends HTMLElement {
      */
     updateStringLiteralsInDOM(propName, value) {
         var _a;
-        console.log("updateStringLiteralsInDOM for ", propName);
+        console.log("updateStringLiteralsInDOM for", propName);
         const elements = (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelectorAll(`[data-bind='${propName}']`);
         elements === null || elements === void 0 ? void 0 : elements.forEach(e => {
-            console.log("updating innerhtml for element ", e);
+            console.log("updating innerhtml for element", e);
             e.innerHTML = value;
         });
     }
@@ -315,7 +318,6 @@ class InternalBinding extends ElementBase {
             else {
                 this.mode = "dark 🌒";
             }
-            console.log(this.mode);
         };
         const btn = (_a = this === null || this === void 0 ? void 0 : this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector("button");
         if (btn) {

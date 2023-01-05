@@ -133,28 +133,32 @@ export class ElementBase extends HTMLElement {
 
     propertiesToWatch.forEach(propName => {
       console.log("defining getters and setters for", propName);
-      Object.defineProperty(this, propName, {
-        get: () => {
-          console.log("get:", propName, "value:", this.watchedProperties.get("_" + propName))
-          return this.watchedProperties.get("_" + propName);
-        },
+      this.createAccessorsForProperty(propName);
+    });
+  }
 
-        set: (value: any) => {
-          console.log("setting", propName, "to:", value)
-          if (this.watchedProperties.get("_" + propName) === value) {
-            console.log(propName, "already has value", value)
-            return;
-          }
+  private createAccessorsForProperty(propName: string) {
+    Object.defineProperty(this, propName, {
+      get: () => {
+        console.log("get:", propName, "value:", this.watchedProperties.get("_" + propName));
+        return this.watchedProperties.get("_" + propName);
+      },
 
-          this.watchedProperties.set("_" + propName, value);
-          this.updateStringLiteralsInDOM(propName, value);
+      set: (value: any) => {
+        console.log("setting", propName, "to:", value);
+        if (this.watchedProperties.get("_" + propName) === value) {
+          console.log(propName, "already has value", value);
+          return;
+        }
 
-          if (this.getAttribute(propName) !== value) {
-            // keep attribute on element in sync with prop
-            this.setAttribute(propName, value);
-          }
-        },
-      });
+        this.watchedProperties.set("_" + propName, value);
+        this.updateStringLiteralsInDOM(propName, value);
+
+        if (this.getAttribute(propName) !== value) {
+          // keep attribute on element in sync with prop
+          this.setAttribute(propName, value);
+        }
+      },
     });
   }
 

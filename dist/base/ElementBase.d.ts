@@ -54,6 +54,7 @@ export declare class ElementBase extends HTMLElement {
      * @returns
      */
     private setupAcessorsForWatchedProps;
+    private createAccessorsForProperty;
     /**
      * updateStringLiteralsInDOM
      * Set all elements with 'data-bind="propName"' innerHTML to new value
