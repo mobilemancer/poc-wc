@@ -74,12 +74,33 @@ class HeaderComponent2 extends HTMLElement {
 customElements.define("header-component2", HeaderComponent2);
 
 class TemplateParser {
+    static connectEventHandlers(webComponent) {
+        var _a;
+        const elements = (_a = webComponent.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelectorAll("[data-onclick]");
+        elements === null || elements === void 0 ? void 0 : elements.forEach(element => {
+            const methodName = element.getAttribute("[data-onclick]");
+            if (methodName) {
+                element.addEventListener("onclick", webComponent[methodName]);
+            }
+        });
+    }
     static parse(template) {
         const elements = this.getElements(template);
         const elementsAndPropsToWatch = this.replaceStringLiterals(elements);
+        elementsAndPropsToWatch.elements = this.replaceEventHandlers(elementsAndPropsToWatch.elements);
         const propertiesToWatch = elementsAndPropsToWatch.propertiesToWatch;
         const templateString = this.convertNodesToString(elementsAndPropsToWatch.elements);
         return { templateString, propertiesToWatch };
+    }
+    static replaceEventHandlers(elements) {
+        elements.forEach(e => {
+            const methodName = e.getAttribute("onclick");
+            if (methodName) {
+                e.removeAttribute("onclick");
+                e.setAttribute("data-onclick", methodName);
+            }
+        });
+        return elements;
     }
     static convertNodesToString(nodes) {
         let result = "";
@@ -288,7 +309,7 @@ class AdvancedComponent extends ElementBase {
 // Define the new element
 customElements.define("advanced-component", AdvancedComponent);
 
-var template = "<div class=\"internal-binding\">\r\n  <!-- <button onclick=\"clicked\">Change mode</button> -->\r\n  <button>Change mode</button>\r\n\r\n  <p>${mode}</p>\r\n</div>\r\n";
+var template = "<div class=\"internal-binding\">\r\n  <button onclick=\"clicked\">Change mode</button>\r\n  <!-- <button>Change mode</button> -->\r\n  <button onclick=\"debug\">Debug</button>\r\n\r\n  <p>${mode}</p>\r\n</div>";
 
 var css_248z = ".internal-binding {\r\n    background-color: blueviolet;\r\n    color: aliceblue;\r\n    border: 2px solid white;\r\n    border-radius: 0.5em;\r\n    padding: 8px;\r\n}";
 
@@ -323,6 +344,7 @@ class InternalBinding extends ElementBase {
         if (btn) {
             btn.onclick = this.clicked;
         }
+        TemplateParser.connectEventHandlers(this);
         console.log("Constructor for InternalBinding finished");
     }
 }

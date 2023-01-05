@@ -3,6 +3,7 @@ import template from "./internal-binding.html";
 import style from "./internal-binding.css";
 import { CustomElement } from "../base/CustomElement";
 import { getElementName } from "../base/utils/utils";
+import TemplateParser from "../base/utils/TemplateParser";
 
 // @CustomElement(template, style)
 export default class InternalBinding extends ElementBase {
@@ -16,6 +17,8 @@ export default class InternalBinding extends ElementBase {
     if (btn) {
       btn.onclick = this.clicked;
     }
+
+    TemplateParser.connectEventHandlers(this);
 
     console.log("Constructor for InternalBinding finished");
   }

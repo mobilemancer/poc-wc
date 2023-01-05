@@ -10,7 +10,8 @@ let template4 = "<p>tihs is a pretty booring ${xyz}, but it ${xyz}s a lot</p>";
 let template4expected = '<p>tihs is a pretty booring <span data-bind="xyz"></span>, but it <span data-bind="xyz"></span>s a lot</p>';
 
 let template5 = '<div class="internal-binding"><button onclick="clicked">Change mode</button><p>${mode}</p></div>';
-let template5expected = '<div class="internal-binding"><button onclick="clicked">Change mode</button><p><span data-bind="mode"></span></p></div>';
+let template5expected = '<div class="internal-binding"><button data-onclick="clicked">Change mode</button><p><span data-bind="mode"></span></p></div>';
+
 
 describe("string literal parsing", () => {
 
@@ -34,4 +35,15 @@ describe("string literal parsing", () => {
     expect(result.templateString).toBe(template5expected);
   });
 
+});
+
+
+let template6 = '<button onclick="clicked">Change mode</button>';
+let template6expected = '<button data-onclick="clicked">Change mode</button>';
+
+describe("event handler parsing", () => {
+  it("parse onclick eventhandler", () => {
+    const result = TemplateParser.parse(template6);
+    expect(result.templateString).toBe(template6expected);
+  });
 });
