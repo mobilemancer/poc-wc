@@ -34,6 +34,7 @@ export declare class ElementBase extends HTMLElement {
      */
     constructor(template?: string, style?: string);
     setupAcessorsForWatchedProps(propertiesToWatch: Set<string> | undefined): void;
+    updateStringLiteralsInDOM(propName: string): void;
     connectedCallback(): void;
     disconnectedCallback(): void;
     adoptedCallback(): void;

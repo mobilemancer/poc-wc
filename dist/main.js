@@ -194,6 +194,14 @@ class ElementBase extends HTMLElement {
             });
         }
     }
+    updateStringLiteralsInDOM(propName) {
+        console.log("updateStringLiteralsInDOM for ", propName);
+        const elements = this.querySelectorAll(`[data-bind='${propName}']`);
+        elements.forEach(e => {
+            console.log("updating innerhtml for element ", e);
+            e.innerHTML = this.watchedProperties.get("_" + propName);
+        });
+    }
     /* istanbul ignore next */
     connectedCallback() {
         console.log(`connectedCallbackbase - ${this === null || this === void 0 ? void 0 : this.tagName}`);

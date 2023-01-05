@@ -82,9 +82,17 @@ export class ElementBase extends HTMLElement {
         },
       });
     }
-
   }
 
+  updateStringLiteralsInDOM(propName: string) {
+    console.log("updateStringLiteralsInDOM for ", propName);
+    const elements = this.querySelectorAll(`[data-bind='${propName}']`);
+    elements.forEach(e => {
+      console.log("updating innerhtml for element ", e);
+
+      e.innerHTML = this.watchedProperties.get("_" + propName);
+    });
+  }
 
   /* istanbul ignore next */
   connectedCallback() {
