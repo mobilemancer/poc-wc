@@ -132,10 +132,10 @@ export class ElementBase extends HTMLElement {
     if (!propertiesToWatch) { return; }
 
     propertiesToWatch.forEach(propName => {
-      console.log("getters and setters for $1", propName);
+      console.log("defining getters and setters for", propName);
       Object.defineProperty(this, propName, {
         get: () => {
-          console.log("get: ", propName, "value:", this.watchedProperties.get("_" + propName))
+          console.log("get:", propName, "value:", this.watchedProperties.get("_" + propName))
           return this.watchedProperties.get("_" + propName);
         },
 
@@ -164,10 +164,10 @@ export class ElementBase extends HTMLElement {
    * @param propName 
    */
   private updateStringLiteralsInDOM(propName: string, value: any) {
-    console.log("updateStringLiteralsInDOM for ", propName);
+    console.log("updateStringLiteralsInDOM for", propName);
     const elements = this.shadowRoot?.querySelectorAll(`[data-bind='${propName}']`);
     elements?.forEach(e => {
-      console.log("updating innerhtml for element ", e);
+      console.log("updating innerhtml for element", e);
       e.innerHTML = value;
     });
   }

@@ -26,7 +26,6 @@ export default class InternalBinding extends ElementBase {
     } else {
       this.mode = "dark 🌒";
     }
-    console.log(this.mode);
   };
 
   // override connectedCallback(): void {
