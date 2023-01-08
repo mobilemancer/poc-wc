@@ -47,3 +47,14 @@ describe("event handler parsing", () => {
     expect(result.templateString).toBe(template6expected);
   });
 });
+
+let template7 = '<p repeat.for="i in x"><p>i</p></p>';
+let template7expected = '<p repeat.for="i in x"><p>i</p></p>';
+
+describe("repeater parsing", () => {
+  it("parse onclick eventhandler", () => {
+    const result = TemplateParser.parse(template7);
+    expect(result.templateString).toBe(template7expected);
+  });
+});
+
