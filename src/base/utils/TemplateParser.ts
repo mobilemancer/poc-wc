@@ -5,7 +5,7 @@ export default class TemplateParser {
     const elements = webComponent.shadowRoot?.querySelectorAll("[data-onclick]");
     elements?.forEach(element => {
       const methodName = element.getAttribute("data-onclick");
-      if (methodName) {
+      if (methodName && (<any>webComponent)[methodName]) {
         element.addEventListener("click", (event) => (<any>webComponent)[methodName](event));
       } else {
         console.warn("No click handler found for element:", element);
