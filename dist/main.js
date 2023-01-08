@@ -84,6 +84,7 @@ class TemplateParser {
             }
             else {
                 console.warn("No click handler found for element:", element);
+                element.addEventListener("click", (event) => console.warn("No click handler found for this element 😔"));
             }
         });
     }

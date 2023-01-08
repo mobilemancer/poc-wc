@@ -9,6 +9,7 @@ export default class TemplateParser {
         element.addEventListener("click", (event) => (<any>webComponent)[methodName](event));
       } else {
         console.warn("No click handler found for element:", element);
+        element.addEventListener("click", (event) => console.warn("No click handler found for this element 😔"));
       }
     });
 
