@@ -325,11 +325,8 @@ function getElementName(className) {
     return !!resultingWords ? resultingWords.join("-").toLowerCase() : "";
 }
 
-// @CustomElement(template, style)
 class InternalBinding extends ElementBase {
     constructor() {
-        var _a;
-        console.log("Constructor for InternalBinding started");
         super(template, css_248z);
         this.mode = "untouched 🆕";
         this.clicked = () => {
@@ -340,12 +337,11 @@ class InternalBinding extends ElementBase {
                 this.mode = "dark 🌒";
             }
         };
-        const btn = (_a = this === null || this === void 0 ? void 0 : this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector("button");
-        if (btn) {
-            btn.onclick = this.clicked;
-        }
+        // const btn = this?.shadowRoot?.querySelector("button");
+        // if (btn) {
+        //   btn.onclick = this.clicked;
+        // }
         TemplateParser.connectEventHandlers(this);
-        console.log("Constructor for InternalBinding finished");
     }
 }
 // define the element
