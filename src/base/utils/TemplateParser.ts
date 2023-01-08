@@ -3,14 +3,12 @@ import { InternalBinding } from "../../main";
 export default class TemplateParser {
   static connectEventHandlers(webComponent: HTMLElement) {
     const elements = webComponent.shadowRoot?.querySelectorAll("[data-onclick]");
-    console.log("Found elements:", elements?.length);
     elements?.forEach(element => {
-      console.log("element:", element);
       const methodName = element.getAttribute("[data-onclick]");
-      console.log("method name:", methodName);
       if (methodName) {
-        element.addEventListener("onclick", (<any>webComponent)[methodName]);
-        console.log("added method:", (<any>webComponent)[methodName]);
+        element.addEventListener("click", (event) => (<any>webComponent)[methodName](event));
+      } else {
+        console.warn("No click handler found for element:", element);
       }
     });
 

@@ -77,14 +77,13 @@ class TemplateParser {
     static connectEventHandlers(webComponent) {
         var _a;
         const elements = (_a = webComponent.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelectorAll("[data-onclick]");
-        console.log("Found elements:", elements === null || elements === void 0 ? void 0 : elements.length);
         elements === null || elements === void 0 ? void 0 : elements.forEach(element => {
-            console.log("element:", element);
             const methodName = element.getAttribute("[data-onclick]");
-            console.log("method name:", methodName);
             if (methodName) {
-                element.addEventListener("onclick", webComponent[methodName]);
-                console.log("added method:", webComponent[methodName]);
+                element.addEventListener("click", (event) => webComponent[methodName](event));
+            }
+            else {
+                console.warn("No click handler found for element:", element);
             }
         });
     }
