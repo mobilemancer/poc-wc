@@ -78,7 +78,7 @@ class TemplateParser {
         var _a;
         const elements = (_a = webComponent.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelectorAll("[data-onclick]");
         elements === null || elements === void 0 ? void 0 : elements.forEach(element => {
-            const methodName = element.getAttribute("[data-onclick]");
+            const methodName = element.getAttribute("data-onclick");
             if (methodName) {
                 element.addEventListener("click", (event) => webComponent[methodName](event));
             }
