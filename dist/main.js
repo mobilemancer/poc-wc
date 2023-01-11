@@ -235,10 +235,10 @@ class ElementBase extends HTMLElement {
             return;
         }
         propertiesToWatch.forEach(propName => {
-            console.log("getters and setters for $1", propName);
+            console.log("defining getters and setters for", propName);
             Object.defineProperty(this, propName, {
                 get: () => {
-                    console.log("get: ", propName, "value:", this.watchedProperties.get("_" + propName));
+                    console.log("get:", propName, "value:", this.watchedProperties.get("_" + propName));
                     return this.watchedProperties.get("_" + propName);
                 },
                 set: (value) => {
@@ -264,10 +264,10 @@ class ElementBase extends HTMLElement {
      */
     updateStringLiteralsInDOM(propName, value) {
         var _a;
-        console.log("updateStringLiteralsInDOM for ", propName);
+        console.log("updateStringLiteralsInDOM for", propName);
         const elements = (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelectorAll(`[data-bind='${propName}']`);
         elements === null || elements === void 0 ? void 0 : elements.forEach(e => {
-            console.log("updating innerhtml for element ", e);
+            console.log("updating innerhtml for element", e);
             e.innerHTML = value;
         });
     }
@@ -315,7 +315,6 @@ class InternalBinding extends ElementBase {
             else {
                 this.mode = "dark 🌒";
             }
-            console.log(this.mode);
         };
         const btn = (_a = this === null || this === void 0 ? void 0 : this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector("button");
         if (btn) {
