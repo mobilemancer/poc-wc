@@ -74,12 +74,37 @@ class HeaderComponent2 extends HTMLElement {
 customElements.define("header-component2", HeaderComponent2);
 
 class TemplateParser {
+    static connectEventHandlers(webComponent) {
+        var _a;
+        const elements = (_a = webComponent.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelectorAll("[data-onclick]");
+        elements === null || elements === void 0 ? void 0 : elements.forEach(element => {
+            const methodName = element.getAttribute("data-onclick");
+            if (methodName && webComponent[methodName]) {
+                element.addEventListener("click", (event) => webComponent[methodName](event));
+            }
+            else {
+                console.warn("No click handler found for element:", element);
+                element.addEventListener("click", (event) => console.warn("No click handler found for this element 😔"));
+            }
+        });
+    }
     static parse(template) {
         const elements = this.getElements(template);
         const elementsAndPropsToWatch = this.replaceStringLiterals(elements);
+        elementsAndPropsToWatch.elements = this.replaceEventHandlers(elementsAndPropsToWatch.elements);
         const propertiesToWatch = elementsAndPropsToWatch.propertiesToWatch;
         const templateString = this.convertNodesToString(elementsAndPropsToWatch.elements);
         return { templateString, propertiesToWatch };
+    }
+    static replaceEventHandlers(elements) {
+        elements.forEach(e => {
+            const methodName = e.getAttribute("onclick");
+            if (methodName) {
+                e.removeAttribute("onclick");
+                e.setAttribute("data-onclick", methodName);
+            }
+        });
+        return elements;
     }
     static convertNodesToString(nodes) {
         let result = "";
@@ -236,25 +261,28 @@ class ElementBase extends HTMLElement {
         }
         propertiesToWatch.forEach(propName => {
             console.log("defining getters and setters for", propName);
-            Object.defineProperty(this, propName, {
-                get: () => {
-                    console.log("get:", propName, "value:", this.watchedProperties.get("_" + propName));
-                    return this.watchedProperties.get("_" + propName);
-                },
-                set: (value) => {
-                    console.log("setting", propName, "to:", value);
-                    if (this.watchedProperties.get("_" + propName) === value) {
-                        console.log(propName, "already has value", value);
-                        return;
-                    }
-                    this.watchedProperties.set("_" + propName, value);
-                    this.updateStringLiteralsInDOM(propName, value);
-                    if (this.getAttribute(propName) !== value) {
-                        // keep attribute on element in sync with prop
-                        this.setAttribute(propName, value);
-                    }
-                },
-            });
+            this.createAccessorsForProperty(propName);
+        });
+    }
+    createAccessorsForProperty(propName) {
+        Object.defineProperty(this, propName, {
+            get: () => {
+                console.log("get:", propName, "value:", this.watchedProperties.get("_" + propName));
+                return this.watchedProperties.get("_" + propName);
+            },
+            set: (value) => {
+                console.log("setting", propName, "to:", value);
+                if (this.watchedProperties.get("_" + propName) === value) {
+                    console.log(propName, "already has value", value);
+                    return;
+                }
+                this.watchedProperties.set("_" + propName, value);
+                this.updateStringLiteralsInDOM(propName, value);
+                if (this.getAttribute(propName) !== value) {
+                    // keep attribute on element in sync with prop
+                    this.setAttribute(propName, value);
+                }
+            },
         });
     }
     /**
@@ -285,7 +313,7 @@ class AdvancedComponent extends ElementBase {
 // Define the new element
 customElements.define("advanced-component", AdvancedComponent);
 
-var template = "<div class=\"internal-binding\">\r\n  <!-- <button onclick=\"clicked\">Change mode</button> -->\r\n  <button>Change mode</button>\r\n\r\n  <p>${mode}</p>\r\n</div>\r\n";
+var template = "<div class=\"internal-binding\">\r\n  <button onclick=\"clicked\">Change mode</button>\r\n  <!-- <button>Change mode</button> -->\r\n  <button onclick=\"debug\">Debug</button>\r\n\r\n  <p>${mode}</p>\r\n</div>";
 
 var css_248z = ".internal-binding {\r\n    background-color: blueviolet;\r\n    color: aliceblue;\r\n    border: 2px solid white;\r\n    border-radius: 0.5em;\r\n    padding: 8px;\r\n}";
 
@@ -301,11 +329,8 @@ function getElementName(className) {
     return !!resultingWords ? resultingWords.join("-").toLowerCase() : "";
 }
 
-// @CustomElement(template, style)
 class InternalBinding extends ElementBase {
     constructor() {
-        var _a;
-        console.log("Constructor for InternalBinding started");
         super(template, css_248z);
         this.mode = "untouched 🆕";
         this.clicked = () => {
@@ -316,11 +341,11 @@ class InternalBinding extends ElementBase {
                 this.mode = "dark 🌒";
             }
         };
-        const btn = (_a = this === null || this === void 0 ? void 0 : this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector("button");
-        if (btn) {
-            btn.onclick = this.clicked;
-        }
-        console.log("Constructor for InternalBinding finished");
+        // const btn = this?.shadowRoot?.querySelector("button");
+        // if (btn) {
+        //   btn.onclick = this.clicked;
+        // }
+        TemplateParser.connectEventHandlers(this);
     }
 }
 // define the element

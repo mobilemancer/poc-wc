@@ -1,10 +1,40 @@
+import { InternalBinding } from "../../main";
+
 export default class TemplateParser {
+  static connectEventHandlers(webComponent: HTMLElement) {
+    const elements = webComponent.shadowRoot?.querySelectorAll("[data-onclick]");
+    elements?.forEach(element => {
+      const methodName = element.getAttribute("data-onclick");
+      if (methodName && (<any>webComponent)[methodName]) {
+        element.addEventListener("click", (event) => (<any>webComponent)[methodName](event));
+      } else {
+        console.warn("No click handler found for element:", element);
+        element.addEventListener("click", (event) => console.warn("No click handler found for this element 😔"));
+      }
+    });
+
+  }
+
   static parse(template: string): { templateString: string, propertiesToWatch: Set<string> } {
     const elements = this.getElements(template);
     const elementsAndPropsToWatch = this.replaceStringLiterals(elements);
+    elementsAndPropsToWatch.elements = this.replaceEventHandlers(elementsAndPropsToWatch.elements);
     const propertiesToWatch = elementsAndPropsToWatch.propertiesToWatch;
     const templateString = this.convertNodesToString(elementsAndPropsToWatch.elements);
     return { templateString, propertiesToWatch };
+  }
+
+  static replaceEventHandlers(elements: Element[]): Element[] {
+    elements.forEach(e => {
+      const methodName = e.getAttribute("onclick");
+      if (methodName) {
+        e.removeAttribute("onclick");
+        e.setAttribute("data-onclick", methodName);
+      }
+
+    });
+
+    return elements;
   }
 
   static convertNodesToString(nodes: Element[]): string {
