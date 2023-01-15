@@ -89,8 +89,14 @@ class TemplateParser {
         });
     }
     static parse(template) {
-        const elements = this.getElements(template);
-        const elementsAndPropsToWatch = this.replaceStringLiterals(elements);
+        const elementsAndPropsToWatch = {
+            elements: new Array(),
+            propertiesToWatch: new Set()
+        };
+        // const elements = this.getElements(template);
+        this.getElements(template, elementsAndPropsToWatch);
+        // const elementsAndPropsToWatch = this.replaceStringLiterals(elements);
+        this.replaceStringLiterals(elementsAndPropsToWatch);
         elementsAndPropsToWatch.elements = this.replaceEventHandlers(elementsAndPropsToWatch.elements);
         const propertiesToWatch = elementsAndPropsToWatch.propertiesToWatch;
         const templateString = this.convertNodesToString(elementsAndPropsToWatch.elements);
@@ -121,37 +127,56 @@ class TemplateParser {
      * @param template find all HTMLElements in the component template
      * @returns an array of all HTMLElements
      */
-    static getElements(template) {
+    static getElements(template, elementsAndPropsToWatch) {
         const parser = new DOMParser();
         const htmlDoc = parser.parseFromString(template, "text/html");
         const allElements = htmlDoc.getElementsByTagName("*");
         const elementsArray = [...allElements];
         // the DOMParser adds a few elements we're not inteerested in, remove them and return the rest
-        return elementsArray.filter((e) => e.tagName !== "HTML" && e.tagName !== "HEAD" && e.tagName !== "BODY");
+        elementsAndPropsToWatch.elements = elementsArray.filter((e) => e.tagName !== "HTML" && e.tagName !== "HEAD" && e.tagName !== "BODY");
     }
-    static replaceStringLiterals(elements) {
+    static replaceStringLiterals(elementsAndPropsToWatch) {
         // gather all property names used in string literals
-        const propertiesToWatch = new Set();
+        // const propertiesToWatch: Set<string> = new Set();
         // walk over all leaf elements and check for string literals
-        elements.filter(element => element.childElementCount === 0 && element.innerHTML.includes("${")).forEach(element => {
+        elementsAndPropsToWatch.elements.filter(element => element.childElementCount === 0 && element.innerHTML.includes("${"))
+            .forEach(element => {
             let end = 0;
             while (element.innerHTML.indexOf("${", end) > -1) {
                 let start = element.innerHTML.indexOf("${", end);
                 end = element.innerHTML.indexOf("}", start);
                 let stringLiteral = element.innerHTML.substring(start, end + 1);
                 let stringLiteralName = element.innerHTML.substring(start + 2, end);
-                if (!propertiesToWatch.has(stringLiteralName)) {
-                    propertiesToWatch.add(stringLiteralName);
+                if (!elementsAndPropsToWatch.propertiesToWatch.has(stringLiteralName)) {
+                    elementsAndPropsToWatch.propertiesToWatch.add(stringLiteralName);
                 }
                 // replace string literal with a span that has a data-binding attr
                 element.innerHTML = element.innerHTML.replace(stringLiteral, `<span data-bind='${stringLiteralName}'></span>`);
             }
         });
-        return { elements, propertiesToWatch };
+    }
+    static replaceRepeaters(elementsAndPropsToWatch) {
+        // walk over all leaf elements and check for repeaters
+        elementsAndPropsToWatch.elements.filter(element => {
+            element.childElementCount === 0 && element.getAttribute("repeat.for");
+        }).forEach(element => {
+            console.log(element);
+            let end = 0;
+            while (element.innerHTML.indexOf("${", end) > -1) {
+                let start = element.innerHTML.indexOf("${", end);
+                end = element.innerHTML.indexOf("}", start);
+                let stringLiteral = element.innerHTML.substring(start, end + 1);
+                let stringLiteralName = element.innerHTML.substring(start + 2, end);
+                if (!elementsAndPropsToWatch.propertiesToWatch.has(stringLiteralName)) {
+                    elementsAndPropsToWatch.propertiesToWatch.add(stringLiteralName);
+                }
+                // replace string literal with a span that has a data-binding attr
+                element.innerHTML = element.innerHTML.replace(stringLiteral, `<span data-bind='${stringLiteralName}'></span>`);
+            }
+        });
     }
     static serializeElements(elements) { }
 }
-TemplateParser.stringLiteralCounter = 0;
 
 /**
  * ElementBase

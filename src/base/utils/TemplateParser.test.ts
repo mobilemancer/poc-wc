@@ -48,8 +48,8 @@ describe("event handler parsing", () => {
   });
 });
 
-let template7 = '<p repeat.for="i in x"><p>i</p></p>';
-let template7expected = '<p repeat.for="i in x"><p>i</p></p>';
+let template7 = '<div repeat.for="i in x"><p>i</p></div>';
+let template7expected = '<div repeat.for="i in x"><p>i</p></div>';
 
 describe("repeater parsing", () => {
   it("parse onclick eventhandler", () => {

@@ -11,11 +11,17 @@ export default class TemplateParser {
      * @param template find all HTMLElements in the component template
      * @returns an array of all HTMLElements
      */
-    static getElements(template: string): Array<Element>;
-    static stringLiteralCounter: number;
-    static replaceStringLiterals(elements: Element[]): {
+    static getElements(template: string, elementsAndPropsToWatch: {
+        elements: Array<Element>;
+        propertiesToWatch: Set<string>;
+    }): void;
+    static replaceStringLiterals(elementsAndPropsToWatch: {
+        elements: Array<Element>;
+        propertiesToWatch: Set<string>;
+    }): void;
+    static replaceRepeaters(elementsAndPropsToWatch: {
         elements: Element[];
         propertiesToWatch: Set<string>;
-    };
+    }): void;
     static serializeElements(elements: Element[]): void;
 }
