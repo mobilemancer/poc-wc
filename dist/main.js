@@ -301,21 +301,21 @@ class ElementBase extends HTMLElement {
     }
 }
 
-var template$1 = "<h1>Hello!!!</h1>";
+var template$2 = "<h1>Hello!!!</h1>";
 
-var css_248z$1 = "h1 {\r\n  color: hotpink;\r\n  font-style: italic;\r\n  font-weight: bolder;\r\n}\r\n";
+var css_248z$2 = "h1 {\r\n  color: hotpink;\r\n  font-style: italic;\r\n  font-weight: bolder;\r\n}\r\n";
 
 class AdvancedComponent extends ElementBase {
     constructor() {
-        super(template$1, css_248z$1);
+        super(template$2, css_248z$2);
     }
 }
 // Define the new element
 customElements.define("advanced-component", AdvancedComponent);
 
-var template = "<div class=\"internal-binding\">\r\n  <button onclick=\"clicked\">Change mode</button>\r\n  <!-- <button>Change mode</button> -->\r\n  <button onclick=\"debug\">Debug</button>\r\n\r\n  <p>${mode}</p>\r\n</div>";
+var template$1 = "<div class=\"internal-binding\">\r\n  <button onclick=\"clicked\">Change mode</button>\r\n  <!-- <button>Change mode</button> -->\r\n  <button onclick=\"debug\">Debug</button>\r\n\r\n  <p>${mode}</p>\r\n</div>";
 
-var css_248z = ".internal-binding {\r\n    background-color: blueviolet;\r\n    color: aliceblue;\r\n    border: 2px solid white;\r\n    border-radius: 0.5em;\r\n    padding: 8px;\r\n}";
+var css_248z$1 = ".internal-binding {\r\n    background-color: blueviolet;\r\n    color: aliceblue;\r\n    border: 2px solid white;\r\n    border-radius: 0.5em;\r\n    padding: 8px;\r\n}";
 
 /**
  * Returns the name of the element
@@ -331,7 +331,7 @@ function getElementName(className) {
 
 class InternalBinding extends ElementBase {
     constructor() {
-        super(template, css_248z);
+        super(template$1, css_248z$1);
         this.mode = "untouched 🆕";
         this.clicked = () => {
             if (this.mode.startsWith("dark")) {
@@ -351,4 +351,21 @@ class InternalBinding extends ElementBase {
 // define the element
 window.customElements.define(getElementName(InternalBinding.name), InternalBinding);
 
-export { AdvancedComponent, HeaderComponent, HeaderComponent2, InternalBinding };
+var template = "<button id=\"dec\" onclick=\"dec\">-</button>\r\n<span id=\"count\">${count}</span>\r\n<button id=\"inc\">+</button>`\r\n";
+
+var css_248z = "* {\r\n    font-size: 200%;\r\n}\r\n\r\nspan {\r\n    width: 4rem;\r\n    display: inline-block;\r\n    text-align: center;\r\n}\r\n\r\nbutton {\r\n    width: 4rem;\r\n    height: 4rem;\r\n    border: none;\r\n    border-radius: 10px;\r\n    background-color: seagreen;\r\n    color: white;\r\n}";
+
+class CounterComponent extends ElementBase {
+    constructor() {
+        super(template, css_248z);
+        this.count = 0;
+    }
+    inc() {
+        this.count++;
+    }
+    dec() {
+        this.count--;
+    }
+}
+
+export { AdvancedComponent, CounterComponent, HeaderComponent, HeaderComponent2, InternalBinding };
