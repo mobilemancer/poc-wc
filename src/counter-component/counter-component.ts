@@ -8,8 +8,10 @@ export class CounterComponent extends ElementBase {
     public count = 0;
 
     constructor() {
+        // 1. Init element with template and style
         super(template, style);
 
+        // 2 . Connect event handlers
         TemplateParser.connectEventHandlers(this);
     }
 
@@ -29,9 +31,6 @@ export class CounterComponent extends ElementBase {
     };
 }
 
-// define the element
-// window.customElements.define(
-//     getElementName(CounterComponent.name),
-//     CounterComponent
-// );
+
+// 3. Register the element
 registerElement(CounterComponent);
