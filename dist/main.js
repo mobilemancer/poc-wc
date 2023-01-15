@@ -370,9 +370,11 @@ class CounterComponent extends ElementBase {
         //     this.count--;
         // }
         this.dec = () => {
+            alert("dec");
             this.count--;
             console.log(this.count);
         };
+        TemplateParser.connectEventHandlers(this);
     }
     inc() {
         this.count++;
