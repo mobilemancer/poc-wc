@@ -364,28 +364,20 @@ var css_248z = "* {\r\n    font-size: 200%;\r\n}\r\n\r\nspan {\r\n    width: 4re
 
 class CounterComponent extends ElementBase {
     constructor() {
+        // 1. Init element with template and style
         super(template, css_248z);
         this.count = 0;
-        // public dec() {
-        //     this.count--;
-        // }
-        this.dec = () => {
-            alert("dec");
-            this.count--;
-            console.log(this.count);
-        };
+        // 2 . Connect event handlers
         TemplateParser.connectEventHandlers(this);
     }
     inc() {
         this.count++;
-        console.log(this.count);
+    }
+    dec() {
+        this.count--;
     }
 }
-// define the element
-// window.customElements.define(
-//     getElementName(CounterComponent.name),
-//     CounterComponent
-// );
+// 3. Register the element
 registerElement(CounterComponent);
 
 export { AdvancedComponent, CounterComponent, HeaderComponent, HeaderComponent2, InternalBinding };

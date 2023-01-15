@@ -17,18 +17,11 @@ export class CounterComponent extends ElementBase {
 
     public inc() {
         this.count++;
-        console.log(this.count);
     }
 
-    // public dec() {
-    //     this.count--;
-    // }
-
-    public dec = () => {
-        alert("dec");
+    public dec() {
         this.count--;
-        console.log(this.count);
-    };
+    }
 }
 
 

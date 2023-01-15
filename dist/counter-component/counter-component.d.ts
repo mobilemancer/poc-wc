@@ -3,5 +3,5 @@ export declare class CounterComponent extends ElementBase {
     count: number;
     constructor();
     inc(): void;
-    dec: () => void;
+    dec(): void;
 }
