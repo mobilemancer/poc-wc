@@ -10,4 +10,16 @@ function getElementName(className: string): string {
     return !!resultingWords ? resultingWords.join("-").toLowerCase() : "";
 }
 
+/**
+ * 
+ * @param component Register a custom element
+ */
+function registerElement(component: any): void {
+    window.customElements.define(
+        getElementName(component.name),
+        component
+    );
+}
+
 export { getElementName };
+export { registerElement };
