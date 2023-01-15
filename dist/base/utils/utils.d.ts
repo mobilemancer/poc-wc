@@ -5,4 +5,6 @@
  * @returns an hyphenated element name
  */
 declare function getElementName(className: string): string;
+declare function registerElement(component: any): void;
 export { getElementName };
+export { registerElement };

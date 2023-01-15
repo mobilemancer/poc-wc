@@ -328,6 +328,9 @@ function getElementName(className) {
     const resultingWords = className.match(wordRegex);
     return !!resultingWords ? resultingWords.join("-").toLowerCase() : "";
 }
+function registerElement(component) {
+    window.customElements.define(getElementName(component.name), component);
+}
 
 class InternalBinding extends ElementBase {
     constructor() {
@@ -367,5 +370,11 @@ class CounterComponent extends ElementBase {
         this.count--;
     }
 }
+// define the element
+// window.customElements.define(
+//     getElementName(CounterComponent.name),
+//     CounterComponent
+// );
+registerElement(CounterComponent);
 
 export { AdvancedComponent, CounterComponent, HeaderComponent, HeaderComponent2, InternalBinding };
