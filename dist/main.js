@@ -328,6 +328,10 @@ function getElementName(className) {
     const resultingWords = className.match(wordRegex);
     return !!resultingWords ? resultingWords.join("-").toLowerCase() : "";
 }
+/**
+ *
+ * @param component Register a custom element
+ */
 function registerElement(component) {
     window.customElements.define(getElementName(component.name), component);
 }
@@ -354,7 +358,7 @@ class InternalBinding extends ElementBase {
 // define the element
 window.customElements.define(getElementName(InternalBinding.name), InternalBinding);
 
-var template = "<button id=\"dec\" onclick=\"dec\">-</button>\r\n<span id=\"count\">${count}</span>\r\n<button id=\"inc\">+</button>`\r\n";
+var template = "<button id=\"dec\" onclick=\"dec\">-</button>\r\n<span id=\"count\">${count}</span>\r\n<button id=\"inc\" onclick=\"inc\">+</button>`\r\n";
 
 var css_248z = "* {\r\n    font-size: 200%;\r\n}\r\n\r\nspan {\r\n    width: 4rem;\r\n    display: inline-block;\r\n    text-align: center;\r\n}\r\n\r\nbutton {\r\n    width: 4rem;\r\n    height: 4rem;\r\n    border: none;\r\n    border-radius: 10px;\r\n    background-color: seagreen;\r\n    color: white;\r\n}";
 
@@ -362,12 +366,17 @@ class CounterComponent extends ElementBase {
     constructor() {
         super(template, css_248z);
         this.count = 0;
+        // public dec() {
+        //     this.count--;
+        // }
+        this.dec = () => {
+            this.count--;
+            console.log(this.count);
+        };
     }
     inc() {
         this.count++;
-    }
-    dec() {
-        this.count--;
+        console.log(this.count);
     }
 }
 // define the element
