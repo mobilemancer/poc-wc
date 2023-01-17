@@ -328,7 +328,7 @@ class ElementBase extends HTMLElement {
 
 var template$2 = "<h1>Hello!!!</h1>";
 
-var css_248z$2 = "h1 {\r\n  color: hotpink;\r\n  font-style: italic;\r\n  font-weight: bolder;\r\n}\r\n";
+var css_248z$2 = "h1 {\n  color: hotpink;\n  font-style: italic;\n  font-weight: bolder;\n}\n";
 
 class AdvancedComponent extends ElementBase {
     constructor() {
@@ -338,9 +338,9 @@ class AdvancedComponent extends ElementBase {
 // Define the new element
 customElements.define("advanced-component", AdvancedComponent);
 
-var template$1 = "<div class=\"internal-binding\">\r\n  <button onclick=\"clicked\">Change mode</button>\r\n  <!-- <button>Change mode</button> -->\r\n  <button onclick=\"debug\">Debug</button>\r\n\r\n  <p>${mode}</p>\r\n</div>";
+var template$1 = "<div class=\"internal-binding\">\n  <button onclick=\"clicked\">Change mode</button>\n  <!-- <button>Change mode</button> -->\n  <button onclick=\"debug\">Debug</button>\n\n  <p>${mode}</p>\n</div>";
 
-var css_248z$1 = ".internal-binding {\r\n    background-color: blueviolet;\r\n    color: aliceblue;\r\n    border: 2px solid white;\r\n    border-radius: 0.5em;\r\n    padding: 8px;\r\n}";
+var css_248z$1 = ".internal-binding {\n    background-color: blueviolet;\n    color: aliceblue;\n    border: 2px solid white;\n    border-radius: 0.5em;\n    padding: 8px;\n}";
 
 /**
  * Returns the name of the element
@@ -383,9 +383,9 @@ class InternalBinding extends ElementBase {
 // define the element
 window.customElements.define(getElementName(InternalBinding.name), InternalBinding);
 
-var template = "<button id=\"dec\" onclick=\"dec\">-</button>\r\n<span id=\"count\">${count}</span>\r\n<button id=\"inc\" onclick=\"inc\">+</button>`\r\n";
+var template = "<button id=\"dec\" onclick=\"dec\">-</button>\n<span id=\"count\">${count}</span>\n<button id=\"inc\" onclick=\"inc\">+</button>`\n";
 
-var css_248z = "* {\r\n    font-size: 200%;\r\n}\r\n\r\nspan {\r\n    width: 4rem;\r\n    display: inline-block;\r\n    text-align: center;\r\n}\r\n\r\nbutton {\r\n    width: 4rem;\r\n    height: 4rem;\r\n    border: none;\r\n    border-radius: 10px;\r\n    background-color: seagreen;\r\n    color: white;\r\n}";
+var css_248z = "* {\n    font-size: 200%;\n}\n\nspan {\n    width: 4rem;\n    display: inline-block;\n    text-align: center;\n}\n\nbutton {\n    width: 4rem;\n    height: 4rem;\n    border: none;\n    border-radius: 10px;\n    background-color: seagreen;\n    color: white;\n}";
 
 class CounterComponent extends ElementBase {
     constructor() {
