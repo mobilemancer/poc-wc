@@ -9,6 +9,7 @@
     "clean": "rimraf ./dist",
     "build": "npm run clean && tsc && copyfiles -u 1 src/**/*.html ./dist",
     "bundle": "npm run clean && npx rollup -c",
+    "clean-bundle": "rimraf ./dist ./node-modules && npm i && npm run bundle",
     "test": "jest",
     "test-coverage": "jest --coverage",
     "test-watch": "jest --watch"
